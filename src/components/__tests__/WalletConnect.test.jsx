@@ -167,3 +167,4 @@ describe('WalletConnect', () => {
     expect(button).toHaveClass('btn-primary')
   })
 })
+

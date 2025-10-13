@@ -140,7 +140,7 @@ export const walletService = {
           })
         }
       } catch (error) {
-        console.error(`Error procesando ${token.symbol}:`, error)
+        console.error(`Error processing ${token.symbol}:`, error)
       }
     }
 

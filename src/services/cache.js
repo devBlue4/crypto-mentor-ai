@@ -214,3 +214,4 @@ export const cacheManager = {
 }
 
 export default Cache
+

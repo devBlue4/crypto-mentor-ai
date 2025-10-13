@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Eye, EyeOff, Volume2, VolumeX, Type, TypeOff } from 'lucide-react'
+import { Eye, EyeOff, Volume2, VolumeX, Type } from 'lucide-react'
 
 const AccessibilityUtils = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -257,3 +257,4 @@ export const useAccessibility = () => {
 }
 
 export default AccessibilityUtils
+

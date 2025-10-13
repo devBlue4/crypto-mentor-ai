@@ -240,3 +240,4 @@ describe('Wallet-Portfolio Integration', () => {
     expect(mockProvider.getBalance).toHaveBeenCalled()
   })
 })
+

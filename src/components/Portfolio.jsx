@@ -42,7 +42,7 @@ const Portfolio = () => {
     }
   }
 
-  // Calcular métricas del portfolio
+  // Calculate portfolio metrics
   useEffect(() => {
     const calculateMetrics = async () => {
       if (!isConnected) return

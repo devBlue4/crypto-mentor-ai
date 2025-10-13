@@ -153,7 +153,7 @@ export const auraAPI = {
   // Demo responses when no API key
   getDemoResponse(message, context) {
     const responses = {
-      'hello': 'Hello! I'm AURA, your Web3 trading assistant. How can I help you today?',
+      'hello': 'Hello! I\'m AURA, your Web3 trading assistant. How can I help you today?',
       'bitcoin price': 'The current Bitcoin price is $43,250 USD. Based on technical analysis, I see an upward trend in the short term with support at $42,000.',
       'portfolio': 'I see you have a diversified portfolio. I recommend considering more exposure to DeFi tokens and maintaining at least 30% in stablecoins.',
       'recommendations': 'Based on the current market, I suggest: 1) Consider DCA in ETH, 2) Rebalance towards infrastructure tokens, 3) Maintain liquidity for opportunities.',
@@ -245,7 +245,7 @@ export const auraAPI = {
       ],
       risk_management: [
         'Set stop-loss on main positions',
-        'Don't invest more than 5% in speculative altcoins',
+        'Don\'t invest more than 5% in speculative altcoins',
         'Maintain emergency fund in stablecoins'
       ]
     }

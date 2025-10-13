@@ -178,3 +178,4 @@ const CacheStatCard = ({ title, stats, icon: Icon, color }) => {
 }
 
 export default CacheManager
+

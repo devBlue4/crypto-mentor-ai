@@ -34,3 +34,4 @@ global.console = {
 
 // Mock environment variables
 process.env.VITE_AURA_API_KEY = 'test-api-key'
+
