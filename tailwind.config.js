@@ -8,7 +8,16 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Modern OKLCH-based color system
+        background: 'oklch(var(--background))',
+        foreground: 'oklch(var(--foreground))',
+        card: 'oklch(var(--card))',
+        'card-foreground': 'oklch(var(--card-foreground))',
+        popover: 'oklch(var(--popover))',
+        'popover-foreground': 'oklch(var(--popover-foreground))',
         primary: {
+          DEFAULT: 'oklch(var(--primary))',
+          foreground: 'oklch(var(--primary-foreground))',
           50: '#f0f9ff',
           100: '#e0f2fe',
           200: '#bae6fd',
@@ -20,6 +29,42 @@ export default {
           800: '#075985',
           900: '#0c4a6e',
         },
+        secondary: {
+          DEFAULT: 'oklch(var(--secondary))',
+          foreground: 'oklch(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'oklch(var(--muted))',
+          foreground: 'oklch(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'oklch(var(--accent))',
+          foreground: 'oklch(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'oklch(var(--destructive))',
+          foreground: 'oklch(var(--destructive-foreground))',
+        },
+        border: 'oklch(var(--border))',
+        input: 'oklch(var(--input))',
+        ring: 'oklch(var(--ring))',
+        chart: {
+          1: 'oklch(var(--chart-1))',
+          2: 'oklch(var(--chart-2))',
+          3: 'oklch(var(--chart-3))',
+          4: 'oklch(var(--chart-4))',
+          5: 'oklch(var(--chart-5))',
+        },
+        sidebar: {
+          DEFAULT: 'oklch(var(--sidebar))',
+          foreground: 'oklch(var(--sidebar-foreground))',
+          primary: 'oklch(var(--sidebar-primary))',
+          'primary-foreground': 'oklch(var(--sidebar-primary-foreground))',
+          accent: 'oklch(var(--sidebar-accent))',
+          'accent-foreground': 'oklch(var(--sidebar-accent-foreground))',
+          border: 'oklch(var(--sidebar-border))',
+          ring: 'oklch(var(--sidebar-ring))',
+        },
         crypto: {
           bitcoin: '#f7931a',
           ethereum: '#627eea',
@@ -29,8 +74,24 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans: ['var(--font-sans)', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Playfair Display', 'serif'],
+        mono: ['var(--font-mono)', 'Fira Code', 'JetBrains Mono', 'monospace'],
+      },
+      borderRadius: {
+        'sm': 'var(--radius-sm)',
+        'md': 'var(--radius-md)',
+        'lg': 'var(--radius-lg)',
+        'xl': 'var(--radius-xl)',
+      },
+      boxShadow: {
+        '2xs': 'var(--shadow-2xs)',
+        'xs': 'var(--shadow-xs)',
+        'sm': 'var(--shadow-sm)',
+        'md': 'var(--shadow-md)',
+        'lg': 'var(--shadow-lg)',
+        'xl': 'var(--shadow-xl)',
+        '2xl': 'var(--shadow-2xl)',
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

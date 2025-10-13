@@ -15,17 +15,17 @@ const Header = () => {
   ]
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <header className="bg-background shadow-sm border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl">
-              <Brain className="w-6 h-6 text-white" />
+            <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-xl">
+              <Brain className="w-6 h-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">CryptoMentor AI</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Powered by AdEx AURA</p>
+              <h1 className="text-xl font-bold text-foreground">CryptoMentor AI</h1>
+              <p className="text-xs text-muted-foreground">Powered by AdEx AURA</p>
             </div>
           </div>
 
@@ -37,7 +37,7 @@ const Header = () => {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   <Icon className="w-4 h-4" />
                   <span className="font-medium">{item.name}</span>
@@ -50,13 +50,13 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             {isConnected ? (
               <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-green-700 dark:text-green-400">
+                <div className="flex items-center space-x-2 px-3 py-2 bg-accent border border-accent rounded-lg">
+                  <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
+                  <span className="text-sm font-medium text-accent-foreground">
                     {account ? `${account.slice(0, 6)}...${account.slice(-4)}` : 'Connected'}
                   </span>
                 </div>
-                <Wallet className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <Wallet className="w-5 h-5 text-chart-2" />
               </div>
             ) : (
               <WalletConnect />

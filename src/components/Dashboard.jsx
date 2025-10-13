@@ -80,28 +80,28 @@ const Dashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="card">
+      <div className="bg-card text-card-foreground border border-border rounded-lg p-6 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-foreground mb-2">
               Welcome to CryptoMentor AI! 🚀
             </h2>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Your intelligent assistant for cryptocurrency analysis and Web3 trading
             </p>
           </div>
           {isConnected && (
-            <div className="flex items-center space-x-2 px-4 py-2 bg-green-50 border border-green-200 rounded-lg">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-green-700">Wallet Connected</span>
+            <div className="flex items-center space-x-2 px-4 py-2 bg-accent border border-accent rounded-lg">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-accent-foreground">Wallet Connected</span>
             </div>
           )}
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="card">
-        <div className="border-b border-gray-200">
+      <div className="bg-card text-card-foreground border border-border rounded-lg shadow-sm">
+        <div className="border-b border-border">
           <nav className="flex space-x-8 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon
@@ -115,16 +115,16 @@ const Dashboard = () => {
                   disabled={isDisabled}
                   className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors duration-200 ${
                     isActive
-                      ? 'border-primary-500 text-primary-600'
+                      ? 'border-primary text-primary'
                       : isDisabled
-                      ? 'border-transparent text-gray-400 cursor-not-allowed'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-transparent text-muted-foreground cursor-not-allowed'
+                      : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span>{tab.name}</span>
                   {isDisabled && (
-                    <span className="text-xs text-gray-400">(Requires Wallet)</span>
+                    <span className="text-xs text-muted-foreground">(Requires Wallet)</span>
                   )}
                 </button>
               )
@@ -149,41 +149,41 @@ const Dashboard = () => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="card">
+        <div className="bg-card text-card-foreground border border-border rounded-lg p-6 shadow-sm">
           <div className="flex items-center space-x-4">
-            <div className="flex items-center justify-center w-12 h-12 bg-primary-100 rounded-lg">
-              <TrendingUp className="w-6 h-6 text-primary-600" />
+            <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg">
+              <TrendingUp className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Crypto Market</p>
-              <p className="text-2xl font-bold text-gray-900">+2.5%</p>
-              <p className="text-xs text-green-600">Last 24h</p>
+              <p className="text-sm font-medium text-muted-foreground">Crypto Market</p>
+              <p className="text-2xl font-bold text-foreground">+2.5%</p>
+              <p className="text-xs text-chart-1">Last 24h</p>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-card text-card-foreground border border-border rounded-lg p-6 shadow-sm">
           <div className="flex items-center space-x-4">
-            <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg">
-              <MessageCircle className="w-6 h-6 text-green-600" />
+            <div className="flex items-center justify-center w-12 h-12 bg-chart-2/10 rounded-lg">
+              <MessageCircle className="w-6 h-6 text-chart-2" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">AI AURA</p>
-              <p className="text-2xl font-bold text-gray-900">Active</p>
-              <p className="text-xs text-green-600">Ready to help</p>
+              <p className="text-sm font-medium text-muted-foreground">AI AURA</p>
+              <p className="text-2xl font-bold text-foreground">Active</p>
+              <p className="text-xs text-chart-2">Ready to help</p>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-card text-card-foreground border border-border rounded-lg p-6 shadow-sm">
           <div className="flex items-center space-x-4">
-            <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg">
-              <AlertTriangle className="w-6 h-6 text-blue-600" />
+            <div className="flex items-center justify-center w-12 h-12 bg-chart-3/10 rounded-lg">
+              <AlertTriangle className="w-6 h-6 text-chart-3" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Alerts</p>
-              <p className="text-2xl font-bold text-gray-900">3</p>
-              <p className="text-xs text-blue-600">Configured</p>
+              <p className="text-sm font-medium text-muted-foreground">Alerts</p>
+              <p className="text-2xl font-bold text-foreground">3</p>
+              <p className="text-xs text-chart-3">Configured</p>
             </div>
           </div>
         </div>
