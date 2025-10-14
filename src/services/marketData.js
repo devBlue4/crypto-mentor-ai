@@ -59,13 +59,22 @@ export const marketDataService = {
       const fearGreed = fearGreedData.status === 'fulfilled' ? fearGreedData.value : null
 
       // Combine data with fallbacks
+      // Calculate dominance with proper rounding and "Others" calculation
+      const btcDominance = global?.dominance?.bitcoin || MOCK_MARKET_DATA.dominance.bitcoin
+      const ethDominance = global?.dominance?.ethereum || MOCK_MARKET_DATA.dominance.ethereum
+      const othersDominance = Math.max(0, 100 - btcDominance - ethDominance)
+
       const data = {
         totalMarketCap: global?.totalMarketCap || MOCK_MARKET_DATA.totalMarketCap,
         totalVolume: global?.totalVolume || MOCK_MARKET_DATA.totalVolume,
         bitcoin: bitcoin || MOCK_MARKET_DATA.bitcoin,
         fearGreedIndex: fearGreed?.value || MOCK_MARKET_DATA.fearGreedIndex,
         fearGreedLabel: fearGreed?.label || MOCK_MARKET_DATA.fearGreedLabel,
-        dominance: global?.dominance || MOCK_MARKET_DATA.dominance,
+        dominance: {
+          bitcoin: parseFloat(btcDominance.toFixed(1)),
+          ethereum: parseFloat(ethDominance.toFixed(1)),
+          others: parseFloat(othersDominance.toFixed(1))
+        },
         lastUpdated: new Date().toISOString(),
         isRealData: true
       }
@@ -182,7 +191,7 @@ export const marketDataService = {
     }
   },
 
-  // Get historical price data
+  // Get real Bitcoin historical price data from CoinGecko
   async getHistoricalData(symbol, days = 7) {
     const cacheKey = generateCacheKey('historical-data', symbol, days.toString())
     
@@ -193,31 +202,145 @@ export const marketDataService = {
     }
     
     try {
-      // Historical data simulation
-      const now = Date.now()
-      const historicalData = []
+      let response
       
-      for (let i = days; i >= 0; i--) {
-        const date = new Date(now - i * 24 * 60 * 60 * 1000)
-        const basePrice = symbol === 'bitcoin' ? 40000 : symbol === 'ethereum' ? 2400 : 100
-        const variation = (Math.random() - 0.5) * 0.1
-        const price = basePrice * (1 + variation)
+      if (days === 1) {
+        // Use range endpoint for 24H to avoid timezone issues
+        const now = Math.floor(Date.now() / 1000)
+        const dayAgo = now - (24 * 60 * 60)
         
-        historicalData.push({
-          date: date.toISOString().split('T')[0],
-          price: price,
-          volume: Math.random() * 1000000000
+        response = await axios.get(`${COINGECKO_API}/coins/bitcoin/market_chart/range`, {
+          params: {
+            vs_currency: 'usd',
+            from: dayAgo,
+            to: now
+          },
+          timeout: 15000
+        })
+      } else if (days === 90) {
+        // Use market_chart for 3M with daily interval
+        response = await axios.get(`${COINGECKO_API}/coins/bitcoin/market_chart`, {
+          params: {
+            vs_currency: 'usd',
+            days: 90,
+            interval: 'daily'
+          },
+          timeout: 15000
+        })
+      } else {
+        // Use standard market_chart for other ranges
+        let interval = 'daily'
+        if (days <= 7) {
+          interval = 'hourly'
+        }
+        
+        response = await axios.get(`${COINGECKO_API}/coins/bitcoin/market_chart`, {
+          params: {
+            vs_currency: 'usd',
+            days: days,
+            interval: interval
+          },
+          timeout: 15000
         })
       }
 
-      marketDataCache.set(cacheKey, historicalData)
+      const { prices } = response.data
+      
+      if (!prices || !Array.isArray(prices) || prices.length === 0) {
+        throw new Error('No price data received from API')
+      }
+
+      // Map API data correctly: each item is [timestamp, price]
+      let historicalData = prices
+        .map(([timestamp, price]) => ({
+          date: new Date(timestamp).toISOString(),
+          price: price,
+          volume: 0 // Volume data not needed for price chart
+        }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by timestamp ascending
+
+      // De-duplicate repeated timestamps (keep latest)
+      const uniqueData = new Map()
+      historicalData.forEach(item => {
+        const timestamp = new Date(item.date).getTime()
+        if (!uniqueData.has(timestamp) || uniqueData.get(timestamp).price !== item.price) {
+          uniqueData.set(timestamp, item)
+        }
+      })
+      historicalData = Array.from(uniqueData.values()).sort((a, b) => new Date(a.date) - new Date(b.date))
+
+      // Data validation and sanity check
+      const priceValues = historicalData.map(item => item.price)
+      const minPrice = Math.min(...priceValues)
+      const maxPrice = Math.max(...priceValues)
+      
+      // Check for flat data with different timestamps (potential bad data)
+      const isFlat = (maxPrice - minPrice) / minPrice < 0.001 && historicalData.length > 1
+      
+      if (minPrice < 1000 || maxPrice > 200000 || isFlat) {
+        console.error(`Invalid price data detected: min=$${minPrice}, max=$${maxPrice}, flat=${isFlat}`)
+        throw new Error('Price data failed validation')
+      }
+
+      // Log first and last points for verification
+      if (historicalData.length > 0) {
+        const first = historicalData[0]
+        const last = historicalData[historicalData.length - 1]
+        console.log(`Bitcoin data loaded: ${days}d range, ${historicalData.length} points`)
+        console.log(`First: ${new Date(first.date).toISOString()} - $${first.price}`)
+        console.log(`Last: ${new Date(last.date).toISOString()} - $${last.price}`)
+      }
+
+      // Cache for 5 minutes for real data
+      marketDataCache.set(cacheKey, historicalData, 5 * 60 * 1000)
       return historicalData
+      
     } catch (error) {
-      console.error('Error getting historical data:', error)
-      const emptyData = []
-      marketDataCache.set(cacheKey, emptyData)
-      return emptyData
+      console.error('Error fetching real Bitcoin data:', error)
+      
+      // Fallback to demo data if API fails
+      const fallbackData = this.generateFallbackData(days)
+      marketDataCache.set(cacheKey, fallbackData, 60000) // Cache fallback for 1 minute
+      return fallbackData
     }
+  },
+
+  // Generate fallback data when API fails
+  generateFallbackData(days) {
+    const now = Date.now()
+    const historicalData = []
+    
+    // Base price around current Bitcoin levels
+    const basePrice = 43000
+    let currentPrice = basePrice
+    
+    // For 24h data, use more frequent intervals
+    const intervalHours = days === 1 ? 2 : 24 // Every 2 hours for 24h, daily for others
+    const totalPoints = days === 1 ? 12 : days + 1 // 12 points for 24h, days+1 for others
+    
+    for (let i = 0; i < totalPoints; i++) {
+      const date = new Date(now - (totalPoints - 1 - i) * intervalHours * 60 * 60 * 1000)
+      
+      // Generate realistic price movement with better variation
+      const variation = (Math.random() - 0.5) * (days === 1 ? 0.03 : 0.08) // ±1.5% for 24h, ±4% for others
+      const trendFactor = days === 1 ? (Math.random() - 0.5) * 0.01 : (i > totalPoints * 0.6 ? -0.002 : 0.003)
+      const volatility = Math.sin(i * 0.8) * (days === 1 ? 0.015 : 0.03)
+      
+      currentPrice = currentPrice * (1 + variation + trendFactor + volatility)
+      
+      // Ensure price stays within reasonable bounds with more variation for 24h
+      const minPrice = days === 1 ? 42000 : 35000
+      const maxPrice = days === 1 ? 45000 : 55000
+      currentPrice = Math.max(minPrice, Math.min(maxPrice, currentPrice))
+      
+      historicalData.push({
+        date: date.toISOString(),
+        price: Math.round(currentPrice),
+        volume: Math.random() * 20000000000 + 10000000000
+      })
+    }
+    
+    return historicalData
   },
 
   // Get market news

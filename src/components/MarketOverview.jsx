@@ -11,6 +11,8 @@ const MarketOverview = () => {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [lastUpdated, setLastUpdated] = useState(null)
+  const [timeRange, setTimeRange] = useState('7d')
+  const [dataError, setDataError] = useState(false)
   const refreshIntervalRef = useRef(null)
 
   useEffect(() => {
@@ -28,22 +30,39 @@ const MarketOverview = () => {
     }
   }, [])
 
-  const loadMarketData = async (silent = false) => {
+  const loadMarketData = async (silent = false, customTimeRange = null) => {
     if (!silent) {
       setRefreshing(true)
     }
     
     try {
+      const currentTimeRange = customTimeRange || timeRange
+      const days = getDaysFromTimeRange(currentTimeRange)
+      
       const [overview, history, marketNews] = await Promise.all([
         marketDataService.getMarketOverview(),
-        marketDataService.getHistoricalData('bitcoin', 7),
+        marketDataService.getHistoricalData('bitcoin', days),
         marketDataService.getMarketNews()
       ])
+
+      // Validate historical data
+      const isValidData = history && history.length > 0 && 
+        history.every(item => item.price && item.price > 1000 && item.price < 200000)
+
+      if (!isValidData) {
+        console.error('Invalid historical data received')
+        setDataError(true)
+        if (!silent) {
+          toast.error('Not available - Invalid data received')
+        }
+        return
+      }
 
       setMarketData(overview)
       setHistoricalData(history)
       setNews(marketNews)
       setLastUpdated(new Date())
+      setDataError(false)
       
       // Show success message only if it's real data and not silent
       if (!silent && overview.isRealData) {
@@ -53,13 +72,29 @@ const MarketOverview = () => {
       }
     } catch (error) {
       console.error('Error loading market data:', error)
+      setDataError(true)
       if (!silent) {
-        toast.error('Failed to load market data')
+        toast.error('Not available - Failed to load market data')
       }
     } finally {
       setLoading(false)
       setRefreshing(false)
     }
+  }
+
+  const getDaysFromTimeRange = (range) => {
+    switch (range) {
+      case '24h': return 1
+      case '7d': return 7
+      case '1m': return 30
+      case '3m': return 90
+      default: return 7
+    }
+  }
+
+  const handleTimeRangeChange = (newTimeRange) => {
+    setTimeRange(newTimeRange)
+    loadMarketData(false, newTimeRange)
   }
 
   // Manual refresh function
@@ -204,80 +239,157 @@ const MarketOverview = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Price Chart */}
-        <div className="card h-80 flex flex-col">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 px-2">Bitcoin Price (7 days)</h3>
-          <div className="flex-1 px-2 pb-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart 
-                data={historicalData}
-                margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-              >
+        <div className="card h-96 flex flex-col">
+          <div className="flex items-center justify-between mb-4 px-4 pt-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Bitcoin Price ({timeRange === '24h' ? '24 hours' : timeRange === '7d' ? '7 days' : timeRange === '1m' ? '1 month' : timeRange === '3m' ? '3 months' : timeRange})
+            </h3>
+            <div className="flex space-x-1 bg-gray-800 rounded-lg p-1 border border-gray-700">
+              {['24h', '7d', '1m', '3m'].map((range) => (
+                <button
+                  key={range}
+                  onClick={() => handleTimeRangeChange(range)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
+                    timeRange === range
+                      ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/25 ring-1 ring-purple-500/50'
+                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700'
+                  }`}
+                >
+                  {range}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex-1 px-4 pb-4">
+            {dataError ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                  <p className="text-red-500 font-medium">Not available</p>
+                  <p className="text-gray-500 text-sm mt-2">Unable to load Bitcoin price data</p>
+                </div>
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart 
+                  data={historicalData}
+                  margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
+                  aria-label={`Bitcoin price chart showing ${timeRange} price movement`}
+                >
                 <CartesianGrid 
-                  strokeDasharray="1 3" 
-                  stroke="rgba(255, 255, 255, 0.1)" 
+                  strokeDasharray="2 4" 
+                  stroke="rgba(255, 255, 255, 0.08)" 
                   strokeWidth={0.5}
                 />
                 <XAxis 
                   dataKey="date" 
-                  tick={{ fontSize: 11, fill: '#6b7280' }}
-                  tickLine={{ stroke: 'rgba(255, 255, 255, 0.2)', strokeWidth: 0.5 }}
-                  axisLine={{ stroke: 'rgba(255, 255, 255, 0.2)', strokeWidth: 0.5 }}
-                  tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  tick={{ fontSize: 10, fill: '#9ca3af' }}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => {
+                    const date = new Date(value)
+                    if (timeRange === '24h') {
+                      // Show hours for 24H range
+                      return date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: false })
+                    } else if (timeRange === '3m') {
+                      // Show monthly/weekly dates for 3M range
+                      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                    } else {
+                      // Default format for other ranges
+                      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                    }
+                  }}
                   interval="preserveStartEnd"
+                  minTickGap={timeRange === '24h' ? 40 : 25}
+                  tickCount={timeRange === '24h' ? 6 : timeRange === '3m' ? 8 : 6}
                 />
                 <YAxis 
-                  tick={{ fontSize: 11, fill: '#6b7280' }}
-                  tickLine={{ stroke: 'rgba(255, 255, 255, 0.2)', strokeWidth: 0.5 }}
-                  axisLine={{ stroke: 'rgba(255, 255, 255, 0.2)', strokeWidth: 0.5 }}
-                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}
-                  domain={['dataMin - 5%', 'dataMax + 5%']}
+                  tick={{ fontSize: 10, fill: '#9ca3af' }}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => {
+                    // Format prices in compact USD format
+                    if (value >= 1000000) {
+                      return `$${(value / 1000000).toFixed(1)}M`
+                    } else if (value >= 1000) {
+                      return `$${(value / 1000).toFixed(0)}K`
+                    }
+                    return `$${value.toFixed(0)}`
+                  }}
+                  domain={['dataMin * 0.98', 'dataMax * 1.02']}
+                  width={60}
+                  tickCount={5}
+                  allowDecimals={false}
+                  type="number"
+                  scale="linear"
                 />
                 <Tooltip 
                   contentStyle={{
-                    backgroundColor: 'rgba(31, 41, 55, 0.95)',
-                    border: '1px solid rgba(75, 85, 99, 0.3)',
-                    borderRadius: '8px',
+                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    border: '1px solid rgba(75, 85, 99, 0.4)',
+                    borderRadius: '12px',
                     color: '#f9fafb',
                     fontSize: '12px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)'
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)',
+                    padding: '12px'
                   }}
-                  labelStyle={{ color: '#f9fafb', fontWeight: '500' }}
+                  labelStyle={{ color: '#f9fafb', fontWeight: '600', fontSize: '13px' }}
                   formatter={(value) => [`$${value.toLocaleString()}`, 'Price']}
-                  labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { 
-                    weekday: 'short', 
-                    month: 'short', 
-                    day: 'numeric' 
-                  })}
-                  offset={10}
+                  labelFormatter={(value) => {
+                    const date = new Date(value)
+                    if (timeRange === '24h') {
+                      return date.toLocaleString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                      })
+                    } else {
+                      return date.toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        month: 'short', 
+                        day: 'numeric'
+                      })
+                    }
+                  }}
+                  offset={12}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="price" 
                   stroke="#f7931a" 
                   strokeWidth={2}
-                  dot={{ fill: '#f7931a', strokeWidth: 2, r: 0 }}
-                  activeDot={{ r: 4, fill: '#f7931a', stroke: '#fff', strokeWidth: 2 }}
+                  dot={false}
+                  activeDot={{ 
+                    r: 4, 
+                    fill: '#f7931a', 
+                    stroke: '#fff', 
+                    strokeWidth: 2,
+                    filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))'
+                  }}
                   connectNulls={false}
                 />
               </LineChart>
             </ResponsiveContainer>
+            )}
           </div>
         </div>
 
         {/* Market Dominance */}
-        <div className="card h-80 flex flex-col">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 px-2">Market Dominance</h3>
-          <div className="flex-1 px-2 pb-2 flex flex-col">
-            <div className="flex-1 flex items-center justify-center">
+        <div className="card h-96 flex flex-col">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6 px-4 pt-4">Market Dominance</h3>
+          <div className="flex-1 px-4 pb-4 flex flex-col justify-center">
+            <div className="flex-1 flex items-center justify-center min-h-0">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart aria-label="Market dominance pie chart showing Bitcoin, Ethereum, and other cryptocurrencies">
                   <Pie
                     data={pieData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={70}
-                    outerRadius={110}
-                    paddingAngle={2}
+                    innerRadius={75}
+                    outerRadius={120}
+                    paddingAngle={3}
                     dataKey="value"
                   >
                     {pieData.map((entry, index) => (
@@ -286,31 +398,32 @@ const MarketOverview = () => {
                   </Pie>
                   <Tooltip 
                     contentStyle={{
-                      backgroundColor: 'rgba(31, 41, 55, 0.95)',
-                      border: '1px solid rgba(75, 85, 99, 0.3)',
-                      borderRadius: '8px',
+                      backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                      border: '1px solid rgba(75, 85, 99, 0.4)',
+                      borderRadius: '12px',
                       color: '#f9fafb',
                       fontSize: '12px',
-                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)'
+                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)',
+                      padding: '12px'
                     }}
-                    labelStyle={{ color: '#f9fafb', fontWeight: '500' }}
+                    labelStyle={{ color: '#f9fafb', fontWeight: '600', fontSize: '13px' }}
                     formatter={(value, name) => [`${value.toFixed(1)}%`, name]}
-                    offset={10}
+                    offset={12}
                   />
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="mt-4 space-y-2">
+            <div className="mt-6 space-y-3">
               {pieData.map((item, index) => (
                 <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <div 
-                      className="w-3 h-3 rounded-full flex-shrink-0" 
+                      className="w-4 h-4 rounded-full flex-shrink-0 shadow-sm" 
                       style={{ backgroundColor: item.color }}
                     ></div>
-                    <span className="text-sm text-gray-600 font-medium">{item.name}</span>
+                    <span className="text-sm text-gray-700 font-medium">{item.name}</span>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">{item.value.toFixed(1)}%</span>
+                  <span className="text-sm font-bold text-gray-900">{item.value.toFixed(1)}%</span>
                 </div>
               ))}
             </div>
