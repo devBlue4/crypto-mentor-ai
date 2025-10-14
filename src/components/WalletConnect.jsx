@@ -29,10 +29,22 @@ const WalletConnect = () => {
       <button
         onClick={handleConnect}
         disabled={isConnecting}
-        className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-medium flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="relative bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-400 hover:to-purple-500 px-8 py-4 rounded-2xl font-semibold flex items-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 active:scale-95 border border-purple-400/30 hover:border-purple-300/50 overflow-hidden"
       >
-        <Wallet className="w-4 h-4" />
-        <span>{isConnecting ? 'Connecting...' : 'Connect Wallet'}</span>
+        {/* Shine effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        
+        {/* Glow effect */}
+        <div className="absolute inset-0 bg-purple-400/20 rounded-2xl blur-xl opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+        
+        <div className="relative flex items-center space-x-3">
+          <div className="flex items-center justify-center w-6 h-6 bg-white/20 rounded-lg">
+            <Wallet className="w-4 h-4" />
+          </div>
+          <span className="text-sm font-semibold tracking-wide">
+            {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+          </span>
+        </div>
       </button>
 
       {/* Modal to install MetaMask */}
@@ -55,7 +67,7 @@ const WalletConnect = () => {
             <div className="space-y-3">
               <button
                 onClick={installMetaMask}
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-400 hover:to-purple-500 px-4 py-3 rounded-xl font-semibold flex items-center justify-center space-x-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-purple-400/30"
               >
                 <ExternalLink className="w-4 h-4" />
                 <span>Install MetaMask</span>
@@ -63,7 +75,7 @@ const WalletConnect = () => {
               
               <button
                 onClick={() => setShowModal(false)}
-                className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/80 px-4 py-2 rounded-lg font-medium transition-colors"
+                className="w-full bg-gray-800/80 text-gray-300 hover:bg-gray-700/80 px-4 py-3 rounded-xl font-semibold border border-gray-600/50 transition-all duration-300 hover:border-gray-500/70"
               >
                 Cancel
               </button>

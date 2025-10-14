@@ -66,11 +66,11 @@ export default {
           ring: 'oklch(var(--sidebar-ring))',
         },
         crypto: {
-          bitcoin: '#f7931a',
-          ethereum: '#627eea',
-          success: '#10b981',
-          warning: '#f59e0b',
-          danger: '#ef4444',
+          bitcoin: 'oklch(0.7000 0.1500 40.0000)',
+          ethereum: 'oklch(0.6500 0.1800 200.0000)',
+          success: 'oklch(0.6500 0.1500 140.0000)',
+          warning: 'oklch(0.7500 0.1500 60.0000)',
+          danger: 'oklch(0.6500 0.2000 15.0000)',
         }
       },
       fontFamily: {
