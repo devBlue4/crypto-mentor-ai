@@ -378,22 +378,33 @@ const MarketOverview = () => {
 
         {/* Market Dominance */}
         <div className="card h-96 flex flex-col">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6 px-4 pt-4">Market Dominance</h3>
-          <div className="flex-1 px-4 pb-4 flex flex-col justify-center">
-            <div className="flex-1 flex items-center justify-center min-h-0">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3 px-4 pt-4">Market Dominance</h3>
+          <div className="flex-1 px-6 pb-4 flex flex-col">
+            <div className="flex-1 flex items-center justify-center min-h-0 relative" style={{ minHeight: '200px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart aria-label="Market dominance pie chart showing Bitcoin, Ethereum, and other cryptocurrencies">
                   <Pie
                     data={pieData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={75}
-                    outerRadius={120}
-                    paddingAngle={3}
+                    innerRadius={55}
+                    outerRadius={80}
+                    paddingAngle={2}
                     dataKey="value"
+                    stroke="rgba(255, 255, 255, 0.1)"
+                    strokeWidth={1}
+                    style={{
+                      filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))'
+                    }}
                   >
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={entry.color}
+                        style={{
+                          filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))'
+                        }}
+                      />
                     ))}
                   </Pie>
                   <Tooltip 
@@ -413,17 +424,17 @@ const MarketOverview = () => {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="mt-6 space-y-3">
+            <div className="mt-3 space-y-2">
               {pieData.map((item, index) => (
                 <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
                     <div 
-                      className="w-4 h-4 rounded-full flex-shrink-0 shadow-sm" 
+                      className="w-3 h-3 rounded-full flex-shrink-0 shadow-sm" 
                       style={{ backgroundColor: item.color }}
                     ></div>
-                    <span className="text-sm text-gray-700 font-medium">{item.name}</span>
+                    <span className="text-xs text-gray-700 font-medium">{item.name}</span>
                   </div>
-                  <span className="text-sm font-bold text-gray-900">{item.value.toFixed(1)}%</span>
+                  <span className="text-xs font-bold text-gray-900">{item.value.toFixed(1)}%</span>
                 </div>
               ))}
             </div>

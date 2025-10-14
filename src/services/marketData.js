@@ -230,7 +230,9 @@ export const marketDataService = {
       } else {
         // Use standard market_chart for other ranges
         let interval = 'daily'
-        if (days <= 7) {
+        if (days <= 7 && days > 1) {
+          interval = 'hourly'
+        } else if (days === 7) {
           interval = 'hourly'
         }
         
