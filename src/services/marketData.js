@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { marketDataCache, newsCache, generateCacheKey } from './cache'
 
-// Market data simulation for demo
+// API Configuration
+const COINGECKO_API = 'https://api.coingecko.com/api/v3'
+const FEAR_GREED_API = 'https://api.alternative.me/fng/'
+
+// Market data simulation for demo (fallback)
 const MOCK_MARKET_DATA = {
   bitcoin: {
     price: 43250.50,
@@ -22,6 +26,7 @@ const MOCK_MARKET_DATA = {
   totalMarketCap: 1750000000000,
   totalVolume: 85000000000,
   fearGreedIndex: 65,
+  fearGreedLabel: 'Neutral',
   dominance: {
     bitcoin: 42.5,
     ethereum: 18.3,
@@ -30,29 +35,118 @@ const MOCK_MARKET_DATA = {
 }
 
 export const marketDataService = {
-  // Get general market data
+  // Get general market data from real APIs
   async getMarketOverview() {
     const cacheKey = generateCacheKey('market-overview')
     
-    // Try to get from cache first
+    // Try to get from cache first (5 minute cache)
     const cached = marketDataCache.get(cacheKey)
     if (cached !== null) {
       return cached
     }
     
     try {
-      // In a real project, this would come from CoinGecko API
-      // const response = await axios.get('https://api.coingecko.com/api/v3/global')
-      
-      // For demo, return simulated data
-      const data = MOCK_MARKET_DATA
-      marketDataCache.set(cacheKey, data)
+      // Fetch data from multiple APIs in parallel
+      const [globalData, bitcoinData, fearGreedData] = await Promise.allSettled([
+        this.fetchGlobalMarketData(),
+        this.fetchBitcoinData(),
+        this.fetchFearGreedIndex()
+      ])
+
+      // Process successful responses
+      const global = globalData.status === 'fulfilled' ? globalData.value : null
+      const bitcoin = bitcoinData.status === 'fulfilled' ? bitcoinData.value : null
+      const fearGreed = fearGreedData.status === 'fulfilled' ? fearGreedData.value : null
+
+      // Combine data with fallbacks
+      const data = {
+        totalMarketCap: global?.totalMarketCap || MOCK_MARKET_DATA.totalMarketCap,
+        totalVolume: global?.totalVolume || MOCK_MARKET_DATA.totalVolume,
+        bitcoin: bitcoin || MOCK_MARKET_DATA.bitcoin,
+        fearGreedIndex: fearGreed?.value || MOCK_MARKET_DATA.fearGreedIndex,
+        fearGreedLabel: fearGreed?.label || MOCK_MARKET_DATA.fearGreedLabel,
+        dominance: global?.dominance || MOCK_MARKET_DATA.dominance,
+        lastUpdated: new Date().toISOString(),
+        isRealData: true
+      }
+
+      // Cache for 5 minutes
+      marketDataCache.set(cacheKey, data, 5 * 60 * 1000)
       return data
     } catch (error) {
       console.error('Error getting market data:', error)
-      const data = MOCK_MARKET_DATA
-      marketDataCache.set(cacheKey, data)
-      return data
+      // Return mock data with error flag
+      const fallbackData = { ...MOCK_MARKET_DATA, isRealData: false, error: true }
+      marketDataCache.set(cacheKey, fallbackData, 60000) // Cache for 1 minute on error
+      return fallbackData
+    }
+  },
+
+  // Fetch global market data from CoinGecko
+  async fetchGlobalMarketData() {
+    try {
+      const response = await axios.get(`${COINGECKO_API}/global`, {
+        timeout: 10000
+      })
+      
+      const global = response.data.data
+      return {
+        totalMarketCap: global.total_market_cap.usd,
+        totalVolume: global.total_volume.usd,
+        dominance: {
+          bitcoin: global.market_cap_percentage.btc,
+          ethereum: global.market_cap_percentage.eth,
+          others: 100 - global.market_cap_percentage.btc - global.market_cap_percentage.eth
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching global market data:', error)
+      throw error
+    }
+  },
+
+  // Fetch Bitcoin specific data
+  async fetchBitcoinData() {
+    try {
+      const response = await axios.get(`${COINGECKO_API}/simple/price`, {
+        params: {
+          ids: 'bitcoin',
+          vs_currencies: 'usd',
+          include_24hr_change: true,
+          include_24hr_vol: true,
+          include_market_cap: true
+        },
+        timeout: 10000
+      })
+
+      const btcData = response.data.bitcoin
+      return {
+        price: btcData.usd,
+        change24h: btcData.usd_24h_change,
+        volume: btcData.usd_24h_vol,
+        marketCap: btcData.usd_market_cap
+      }
+    } catch (error) {
+      console.error('Error fetching Bitcoin data:', error)
+      throw error
+    }
+  },
+
+  // Fetch Fear & Greed Index
+  async fetchFearGreedIndex() {
+    try {
+      const response = await axios.get(FEAR_GREED_API, {
+        timeout: 10000
+      })
+
+      const fngData = response.data.data[0]
+      return {
+        value: parseInt(fngData.value),
+        label: fngData.value_classification
+      }
+    } catch (error) {
+      console.error('Error fetching Fear & Greed Index:', error)
+      throw error
     }
   },
 
