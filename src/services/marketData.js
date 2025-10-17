@@ -4,6 +4,9 @@ import { marketDataCache, newsCache, generateCacheKey } from './cache'
 // API Configuration
 const COINGECKO_API = 'https://api.coingecko.com/api/v3'
 const FEAR_GREED_API = 'https://api.alternative.me/fng/'
+const CRYPTOCOMPARE_API = 'https://min-api.cryptocompare.com/data/v2/news/'
+const DEFILLAMA_PROTOCOLS_API = import.meta.env.DEV ? '/defillama/protocols' : 'https://api.llama.fi/protocols'
+const CRYPTOCOMPARE_API_KEY = import.meta.env.VITE_CRYPTOCOMPARE_API_KEY
 
 // Market data simulation for demo (fallback)
 const MOCK_MARKET_DATA = {
@@ -14,6 +17,31 @@ const MOCK_MARKET_DATA = {
     marketCap: 850000000000,
     high24h: 44500,
     low24h: 42500
+  },
+
+  // Fetch top performers using DeFiLlama protocols 24h change (as a proxy)
+  async fetchTopPerformers24h() {
+    try {
+      const { data } = await axios.get(DEFILLAMA_PROTOCOLS_API, { timeout: 15000 })
+      if (!Array.isArray(data)) return []
+
+      // Map to a common shape using "change_1d" when available, fallback to tvl changes
+      const items = data
+        .filter(p => typeof p.change_1d === 'number' && p.change_1d !== null)
+        .map(p => ({
+          symbol: (p.symbol || p.name || 'N/A').toUpperCase().slice(0, 8),
+          name: p.name,
+          change: `${p.change_1d > 0 ? '+' : ''}${p.change_1d.toFixed(2)}%`,
+          logo: p.logo || p.logoUrl || p.image
+        }))
+        .sort((a, b) => parseFloat(b.change) - parseFloat(a.change))
+        .slice(0, 9) // 3x3 grid in UI
+
+      return items
+    } catch (error) {
+      console.warn('DeFiLlama top performers unavailable:', error?.response?.status || error?.message)
+      return []
+    }
   },
   ethereum: {
     price: 2650.75,
@@ -47,16 +75,18 @@ export const marketDataService = {
     
     try {
       // Fetch data from multiple APIs in parallel
-      const [globalData, bitcoinData, fearGreedData] = await Promise.allSettled([
+      const [globalData, bitcoinData, fearGreedData, topPerformersData] = await Promise.allSettled([
         this.fetchGlobalMarketData(),
         this.fetchBitcoinData(),
-        this.fetchFearGreedIndex()
+        this.fetchFearGreedIndex(),
+        this.fetchTopPerformers24h()
       ])
 
       // Process successful responses
       const global = globalData.status === 'fulfilled' ? globalData.value : null
       const bitcoin = bitcoinData.status === 'fulfilled' ? bitcoinData.value : null
       const fearGreed = fearGreedData.status === 'fulfilled' ? fearGreedData.value : null
+      const topPerformers = topPerformersData.status === 'fulfilled' ? topPerformersData.value : []
 
       // Combine data with fallbacks
       // Calculate dominance with proper rounding and "Others" calculation
@@ -75,6 +105,7 @@ export const marketDataService = {
           ethereum: parseFloat(ethDominance.toFixed(1)),
           others: parseFloat(othersDominance.toFixed(1))
         },
+        top_performers: topPerformers,
         lastUpdated: new Date().toISOString(),
         isRealData: true
       }
@@ -356,41 +387,87 @@ export const marketDataService = {
     }
     
     try {
-      // News simulation
-      const news = [
-        {
-          id: 1,
-          title: 'Bitcoin reaches new monthly high',
-          summary: 'Bitcoin price surpassed $43,000 USD with record trading volume.',
-          source: 'CryptoNews',
-          publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          sentiment: 'positive'
-        },
-        {
-          id: 2,
-          title: 'Ethereum 2.0 successful update',
-          summary: 'The Ethereum network continues to improve its scalability with the latest updates.',
-          source: 'Ethereum.org',
-          publishedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          sentiment: 'positive'
-        },
-        {
-          id: 3,
-          title: 'Crypto regulations under discussion',
-          summary: 'Regulators are working on new guidelines for the cryptocurrency market.',
-          source: 'Financial Times',
-          publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          sentiment: 'neutral'
-        }
-      ]
-      
-      newsCache.set(cacheKey, news)
-      return news
+      // 1) CoinGecko status updates for top coins (acts as "project/news updates")
+      const coingeckoUpdates = await this.fetchCoinGeckoStatusUpdates(['bitcoin', 'ethereum', 'solana', 'cardano', 'polygon'])
+
+      // 2) Optional: CryptoCompare global crypto news (free tier available)
+      let cryptocompareNews = []
+      try {
+        cryptocompareNews = await this.fetchCryptoCompareNews()
+      } catch (_) {
+        // ignore optional source errors
+      }
+
+      // Merge, sort by date (desc) and limit
+      const merged = [...cryptocompareNews, ...coingeckoUpdates]
+        .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+        .slice(0, 15)
+
+      newsCache.set(cacheKey, merged, 5 * 60 * 1000)
+      return merged
     } catch (error) {
       console.error('Error getting news:', error)
       const emptyNews = []
       newsCache.set(cacheKey, emptyNews)
       return emptyNews
+    }
+  },
+
+  // Fetch CoinGecko status updates for a list of coins and map to unified article shape
+  async fetchCoinGeckoStatusUpdates(coinIds = ['bitcoin', 'ethereum']) {
+    try {
+      const requests = coinIds.map((id) =>
+        axios.get(`${COINGECKO_API}/coins/${id}/status_updates`, { params: { per_page: 5, page: 1 }, timeout: 10000 })
+      )
+      const results = await Promise.allSettled(requests)
+      const articles = []
+      results.forEach((res, idx) => {
+        if (res.status === 'fulfilled') {
+          const updates = res.value.data.status_updates || []
+          updates.forEach((u) => {
+            articles.push({
+              id: `${coinIds[idx]}_${u.created_at}_${u.project?.name || 'update'}`,
+              title: `${u.project?.name || coinIds[idx]}: ${u.category || 'Update'}`,
+              summary: (u.description || 'Project update').slice(0, 220) + ((u.description || '').length > 220 ? '…' : ''),
+              source: u.user || u.project?.name || coinIds[idx],
+              publishedAt: u.created_at,
+              url: u?.project?.homepage || undefined,
+              image: u?.project?.image?.large || u?.project?.image?.small,
+              sentiment: 'neutral'
+            })
+          })
+        }
+      })
+      return articles
+    } catch (error) {
+      console.error('Error fetching CoinGecko status updates:', error)
+      return []
+    }
+  },
+
+  // Fetch CryptoCompare news (optional). Requires API key for higher limits
+  async fetchCryptoCompareNews() {
+    try {
+      const headers = CRYPTOCOMPARE_API_KEY ? { Authorization: `Apikey ${CRYPTOCOMPARE_API_KEY}` } : {}
+      const { data } = await axios.get(CRYPTOCOMPARE_API, {
+        params: { lang: 'EN' },
+        headers,
+        timeout: 10000
+      })
+      const items = Array.isArray(data?.Data) ? data.Data : []
+      return items.map((n) => ({
+        id: n.id || `${n.source_info?.name}_${n.published_on}`,
+        title: n.title,
+        summary: (n.body || '').replace(/\n+/g, ' ').slice(0, 280) + (n.body && n.body.length > 280 ? '…' : ''),
+        source: n.source_info?.name || 'CryptoCompare',
+        publishedAt: new Date((n.published_on || 0) * 1000).toISOString(),
+        url: n.url,
+        image: n.imageurl,
+        sentiment: 'neutral'
+      }))
+    } catch (error) {
+      console.warn('CryptoCompare news unavailable:', error?.response?.status || error?.message)
+      return []
     }
   },
 

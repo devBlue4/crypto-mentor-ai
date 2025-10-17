@@ -50,7 +50,7 @@ export const gptAPI = {
     const response = await openaiClient.post('/chat/completions', body)
     const content = response.data?.choices?.[0]?.message?.content?.trim()
     if (!content) {
-      throw new Error('Respuesta vacía de OpenAI')
+      throw new Error('Empty response from OpenAI')
     }
 
     return {

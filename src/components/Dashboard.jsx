@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense } from 'react'
-import { TrendingUp, MessageCircle, AlertTriangle, BookOpen, BarChart3, Settings, Activity, Star, History } from 'lucide-react'
+import { TrendingUp, MessageCircle, AlertTriangle, BookOpen, BarChart3, Star, History } from 'lucide-react'
 import { useWallet } from '../contexts/WalletContext'
 
 // Lazy load components for better performance
@@ -8,8 +8,7 @@ const ChatInterface = lazy(() => import('./ChatInterface'))
 const MarketOverview = lazy(() => import('./MarketOverview'))
 const AlertsPanel = lazy(() => import('./AlertsPanel'))
 const EducationSection = lazy(() => import('./EducationSection'))
-const CacheManager = lazy(() => import('./CacheManager'))
-const PerformanceMonitor = lazy(() => import('./PerformanceMonitor'))
+// Removed CacheManager and PerformanceMonitor tabs per request
 const Watchlist = lazy(() => import('./Watchlist'))
 const TransactionHistory = lazy(() => import('./TransactionHistory'))
 
@@ -48,18 +47,6 @@ const Dashboard = () => {
             name: 'Education',
             icon: BookOpen,
             component: EducationSection
-          },
-          {
-            id: 'cache',
-            name: 'Cache Manager',
-            icon: Settings,
-            component: CacheManager
-          },
-          {
-            id: 'performance',
-            name: 'Performance',
-            icon: Activity,
-            component: PerformanceMonitor
           },
           {
             id: 'watchlist',

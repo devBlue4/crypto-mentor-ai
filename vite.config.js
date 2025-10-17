@@ -18,6 +18,17 @@ export default defineConfig({
             // console.log('[proxy] →', proxyReq.getHeader('host'), proxyReq.path)
           })
         }
+      },
+      '/defillama': {
+        target: 'https://api.llama.fi',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/defillama/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            // console.log('[defillama] →', proxyReq.getHeader('host'), proxyReq.path)
+          })
+        }
       }
     }
   },
