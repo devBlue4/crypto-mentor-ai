@@ -29,6 +29,17 @@ export default defineConfig({
             // console.log('[defillama] →', proxyReq.getHeader('host'), proxyReq.path)
           })
         }
+      },
+      '/coingecko': {
+        target: 'https://api.coingecko.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/coingecko/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            // console.log('[coingecko] →', proxyReq.getHeader('host'), proxyReq.path)
+          })
+        }
       }
     }
   },

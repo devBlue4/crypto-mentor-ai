@@ -2,7 +2,7 @@ import axios from 'axios'
 import { marketDataCache, newsCache, generateCacheKey } from './cache'
 
 // API Configuration
-const COINGECKO_API = 'https://api.coingecko.com/api/v3'
+const COINGECKO_API = import.meta.env.DEV ? '/coingecko/api/v3' : 'https://api.coingecko.com/api/v3'
 const FEAR_GREED_API = 'https://api.alternative.me/fng/'
 const CRYPTOCOMPARE_API = 'https://min-api.cryptocompare.com/data/v2/news/'
 const DEFILLAMA_PROTOCOLS_API = import.meta.env.DEV ? '/defillama/protocols' : 'https://api.llama.fi/protocols'
@@ -141,7 +141,12 @@ export const marketDataService = {
       }
     } catch (error) {
       console.error('Error fetching global market data:', error)
-      throw error
+      // Return partial mock so UI stays responsive
+      return {
+        totalMarketCap: MOCK_MARKET_DATA.totalMarketCap,
+        totalVolume: MOCK_MARKET_DATA.totalVolume,
+        dominance: MOCK_MARKET_DATA.dominance
+      }
     }
   },
 
@@ -302,18 +307,8 @@ export const marketDataService = {
       })
       historicalData = Array.from(uniqueData.values()).sort((a, b) => new Date(a.date) - new Date(b.date))
 
-      // Data validation and sanity check
-      const priceValues = historicalData.map(item => item.price)
-      const minPrice = Math.min(...priceValues)
-      const maxPrice = Math.max(...priceValues)
-      
-      // Check for flat data with different timestamps (potential bad data)
-      const isFlat = (maxPrice - minPrice) / minPrice < 0.001 && historicalData.length > 1
-      
-      if (minPrice < 1000 || maxPrice > 200000 || isFlat) {
-        console.error(`Invalid price data detected: min=$${minPrice}, max=$${maxPrice}, flat=${isFlat}`)
-        throw new Error('Price data failed validation')
-      }
+      // Skip overly strict validation to avoid false fallbacks.
+      // We only fall back if API returns empty/invalid arrays or throws.
 
       // Log first and last points for verification
       if (historicalData.length > 0) {
@@ -330,7 +325,29 @@ export const marketDataService = {
       
     } catch (error) {
       console.error('Error fetching real Bitcoin data:', error)
-      
+
+      // Retry once with standard market_chart endpoint if range failed for 24h
+      try {
+        if (days === 1) {
+          const retry = await axios.get(`${COINGECKO_API}/coins/bitcoin/market_chart`, {
+            params: { vs_currency: 'usd', days: 1, interval: 'hourly' },
+            timeout: 15000
+          })
+          const { prices } = retry.data
+          if (Array.isArray(prices) && prices.length > 0) {
+            const historicalData = prices.map(([timestamp, price]) => ({
+              date: new Date(timestamp).toISOString(),
+              price,
+              volume: 0
+            }))
+            marketDataCache.set(cacheKey, historicalData, 5 * 60 * 1000)
+            return historicalData
+          }
+        }
+      } catch (e) {
+        console.warn('Retry with market_chart failed:', e?.message || e)
+      }
+
       // Fallback to demo data if API fails
       const fallbackData = this.generateFallbackData(days)
       marketDataCache.set(cacheKey, fallbackData, 60000) // Cache fallback for 1 minute
