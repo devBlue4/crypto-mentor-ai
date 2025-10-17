@@ -2,66 +2,174 @@ import axios from 'axios'
 import { auraResponseCache, generateCacheKey } from './cache'
 
 // AdEx AURA API configuration
-const AURA_API_BASE = 'https://api.adex.network/aura/v1'
+const AURA_API_BASE = import.meta.env.DEV
+  ? '/aura/aura/v1' // usar proxy de Vite en desarrollo
+  : (import.meta.env.VITE_AURA_API_BASE || 'https://api.adex.network/aura/v1')
 const AURA_API_KEY = import.meta.env.VITE_AURA_API_KEY
+const OPENAI_API_KEY_PRESENT = !!import.meta.env.VITE_OPENAI_API_KEY
+
+// Log configuration (only in development)
+if (import.meta.env.DEV) {
+  console.log('🤖 AURA API Configuration:')
+  console.log('  Base URL:', AURA_API_BASE)
+  console.log('  API Key:', AURA_API_KEY ? `${AURA_API_KEY.substring(0, 8)}...` : 'Not configured')
+}
 
 // Configured axios client
 const auraClient = axios.create({
   baseURL: AURA_API_BASE,
   headers: {
     'Authorization': `Bearer ${AURA_API_KEY}`,
-    'Content-Type': 'application/json'
+    'X-API-Key': AURA_API_KEY,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
-  timeout: 30000
+  timeout: 30000,
+  validateStatus: (status) => status >= 200 && status < 300 // deja que axios lance en 4xx/5xx
 })
 
 export const auraAPI = {
+  // Normaliza la respuesta del API a un objeto estándar
+  normalizeResponse(apiData) {
+    return {
+      content: apiData?.response || apiData?.content || apiData?.text || '',
+      analysis: apiData?.analysis,
+      recommendations: apiData?.recommendations,
+      confidence: apiData?.confidence
+    }
+  },
+
+  // Intenta múltiples variantes de payload para maximizar compatibilidad
+  async tryChatPayloads(message, context) {
+    const baseContext = {
+      user_type: 'crypto_enthusiast',
+      experience_level: 'intermediate',
+      interests: ['trading', 'portfolio_management', 'market_analysis'],
+      ...context
+    }
+
+    const payloadVariants = [
+      {
+        message,
+        context: baseContext,
+        options: { include_analysis: true, include_recommendations: true, language: 'en' }
+      },
+      { message },
+      { prompt: message, context: baseContext },
+      { text: message }
+    ]
+
+    let lastError = null
+    for (const payload of payloadVariants) {
+      try {
+        const response = await auraClient.post('/chat', payload)
+        return this.normalizeResponse(response.data)
+      } catch (err) {
+        lastError = err
+        continue
+      }
+    }
+    throw lastError
+  },
+
+  // Fallback: short definition from Wikipedia (es -> en)
+  async fetchWikipediaSummary(query) {
+    const title = encodeURIComponent(query.trim())
+    const endpoints = [
+      `https://es.wikipedia.org/api/rest_v1/page/summary/${title}`,
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`
+    ]
+    for (const url of endpoints) {
+      try {
+        const { data } = await axios.get(url, { timeout: 8000 })
+        if (data?.extract) {
+          return {
+            content: data.extract,
+            analysis: `Wikipedia summary (${data.lang || 'es/en'})`,
+            recommendations: [
+              'Cross-check information with official sources',
+              'Dive into technical documentation if applicable'
+            ]
+          }
+        }
+      } catch (_) { /* intentar siguiente idioma */ }
+    }
+    throw new Error('Wikipedia unavailable')
+  },
   // Send message to AURA chat
   async sendMessage(message, context = {}) {
     const cacheKey = generateCacheKey('aura-message', message, JSON.stringify(context))
     
-    // Try to get from cache first (only for demo responses)
-    if (!AURA_API_KEY) {
+    // Check cache first
       const cached = auraResponseCache.get(cacheKey)
       if (cached !== null) {
         return cached
       }
+    
+    // If no API key, use demo mode
+    if (!AURA_API_KEY || AURA_API_KEY === 'your_aura_api_key_here') {
+      console.log('🔸 AURA API: Using demo mode (no API key configured)')
+      const result = this.getDemoResponse(message, context)
+      auraResponseCache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
+      return result
     }
     
     try {
-      const response = await auraClient.post('/chat', {
-        message,
-        context: {
-          user_type: 'crypto_enthusiast',
-          experience_level: 'intermediate',
-          interests: ['trading', 'portfolio_management', 'market_analysis'],
-          ...context
-        },
-        options: {
-          include_analysis: true,
-          include_recommendations: true,
-          language: 'en'
-        }
+      console.log('🚀 AURA API: Sending message to real API...', {
+        messageLength: message.length,
+        hasContext: Object.keys(context).length > 0
       })
-
-      const result = {
-        content: response.data.response,
-        analysis: response.data.analysis,
-        recommendations: response.data.recommendations,
-        confidence: response.data.confidence
-      }
       
+      const result = await this.tryChatPayloads(message, context)
+
+      console.log('✅ AURA API: Response received')
+
       // Cache successful responses
-      auraResponseCache.set(cacheKey, result)
+      auraResponseCache.set(cacheKey, result, 5 * 60 * 1000) // Cache for 5 minutes
       return result
     } catch (error) {
-      // Fallback for demo if no API key
-      if (!AURA_API_KEY) {
-        const result = this.getDemoResponse(message, context)
-        auraResponseCache.set(cacheKey, result)
-        return result
+      console.error('❌ AURA API Error:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data
+      })
+
+      // Si hay API key configurada y es un 500
+      const status = error.response?.status
+      if (AURA_API_KEY && status === 500) {
+        // Si hay clave de OpenAI configurada, dejamos que AuraContext haga fallback a GPT
+        if (OPENAI_API_KEY_PRESENT) {
+          console.warn('⚠️ AURA API: 500. Propagando error para usar fallback GPT.')
+          throw error
+        }
+        // Si NO hay OpenAI, intentamos Wikipedia y, si falla, demo
+        console.warn('⚠️ AURA API: 500 sin OpenAI. Intentando fallback Wikipedia')
+        const isDefinition = /^(que es|qué es|what is)\s+/i.test(message.trim())
+        if (isDefinition) {
+          const term = message.replace(/^(que es|qué es|what is)\s+/i, '').replace(/[?¿]/g, '').trim()
+          if (term.length > 0) {
+            try {
+              const wiki = await this.fetchWikipediaSummary(term)
+              auraResponseCache.set(cacheKey, wiki, 2 * 60 * 1000)
+              return wiki
+            } catch (_) { /* si falla, continuamos al demo */ }
+          }
+        }
+        console.warn('⚠️ AURA API: usando modo demo temporalmente')
+        const demo = this.getDemoResponse(message, context)
+        auraResponseCache.set(cacheKey, demo, 2 * 60 * 1000)
+        return demo
       }
-      throw error
+
+      // Con API key y errores distintos a 500: propagar para que la UI lo muestre (401, 403, 404, 429, etc.)
+      if (AURA_API_KEY) throw error
+
+      // Sin API key: usar respuestas de demostración
+      console.warn('⚠️ AURA API: No API key, usando modo demo')
+      const result = this.getDemoResponse(message, context)
+      auraResponseCache.set(cacheKey, result, 2 * 60 * 1000)
+      return result
     }
   },
 
@@ -152,35 +260,134 @@ export const auraAPI = {
 
   // Demo responses when no API key
   getDemoResponse(message, context) {
-    const responses = {
-      'hello': 'Hello! I\'m AURA, your Web3 trading assistant. How can I help you today?',
-      'bitcoin price': 'The current Bitcoin price is $43,250 USD. Based on technical analysis, I see an upward trend in the short term with support at $42,000.',
-      'portfolio': 'I see you have a diversified portfolio. I recommend considering more exposure to DeFi tokens and maintaining at least 30% in stablecoins.',
-      'recommendations': 'Based on the current market, I suggest: 1) Consider DCA in ETH, 2) Rebalance towards infrastructure tokens, 3) Maintain liquidity for opportunities.',
-      'default': 'Interesting question. Based on the current market analysis and your risk profile, I suggest researching more about this topic and considering portfolio diversification.'
-    }
-
     const lowerMessage = message.toLowerCase()
-    let response = responses.default
-
-    for (const [key, value] of Object.entries(responses)) {
-      if (lowerMessage.includes(key)) {
-        response = value
-        break
+    
+    // Saludos
+    if (lowerMessage.match(/hola|hello|hi|hey/)) {
+      return {
+        content: '¡Hola! Soy AURA, tu asistente de trading Web3. ¿En qué puedo ayudarte hoy? Puedo ayudarte con análisis de mercado, recomendaciones de portafolio y educación sobre criptomonedas.',
+        analysis: 'Usuario iniciando conversación',
+        recommendations: [
+          'Pregunta sobre el mercado actual',
+          'Solicita análisis de tu portafolio',
+          'Aprende sobre criptomonedas específicas'
+        ]
       }
     }
 
+    // ¿Qué es AURA / AdEx AURA?
+    if (lowerMessage.match(/\b(aura|adex aura)\b|que es aura|qué es aura|what is aura|que es adex|qué es adex|what is adex/i)) {
+      return {
+        content: 'AdEx AURA es una API/IA especializada en cripto que ofrece análisis de portafolio, recomendaciones de trading y insights de mercado en tiempo real. En esta app, AURA contextualiza tu wallet (si está conectada), analiza tus tokens y responde en español con explicaciones claras.',
+        analysis: 'Explicación de capacidades: chat, análisis de portafolio, recomendaciones, mercado.',
+        recommendations: [
+          'Conecta tu wallet para un análisis personalizado',
+          'Pregunta por tendencias de mercado o riesgo de tu portafolio',
+          'Configura alertas inteligentes según tus objetivos'
+        ]
+      }
+    }
+    
+    // Precio de Bitcoin
+    if (lowerMessage.match(/bitcoin|btc.*price|precio.*bitcoin/i)) {
+      return {
+        content: 'El precio actual de Bitcoin es aproximadamente $67,500 USD. Bitcoin ha mostrado una tendencia alcista en las últimas semanas con un soporte fuerte en $65,000 y resistencia en $70,000. El volumen de trading ha aumentado, lo que indica un interés institucional creciente.',
+        analysis: 'Análisis técnico: Tendencia alcista con momentum positivo. RSI en 58 (neutral). MACD mostrando señal de compra.',
+        recommendations: [
+          'Considera una estrategia DCA (Dollar Cost Averaging) para entradas graduales',
+          'Establece stop-loss en $64,000 para gestionar riesgo',
+          'Monitorea el nivel de resistencia de $70,000 para posibles toma de ganancias'
+        ]
+      }
+    }
+    
+    // Mercado general
+    if (lowerMessage.match(/market|mercado|como.*esta/i)) {
+      return {
+        content: 'El mercado cripto actual muestra una tendencia alcista moderada. La capitalización total del mercado es de $3.84T con un volumen de 24h de $85B. El índice Fear & Greed está en 65 (Optimista), indicando un sentimiento positivo pero no extremo. Bitcoin mantiene su dominancia en 57.1%.',
+        analysis: 'El mercado se encuentra en una fase de acumulación institucional con volatilidad reducida comparada con meses anteriores.',
+        recommendations: [
+          'Buen momento para posiciones largas en activos principales',
+          'Mantén 20-30% en stablecoins para oportunidades',
+          'Considera rebalancear hacia proyectos de infraestructura'
+        ]
+      }
+    }
+    
+    // Portfolio
+    if (lowerMessage.match(/portfolio|portafolio|analiz.*mi/i)) {
+      if (context.hasWallet) {
+        return {
+          content: `He analizado tu portafolio conectado. Tienes ${context.tokenCount} tokens diferentes, lo cual muestra una diversificación ${context.tokenCount >= 5 ? 'excelente' : 'moderada'}. Tu balance actual demuestra un enfoque ${context.hasBalance ? 'activo' : 'conservador'} en el mercado.`,
+          analysis: `Diversificación: ${context.tokenCount >= 5 ? 'Alta' : 'Media'}. Riesgo: Medio. Balance: ${context.hasBalance ? 'Activo' : 'Requiere atención'}.`,
+          recommendations: [
+            context.tokenCount < 5 ? 'Considera diversificar más tu portafolio' : 'Mantén tu nivel de diversificación actual',
+            'Rebalancea cada 2-3 meses para mantener tu asignación objetivo',
+            'Considera tener al menos 20% en stablecoins para liquidez'
+          ]
+        }
+      } else {
+        return {
+          content: 'Para analizar tu portafolio necesito que conectes tu wallet. Haz clic en "Connect Wallet" en la esquina superior derecha. Una vez conectada, podré darte un análisis detallado de tus holdings, diversificación y recomendaciones personalizadas.',
+          analysis: 'Wallet no conectada - análisis no disponible',
+          recommendations: [
+            'Conecta tu wallet para análisis personalizado',
+            'Asegúrate de usar una wallet compatible (MetaMask, WalletConnect)',
+            'Nunca compartas tu frase semilla con nadie'
+          ]
+        }
+      }
+    }
+    
+    // Ethereum
+    if (lowerMessage.match(/ethereum|eth(?!\w)/i)) {
+      return {
+        content: 'Ethereum está cotizando alrededor de $3,850 USD. Con la actualización exitosa a Proof of Stake y el crecimiento del ecosistema DeFi y NFT, ETH muestra fundamentos sólidos. El volumen de staking ha superado los 34M ETH, reduciendo la oferta circulante.',
+        analysis: 'Fundamentos fuertes con adopción institucional creciente. Rendimiento de staking ~4-5% APY.',
+        recommendations: [
+          'ETH es una excelente opción para holdings a largo plazo',
+          'Considera hacer staking para generar rendimientos pasivos',
+          'Diversifica dentro del ecosistema Ethereum (DeFi, Layer 2s)'
+        ]
+      }
+    }
+    
+    // DeFi
+    if (lowerMessage.match(/defi|decentralized finance|finanzas descentralizadas/i)) {
+      return {
+        content: 'DeFi (Finanzas Descentralizadas) son aplicaciones financieras construidas sobre blockchain que operan sin intermediarios. Incluyen lending/borrowing (Aave, Compound), exchanges descentralizados (Uniswap, SushiSwap), y yield farming. El TVL total en DeFi supera los $100B.',
+        analysis: 'DeFi ofrece oportunidades de rendimiento superiores a finanzas tradicionales pero con riesgos adicionales (smart contracts, impermanent loss).',
+        recommendations: [
+          'Comienza con protocolos establecidos y auditados (Aave, Uniswap)',
+          'Nunca inviertas más del 10-20% de tu portfolio en DeFi de alto riesgo',
+          'Entiende los riesgos: impermanent loss, smart contract bugs, rug pulls'
+        ]
+      }
+    }
+    
+    // Recomendaciones generales
+    if (lowerMessage.match(/recommend|recomend|sugiere|aconsejas/i)) {
+      return {
+        content: 'Basándome en el mercado actual y las mejores prácticas, te recomiendo una estrategia balanceada: 40-50% en BTC/ETH (activos principales), 20-30% en altcoins de proyectos sólidos (SOL, LINK, AVAX), 20-30% en stablecoins para liquidez, y 5-10% en proyectos de alto riesgo/alto rendimiento si tu perfil lo permite.',
+        analysis: 'Esta distribución balancea crecimiento potencial con gestión de riesgo adecuada.',
+        recommendations: [
+          'Implementa DCA (compras periódicas) en lugar de intentar timing del mercado',
+          'Rebalancea tu portafolio trimestralmente',
+          'Mantén un fondo de emergencia fuera de cripto',
+          'Nunca inviertas más de lo que puedes permitirte perder'
+        ]
+      }
+    }
+    
+    // Default response
     return {
-      content: response,
-      analysis: {
-        sentiment: 'neutral',
-        confidence: 0.8,
-        key_points: ['Favorable technical analysis', 'Diversification recommended']
-      },
+      content: 'Esa es una excelente pregunta. Basándome en el análisis del mercado actual y las tendencias de la industria, te recomendaría investigar más sobre este tema específico. El mercado cripto es muy dinámico, por lo que es importante mantenerse informado y tomar decisiones basadas en investigación sólida y tu perfil de riesgo personal.',
+      analysis: 'El mercado cripto requiere educación continua y análisis cuidadoso antes de tomar decisiones de inversión.',
       recommendations: [
-        'Consider DCA in main assets',
-        'Maintain portfolio diversification',
-        'Set stop-loss to manage risk'
+        'Investiga fuentes confiables como CoinDesk, The Block, y CoinGecko',
+        'Mantén una estrategia de inversión disciplinada',
+        'Considera consultar con asesores financieros para decisiones importantes',
+        'Diversifica tu portafolio para gestionar el riesgo'
       ]
     }
   },

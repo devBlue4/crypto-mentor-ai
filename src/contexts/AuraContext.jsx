@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import { auraAPI } from '../services/auraAPI'
+import { gptAPI } from '../services/gptAPI'
 
 const AuraContext = createContext()
 
@@ -45,17 +46,43 @@ export const AuraProvider = ({ children }) => {
       return auraMessage
     } catch (error) {
       console.error('Error sending message to AURA:', error)
-      
-      const errorMessage = {
-        id: Date.now() + 1,
-        type: 'aura',
-        content: 'Sorry, there was an error processing your message. Please try again.',
-        timestamp: new Date(),
-        isError: true
-      }
+      // Try GPT fallback
+      try {
+        const gptResponse = await gptAPI.sendMessage(message, context)
+        const gptMessage = {
+          id: Date.now() + 1,
+          type: 'aura',
+          content: gptResponse.content,
+          timestamp: new Date(),
+          analysis: gptResponse.analysis,
+          recommendations: gptResponse.recommendations
+        }
+        setConversation(prev => [...prev, gptMessage])
+        return gptMessage
+      } catch (fallbackError) {
+        console.error('GPT fallback failed:', fallbackError)
 
-      setConversation(prev => [...prev, errorMessage])
-      return errorMessage
+        const status = error?.response?.status
+        const apiMessage = error?.response?.data?.message || error?.message
+        const friendly =
+          status === 401 ? 'Invalid API key or insufficient permissions (401).'
+          : status === 403 ? 'Access denied (403). Check API permissions.'
+          : status === 404 ? 'Endpoint not found (404). Verify base URL.'
+          : status === 429 ? 'Rate limit exceeded (429). Please try later.'
+          : status ? `API error (${status}).`
+          : 'Could not connect to AURA.'
+
+        const errorMessage = {
+          id: Date.now() + 1,
+          type: 'aura',
+          content: `There was a problem processing your message.
+Details: ${friendly}${apiMessage ? `\nMessage: ${apiMessage}` : ''}`,
+          timestamp: new Date(),
+          isError: true
+        }
+        setConversation(prev => [...prev, errorMessage])
+        return errorMessage
+      }
     } finally {
       setIsLoading(false)
     }

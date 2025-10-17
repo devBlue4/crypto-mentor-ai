@@ -5,7 +5,21 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    host: true
+    host: true,
+    proxy: {
+      '/aura': {
+        target: 'https://api.adex.network',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/aura/, ''),
+        configure: (proxy) => {
+          // Opcional: logs de debug del proxy
+          proxy.on('proxyReq', (proxyReq) => {
+            // console.log('[proxy] →', proxyReq.getHeader('host'), proxyReq.path)
+          })
+        }
+      }
+    }
   },
   build: {
     outDir: 'dist',
