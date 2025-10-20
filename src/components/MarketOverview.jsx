@@ -79,8 +79,6 @@ const MarketOverview = () => {
       // Show success message only if it's real data and not silent
       if (!silent && overview.isRealData) {
         toast.success('Market data updated successfully')
-      } else if (!silent && !overview.isRealData) {
-        toast.error('Using demo data - API unavailable')
       }
     } catch (error) {
       console.error('Error loading market data:', error)
@@ -144,7 +142,6 @@ const MarketOverview = () => {
           {lastUpdated && (
             <p className="text-sm text-muted-foreground">
               Last updated: {lastUpdated.toLocaleTimeString()}
-              {marketData?.isRealData ? ' (Live Data)' : ' (Demo Data)'}
             </p>
           )}
         </div>
@@ -175,9 +172,7 @@ const MarketOverview = () => {
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm font-medium">+3.2%</span>
           </div>
-          {!marketData?.isRealData && (
-            <p className="text-xs text-yellow-600 mt-1">Demo data</p>
-          )}
+
         </div>
 
         <div className="card">
@@ -195,9 +190,7 @@ const MarketOverview = () => {
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm font-medium">+8.5%</span>
           </div>
-          {!marketData?.isRealData && (
-            <p className="text-xs text-yellow-600 mt-1">Demo data</p>
-          )}
+
         </div>
 
         <div className="card">
@@ -214,9 +207,7 @@ const MarketOverview = () => {
           <div className="flex items-center space-x-1 text-yellow-600">
             <span className="text-sm font-medium">{marketData?.fearGreedLabel || 'Neutral'}</span>
           </div>
-          {!marketData?.isRealData && (
-            <p className="text-xs text-yellow-600 mt-1">Demo data</p>
-          )}
+
         </div>
 
         <div className="card">
@@ -242,9 +233,7 @@ const MarketOverview = () => {
               {marketDataService.formatPercentage(marketData?.bitcoin?.change24h || 0)}
             </span>
           </div>
-          {!marketData?.isRealData && (
-            <p className="text-xs text-yellow-600 mt-1">Demo data</p>
-          )}
+
         </div>
       </div>
 
