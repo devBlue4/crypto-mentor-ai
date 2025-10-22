@@ -1,105 +1,191 @@
-# Guion de video (solo funcionalidades estables)
+# Guion de Video Mejorado - CryptoMentor AI
 
-Duración aproximada: 2:30
+**Duración total: 3:45 minutos**
 
-Notas generales:
-- Grabar en `http://localhost:3000`.
-- Si aparece “Demo data” en Overview, continuar; la UX está preparada para modo demo.
-- El flujo de `Portfolio` es opcional (requiere MetaMask). Todo lo demás funciona en demo.
+## 🎯 Objetivo del Video
+Demostrar CryptoMentor AI como una solución completa que utiliza AdEx AURA API para democratizar el trading de criptomonedas, destacando el análisis contextual y las recomendaciones personalizadas.
 
-### Highlight de Hackathon (enfatizar siempre)
-- Mostrar en el Chat el badge “Powered by AdEx AURA API”.
-- Enfatizar en voz y en pantalla la capacidad clave: el agente toma una `account address` y devuelve una lista de recomendaciones y estrategias en lenguaje natural, con una descripción de lo que hace cada una.
-- Prompt principal a usar en el video:
-  - `For address 0x1C680f16b2270e324D5778305C9EC96784c832ab, share 3–5 app recommendations and strategies, each with a one‑sentence description of what it does.`
-- Sugerencia visual: mostrar la dirección corta `0x1C680f…32ab` en pantalla y mantener la completa en el portapapeles.
+## 📋 Notas Técnicas
+- **Grabar en**: `http://localhost:3000` (desarrollo) o URL de producción
+- **Modo Demo**: Si aparece "Demo data", continuar - la UX está preparada
+- **MetaMask**: Opcional para Portfolio, todo lo demás funciona sin wallet
+- **Resolución**: 1920x1080, 60fps para mejor calidad
 
-## 1) Intro (0:00–0:05)
-- Toma: Pantalla de carga y luego `Header` con logo “CryptoMentor AI”.
-- Voz en off: “Bienvenido a CryptoMentor AI, tu asistente inteligente para análisis cripto y educación Web3.”
+## 🏆 Highlight Principal del Hackathon
+**ENFATIZAR SIEMPRE**: 
+- Badge "Powered by AdEx AURA API" visible en Chat y Strategies
+- **Capacidad clave**: AURA toma una `account address` y devuelve recomendaciones y estrategias en lenguaje natural
+- **Prompt estrella**: `Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.`
+- **Visual**: Mostrar dirección corta `0x1C680f…32ab` en pantalla, completa en portapapeles
 
-## 2) Dashboard y navegación (0:05–0:20)
-- Toma: `Dashboard` con mensaje “Welcome to CryptoMentor AI!” y pestañas: `Overview`, `Portfolio`, `AI Chat`, `Alerts`, `Education`.
-- Acción: Mover el cursor por las pestañas sin hacer clic aún.
-- Voz en off: “La app es rápida, clara y organizada por pestañas para que encuentres todo en un clic.”
+## 1) Presentación Personal (0:00–0:20)
+- **Toma**: Pantalla de carga → Header con logo "CryptoMentor AI"
+- **Voz en off**: "¡Hola! Soy [Tu Nombre], desarrollador y entusiasta de las criptomonedas."
+- **Visual**: Mostrar el logo de CryptoMentor AI y transición suave
+- **Voz en off**: "Hoy te presento CryptoMentor AI, mi proyecto para el hackathon de AdEx AURA."
+- **Visual**: Zoom in al dashboard principal
+- **Voz en off**: "Una solución que combina Web3, inteligencia artificial y educación para democratizar el trading de criptomonedas."
+- **Visual**: Mostrar las pestañas principales del dashboard
 
-## 3) Overview – Resumen de mercado y noticias (0:20–0:50)
-- Toma: `Overview` (activo por defecto).
-- Acción: Hacer scroll por tarjetas “Market Cap”, “24h Volume”, “Fear & Greed”, “Bitcoin” y la sección “Market News”.
-- Voz en off: “En Overview ves el estado del mercado, sentimiento y un vistazo a Bitcoin. Abajo, noticias recientes con su sentimiento estimado.”
-- Texto en pantalla: “Datos en vivo o demo según disponibilidad.”
- - Acción: Clic en un titular de “Market News” para abrir la noticia original en una nueva pestaña.
- - Acción (opcional): Clic en “Refresh” para actualizar los datos del resumen.
+## 2) El Problema que Resuelvo (0:20–0:35)
+- **Toma**: Mostrar múltiples pestañas del navegador con diferentes sitios crypto
+- **Voz en off**: "Como desarrollador, he visto que el trading de criptomonedas es complejo. La información está fragmentada en múltiples plataformas."
+- **Visual**: Mostrar sitios como CoinGecko, TradingView, diferentes exchanges
+- **Voz en off**: "Los usuarios toman decisiones sin análisis adecuado, y la barrera de entrada es muy alta para principiantes."
+- **Visual**: Transición al dashboard de CryptoMentor AI
+- **Voz en off**: "Por eso creé CryptoMentor AI: una solución integral que simplifica todo el proceso."
 
-## 4) AI Chat – CryptoMentor AI Agent (0:50–1:20)
-- Toma: Clic en la pestaña `AI Chat`.
-- Acción:
-  - Mostrar mensajes de bienvenida.
-  - Hacer clic en un “Example” o escribir: “¿Cómo está el mercado hoy?”
-  - Presionar “Send”.
-- Voz en off: “Chatea con el CryptoMentor AI Agent (AdEx AURA). Además de responder preguntas, puede analizar una account address y devolver recomendaciones y estrategias en lenguaje natural, cada una con su descripción.”
-- Acción: Clic en “Clear” para reiniciar la conversación.
-- Voz en off: “Puedes reiniciar la conversación cuando quieras.”
- - Nota técnica (en pantalla pequeña): “Powered by AdEx AURA API”.
- - Demostración dirigida: Pegar `0x1C680f16b2270e324D5778305C9EC96784c832ab` y enviar el prompt:
-   - `Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.`
-   - Mostrar cómo el agente devuelve una lista de recomendaciones y estrategias con su descripción.
- - Texto en pantalla (callout): “AdEx AURA → Address → App recommendations & strategies (natural language + description)”.
+## 3) Dashboard y Navegación (0:35–0:50)
+- **Toma**: Dashboard con mensaje "Welcome to CryptoMentor AI!" y pestañas: `Overview`, `Portfolio`, `AI Chat`, `Alerts`, `Education`, `Strategies`
+- **Acción**: Hover sobre cada pestaña mostrando preview del contenido
+- **Voz en off**: "Interfaz moderna y organizada. Todo lo que necesitas para trading crypto en un solo lugar."
+- **Visual**: Destacar el diseño limpio y la navegación intuitiva
 
-## 5) Alertas – Crear y gestionar (1:20–1:45)
-- Toma: Clic en la pestaña `Alerts`.
-- Acción:
-  - Clic en “New Alert”.
-  - Completar: Type=Price, Crypto=Bitcoin, Condition=Above, Value=45000.
-  - Clic en “Create Alert”.
-  - Mostrar la alerta creada en la lista, alternar “Active/Disabled”.
-- Voz en off: “Crea alertas personalizadas por precio o cambio porcentual. Actívalas o desactívalas al instante.”
-- Acción (opcional): Borrar una alerta de ejemplo.
-- Voz en off: “Gestiona tus alertas desde un solo lugar.”
+## 4) Overview – Dashboard de Mercado (0:50–1:15)
+- **Toma**: Overview activo por defecto
+- **Acción**: Scroll suave por las tarjetas de métricas
+- **Voz en off**: "Empecemos con el dashboard de mercado. Datos en tiempo real: capitalización, volumen, sentimiento Fear & Greed, y precio de Bitcoin."
+- **Visual**: Destacar las animaciones y colores de las métricas
+- **Acción**: Clic en "Refresh" para mostrar actualización de datos
+- **Voz en off**: "También incluye noticias del mercado con análisis de sentimiento automático."
+- **Acción**: Scroll a sección de noticias, clic en un titular para abrir en nueva pestaña
+- **Texto en pantalla**: "Datos en vivo o demo según disponibilidad"
 
-## 6) Education – Lecciones y quiz con IA (1:45–2:15)
-- Toma: Clic en la pestaña `Education`.
-- Acción:
-  - Seleccionar categoría “Basic Concepts”.
-  - En la lección “What are Cryptocurrencies?”, clic en “Start AI Quiz”.
-  - Responder una pregunta y luego “Submit” para ver el puntaje.
-- Voz en off: “Aprende con quizzes generados por IA. Verás la indicación ‘AI‑powered’ y ‘Powered by AdEx AURA/OpenAI)’. El quiz se responde en inglés. Recibe calificación y explicaciones, y marca lecciones como completadas.”
+## 5) AI Chat – AdEx AURA en Acción (1:15–1:55)
+- **Toma**: Clic en pestaña `AI Chat`
+- **Acción**: Mostrar mensajes de bienvenida y ejemplos
+- **Voz en off**: "Ahora viene lo bueno: el chat inteligente con AdEx AURA API. Esta es la funcionalidad estrella de mi proyecto."
+- **Visual**: Destacar badge "Powered by AdEx AURA API"
+- **Acción**: Escribir "¿Cómo está el mercado hoy?" y enviar
+- **Voz en off**: "AURA responde con análisis contextual y recomendaciones personalizadas."
+- **Acción**: Mostrar respuesta detallada con análisis
+- **Voz en off**: "Pero aquí está la magia que hace único mi proyecto: análisis de direcciones de wallet."
+- **Acción**: Pegar `0x1C680f16b2270e324D5778305C9EC96784c832ab` (mostrar como `0x1C680f…32ab`)
+- **Acción**: Enviar prompt: `Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.`
+- **Voz en off**: "AURA analiza la dirección y devuelve estrategias personalizadas con descripciones detalladas. Esto es lo que hace especial mi implementación de la API."
+- **Visual**: Mostrar lista de recomendaciones con descripciones
+- **Texto en pantalla**: "AdEx AURA → Address → App recommendations & strategies (natural language + description)"
 
-## 7) Opcional: Conectar Wallet y ver Portfolio (2:15–2:30)
-- Requiere MetaMask instalado.
-- Toma: En el `Header`, clic en “Connect Wallet” y aprobar en MetaMask.
-- Acción: Ir a `Portfolio`. Mostrar “Total Value”, “ETH Balance” y “Tokens” (si hay). Clic en “Update”.
-- Voz en off: “Conecta tu wallet para ver tu balance y un resumen de tu portafolio. Todo seguro y sin exponer tus claves.”
-- Nota: Si no hay tokens detectados, igualmente se muestra ETH y el módulo funciona bien.
+## 6) Portfolio Analysis (1:55–2:15)
+- **Toma**: Clic en pestaña `Portfolio`
+- **Voz en off**: "El análisis de portfolio es otra funcionalidad clave. AURA analiza automáticamente tu wallet."
+- **Acción**: Mostrar métricas: diversificación, riesgo, valor total
+- **Voz en off**: "Proporciona recomendaciones personalizadas basadas en tu perfil de riesgo."
+- **Visual**: Destacar score de diversidad y nivel de riesgo
+- **Acción**: Mostrar recomendaciones específicas
+- **Voz en off**: "Todo basado en datos reales de tu wallet, sin exponer claves privadas. Seguridad primero."
 
-## 8) Strategies – Recomendaciones con dirección (2:30–2:55)
-- Toma: Clic en la pestaña `Strategies`.
-- Acción: Pegar una `account address` en el campo (por ejemplo, `0x...`) y presionar “Generate strategies”.
-- Voz en off: “La app toma una dirección de cuenta y muestra una lista de recomendaciones y estrategias en lenguaje natural, con una breve descripción de lo que hace cada una.”
-- Acción: Mostrar 2–3 tarjetas con título, descripción, “Why” y “Action”.
- - Texto en pantalla (callout): “Powered by AdEx AURA API”.
+## 7) Alertas Inteligentes (2:15–2:35)
+- **Toma**: Clic en pestaña `Alerts`
+- **Acción**: Clic en "New Alert"
+- **Voz en off**: "Sistema de alertas inteligentes que te mantiene informado."
+- **Acción**: Completar formulario: Type=Price, Crypto=Bitcoin, Condition=Above, Value=45000
+- **Acción**: Clic en "Create Alert"
+- **Voz en off**: "Alertas personalizadas por precio, cambio porcentual o volumen."
+- **Acción**: Mostrar alerta creada, alternar Active/Disabled
+- **Voz en off**: "Gestión centralizada de todas tus alertas desde un solo lugar."
 
-### Prompts sugeridos para la demo (copiar y pegar)
-- Principal (naturales):
-  - `For address 0x1C680f16b2270e324D5778305C9EC96784c832ab, share a short list of app recommendations and strategies. Add one sentence saying what each one does.`
-  - `Analyze 0x1C680f16b2270e324D5778305C9EC96784c832ab and suggest 3–5 strategies and apps, with a brief explanation of what each does.`
-- Refinar resultados:
-  - `Could you group them by time horizon (short / medium / long) and keep one line per item?`
-  - `Add a risk level (low / medium / high) and a short why for each strategy.`
-  - `Mention example apps or protocols for each recommendation and what they do.`
-- Accionabilidad:
-  - `Turn these into a simple action plan (steps) with one‑line explanations.`
-  - `Add price alerts (levels) tied to each strategy and what the alert would do.`
-- Resumen final:
-  - `Give me the top 3 for 0x1C680f16b2270e324D5778305C9EC96784c832ab with one‑line descriptions.`
+## 8) Centro de Educación (2:35–2:55)
+- **Toma**: Clic en pestaña `Education`
+- **Voz en off**: "La educación es fundamental. Por eso incluí un centro de aprendizaje interactivo."
+- **Acción**: Mostrar categorías: Basic Concepts, Trading, DeFi, Security
+- **Acción**: Seleccionar "Basic Concepts" → "What are Cryptocurrencies?"
+- **Voz en off**: "Lecciones progresivas desde principiante hasta avanzado."
+- **Acción**: Clic en "Start AI Quiz"
+- **Voz en off**: "Quizzes generados por IA con calificaciones y explicaciones detalladas."
+- **Acción**: Responder una pregunta y mostrar resultado
+- **Visual**: Destacar progreso y sistema de puntuación
 
-## Cierre (2:30)
-- Toma: Regresar al `Dashboard`.
-- Voz en off: “Esto fue CryptoMentor AI: mercado, chat con IA, alertas y educación, todo en un solo lugar. Pruébalo ahora.”
+## 9) Strategies – Análisis de Direcciones (2:55–3:15)
+- **Toma**: Clic en pestaña `Strategies`
+- **Voz en off**: "Y aquí está otra funcionalidad única: análisis especializado de direcciones de wallet."
+- **Visual**: Destacar badge "Powered by AdEx AURA API"
+- **Acción**: Pegar `0x1C680f16b2270e324D5778305C9EC96784c832ab` en el campo
+- **Acción**: Clic en "Generate strategies"
+- **Voz en off**: "AURA analiza la dirección y genera estrategias personalizadas con descripciones detalladas."
+- **Acción**: Mostrar 2-3 tarjetas con título, descripción, "Why" y "Action"
+- **Voz en off**: "Cada estrategia incluye pasos accionables. Esto es lo que hace especial mi uso de la API de AdEx AURA."
+- **Texto en pantalla**: "Powered by AdEx AURA API"
 
-## Recomendaciones de grabación
-- Mantener clics pausados para apreciar transiciones y toasts.
-- Si aparece “Demo data”, continuar; la demostración sigue siendo representativa.
-- Evitar refrescos innecesarios o forzar errores.
+## 10) Web3 Integration (3:15–3:30)
+- **Toma**: Header → "Connect Wallet" (si MetaMask disponible)
+- **Voz en off**: "Integración completa con Web3. Conecta MetaMask para análisis personalizado en tiempo real."
+- **Acción**: Mostrar conexión exitosa y datos del wallet
+- **Voz en off**: "Todo seguro y sin exponer claves privadas. La seguridad es mi prioridad."
+- **Nota**: Si no hay MetaMask, mostrar funcionalidad demo
+
+## 11) Cierre Personal (3:30–3:45)
+- **Toma**: Regresar al Dashboard principal
+- **Voz en off**: "Como desarrollador, estoy orgulloso de haber creado CryptoMentor AI."
+- **Visual**: Mostrar todas las pestañas y funcionalidades
+- **Voz en off**: "Una solución completa que combina Web3, AdEx AURA API y UX moderna para democratizar el trading crypto."
+- **Texto en pantalla**: "CryptoMentor AI - Powered by AdEx AURA"
+- **Voz en off**: "Gracias por ver mi proyecto. ¡Espero que les guste tanto como a mí crearlo!"
+
+---
+
+## 📝 Prompts Sugeridos para la Demo
+
+### Prompts Principales (Copiar y Pegar)
+```
+Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.
+```
+
+```
+For address 0x1C680f16b2270e324D5778305C9EC96784c832ab, share a short list of app recommendations and strategies. Add one sentence saying what each one does.
+```
+
+### Prompts de Refinamiento
+```
+Could you group them by time horizon (short / medium / long) and keep one line per item?
+```
+
+```
+Add a risk level (low / medium / high) and a short why for each strategy.
+```
+
+```
+Turn these into a simple action plan (steps) with one-line explanations.
+```
+
+---
+
+## 🎬 Recomendaciones de Grabación
+
+### Técnicas
+- **Resolución**: 1920x1080, 60fps
+- **Audio**: Micrófono de calidad, sin eco
+- **Iluminación**: Pantalla bien iluminada, sin reflejos
+- **Cursor**: Tamaño normal, velocidad moderada
+
+### Timing
+- **Pausas**: 1-2 segundos entre acciones importantes
+- **Transiciones**: Suaves entre secciones
+- **Toasts**: Esperar a que aparezcan completamente
+- **Loading**: Mostrar indicadores de carga
+
+### Contenido
+- **Demo Data**: Continuar si aparece, es funcional
+- **Errores**: Evitar refrescos innecesarios
+- **MetaMask**: Opcional, mostrar funcionalidad demo si no está disponible
+- **Badges**: Siempre destacar "Powered by AdEx AURA API"
+
+### Post-Producción
+- **Subtítulos**: Agregar para accesibilidad
+- **Música**: Fondo sutil, no invasivo
+- **Transiciones**: Suaves entre secciones
+- **Callouts**: Destacar funcionalidades clave
+
+---
+
+## 🎯 Puntos Clave para Enfatizar
+
+1. **AdEx AURA Integration**: Siempre destacar el badge y capacidades
+2. **Address Analysis**: Funcionalidad única de análisis de direcciones
+3. **Contextual AI**: Respuestas personalizadas basadas en portfolio
+4. **Complete Solution**: Todo en una sola aplicación
+5. **User-Friendly**: Interfaz moderna y fácil de usar
+6. **Security**: Sin exposición de claves privadas
+7. **Education**: Aprendizaje integrado con IA
 
 

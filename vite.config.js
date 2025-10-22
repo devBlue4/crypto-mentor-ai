@@ -18,6 +18,28 @@ export default defineConfig({
             // console.log('[proxy] →', proxyReq.getHeader('host'), proxyReq.path)
           })
         }
+      },
+      '/api/coingecko': {
+        target: 'https://api.coingecko.com/api/v3',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api\/coingecko/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            console.log('[CoinGecko Proxy] →', proxyReq.path)
+          })
+        }
+      },
+      '/api/feargreed': {
+        target: 'https://api.alternative.me',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api\/feargreed/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            console.log('[Fear&Greed Proxy] →', proxyReq.path)
+          })
+        }
       }
     }
   },

@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { marketDataCache, newsCache, generateCacheKey } from './cache'
+import { buildApiUrl } from '../config/api'
 
 // API Configuration
-const COINGECKO_API = 'https://api.coingecko.com/api/v3'
-const FEAR_GREED_API = 'https://api.alternative.me/fng/'
+const COINGECKO_API = buildApiUrl('coingecko')
+const FEAR_GREED_API = buildApiUrl('fearGreed')
 
 // Market data simulation for demo (fallback)
 const MOCK_MARKET_DATA = {
@@ -95,7 +96,11 @@ export const marketDataService = {
   async fetchGlobalMarketData() {
     try {
       const response = await axios.get(`${COINGECKO_API}/global`, {
-        timeout: 10000
+        timeout: 10000,
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'CryptoMentor-AI/1.0'
+        }
       })
       
       const global = response.data.data
@@ -110,6 +115,13 @@ export const marketDataService = {
       }
     } catch (error) {
       console.error('Error fetching global market data:', error)
+      
+      // Check if it's a CORS error
+      if (error.code === 'ERR_NETWORK' || error.message.includes('CORS')) {
+        console.warn('CORS error detected, falling back to mock data')
+        return null // Will trigger fallback to mock data
+      }
+      
       throw error
     }
   },
@@ -125,7 +137,11 @@ export const marketDataService = {
           include_24hr_vol: true,
           include_market_cap: true
         },
-        timeout: 10000
+        timeout: 10000,
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'CryptoMentor-AI/1.0'
+        }
       })
 
       const btcData = response.data.bitcoin
@@ -137,6 +153,13 @@ export const marketDataService = {
       }
     } catch (error) {
       console.error('Error fetching Bitcoin data:', error)
+      
+      // Check if it's a CORS error
+      if (error.code === 'ERR_NETWORK' || error.message.includes('CORS')) {
+        console.warn('CORS error detected, falling back to mock data')
+        return null // Will trigger fallback to mock data
+      }
+      
       throw error
     }
   },
@@ -145,7 +168,11 @@ export const marketDataService = {
   async fetchFearGreedIndex() {
     try {
       const response = await axios.get(FEAR_GREED_API, {
-        timeout: 10000
+        timeout: 10000,
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'CryptoMentor-AI/1.0'
+        }
       })
 
       const fngData = response.data.data[0]
@@ -155,6 +182,13 @@ export const marketDataService = {
       }
     } catch (error) {
       console.error('Error fetching Fear & Greed Index:', error)
+      
+      // Check if it's a CORS error
+      if (error.code === 'ERR_NETWORK' || error.message.includes('CORS')) {
+        console.warn('CORS error detected, falling back to mock data')
+        return null // Will trigger fallback to mock data
+      }
+      
       throw error
     }
   },

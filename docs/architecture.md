@@ -217,6 +217,49 @@ export const walletService = {
 }
 ```
 
+### Configuración de APIs con Proxy
+
+#### src/config/api.js (Nuevo)
+```javascript
+export const API_CONFIG = {
+  development: {
+    coingecko: '/api/coingecko',
+    fearGreed: '/api/feargreed/fng/',
+    rss2json: 'https://api.rss2json.com/v1/api.json',
+    allorigins: 'https://api.allorigins.win/get'
+  },
+  production: {
+    coingecko: 'https://api.coingecko.com/api/v3',
+    fearGreed: 'https://api.alternative.me/fng/',
+    rss2json: 'https://api.rss2json.com/v1/api.json',
+    allorigins: 'https://api.allorigins.win/get'
+  }
+}
+
+export const getApiConfig = () => {
+  const isDev = import.meta.env.DEV
+  return isDev ? API_CONFIG.development : API_CONFIG.production
+}
+```
+
+#### Configuración de Proxy (vite.config.js)
+```javascript
+proxy: {
+  '/api/coingecko': {
+    target: 'https://api.coingecko.com/api/v3',
+    changeOrigin: true,
+    secure: true,
+    rewrite: (path) => path.replace(/^\/api\/coingecko/, '')
+  },
+  '/api/feargreed': {
+    target: 'https://api.alternative.me',
+    changeOrigin: true,
+    secure: true,
+    rewrite: (path) => path.replace(/^\/api\/feargreed/, '')
+  }
+}
+```
+
 ### Error Handling Strategy
 
 ```javascript
