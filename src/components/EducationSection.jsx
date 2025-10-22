@@ -313,25 +313,25 @@ const EducationSection = () => {
                     className={`text-left p-4 rounded-lg border transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 ${
                       showResults
                         ? isRight
-                          ? 'bg-green-50 border-green-200'
+                          ? 'bg-green-900/20 border-green-700 text-green-200'
                           : isWrong
-                          ? 'bg-red-50 border-red-200'
-                          : 'bg-white border-gray-200'
+                          ? 'bg-red-900/20 border-red-700 text-red-200'
+                          : 'bg-gray-900 border-gray-700 text-gray-200'
                         : selected
                         ? 'bg-gray-800 text-white border-gray-700'
-                        : 'bg-white border-gray-200 hover:border-gray-300'
+                        : 'bg-gray-900 border-gray-700 hover:border-gray-600 text-gray-200'
                     }`}
                   >
-                    <span className="font-medium text-gray-800">{String.fromCharCode(65 + idx)}.</span>{' '}
-                    <span className={`${showResults ? 'text-gray-800' : selected ? 'text-white' : 'text-gray-700'}`}>{opt}</span>
+                    <span className={`${selected ? 'text-white' : 'text-gray-300'} font-medium`}>{String.fromCharCode(65 + idx)}.</span>{' '}
+                    <span className={`${showResults ? (isRight ? 'text-green-200' : isWrong ? 'text-red-200' : 'text-gray-300') : selected ? 'text-white' : 'text-gray-300'}`}>{opt}</span>
                   </button>
                 )
               })}
             </div>
 
             {showResults && (
-              <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="text-sm text-gray-700"><span className="font-semibold">Explanation:</span> {question.explanation || '—'}</p>
+              <div className="mt-4 p-3 bg-gray-900 border border-gray-700 rounded-lg">
+                <p className="text-sm text-gray-300"><span className="font-semibold text-gray-200">Explanation:</span> {question.explanation || '—'}</p>
               </div>
             )}
           </div>
@@ -486,50 +486,50 @@ const EducationSection = () => {
 
       {/* Quick Tips */}
       <div className="card">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Tips</h3>
+        <h3 className="text-lg font-semibold text-gray-200 mb-6">Quick Tips</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-4 bg-blue-50 rounded-lg">
+          <div className="p-4 bg-gray-900 border border-blue-900/40 rounded-lg">
             <div className="flex items-start space-x-3">
-              <Lightbulb className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
+              <Lightbulb className="w-5 h-5 text-blue-400 mt-1 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-blue-900 mb-2">Never Invest More Than You Can Afford to Lose</h4>
-                <p className="text-sm text-blue-700">
+                <h4 className="font-semibold text-blue-300 mb-2">Never Invest More Than You Can Afford to Lose</h4>
+                <p className="text-sm text-blue-200">
                   Cryptocurrencies are volatile. Only invest money you can afford to lose.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 bg-green-50 rounded-lg">
+          <div className="p-4 bg-gray-900 border border-green-900/40 rounded-lg">
             <div className="flex items-start space-x-3">
-              <Shield className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
+              <Shield className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-green-900 mb-2">Use Two-Factor Authentication</h4>
-                <p className="text-sm text-green-700">
+                <h4 className="font-semibold text-green-300 mb-2">Use Two-Factor Authentication</h4>
+                <p className="text-sm text-green-200">
                   Protect your accounts with 2FA and keep your private keys secure.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 bg-yellow-50 rounded-lg">
+          <div className="p-4 bg-gray-900 border border-yellow-900/40 rounded-lg">
             <div className="flex items-start space-x-3">
-              <TrendingUp className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" />
+              <TrendingUp className="w-5 h-5 text-yellow-400 mt-1 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-yellow-900 mb-2">Diversify Your Portfolio</h4>
-                <p className="text-sm text-yellow-700">
+                <h4 className="font-semibold text-yellow-300 mb-2">Diversify Your Portfolio</h4>
+                <p className="text-sm text-yellow-200">
                   Don't put all your eggs in one basket. Diversify your investments.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 bg-purple-50 rounded-lg">
+          <div className="p-4 bg-gray-900 border border-purple-900/40 rounded-lg">
             <div className="flex items-start space-x-3">
-              <BookOpen className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
+              <BookOpen className="w-5 h-5 text-purple-400 mt-1 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-purple-900 mb-2">Continuous Education</h4>
-                <p className="text-sm text-purple-700">
+                <h4 className="font-semibold text-purple-300 mb-2">Continuous Education</h4>
+                <p className="text-sm text-purple-200">
                   The crypto market evolves quickly. Stay informed and educated.
                 </p>
               </div>

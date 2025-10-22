@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense } from 'react'
-import { TrendingUp, MessageCircle, AlertTriangle, BookOpen, BarChart3, Settings, Activity, Star, History } from 'lucide-react'
+import { TrendingUp, MessageCircle, AlertTriangle, BookOpen, BarChart3 } from 'lucide-react'
 import { useWallet } from '../contexts/WalletContext'
 
 // Lazy load components for better performance
@@ -8,10 +8,7 @@ const ChatInterface = lazy(() => import('./ChatInterface'))
 const MarketOverview = lazy(() => import('./MarketOverview'))
 const AlertsPanel = lazy(() => import('./AlertsPanel'))
 const EducationSection = lazy(() => import('./EducationSection'))
-const CacheManager = lazy(() => import('./CacheManager'))
-const PerformanceMonitor = lazy(() => import('./PerformanceMonitor'))
-const Watchlist = lazy(() => import('./Watchlist'))
-const TransactionHistory = lazy(() => import('./TransactionHistory'))
+// Removed tabs: CacheManager, PerformanceMonitor, Watchlist, TransactionHistory
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview')
@@ -48,30 +45,6 @@ const Dashboard = () => {
             name: 'Education',
             icon: BookOpen,
             component: EducationSection
-          },
-          {
-            id: 'cache',
-            name: 'Cache Manager',
-            icon: Settings,
-            component: CacheManager
-          },
-          {
-            id: 'performance',
-            name: 'Performance',
-            icon: Activity,
-            component: PerformanceMonitor
-          },
-          {
-            id: 'watchlist',
-            name: 'Watchlist',
-            icon: Star,
-            component: Watchlist
-          },
-          {
-            id: 'history',
-            name: 'History',
-            icon: History,
-            component: TransactionHistory
           }
         ]
 
@@ -100,28 +73,28 @@ const Dashboard = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-card text-card-foreground border border-border rounded-lg shadow-sm">
-        <div className="border-b border-border">
-          <nav className="flex space-x-8 overflow-x-auto">
+      <div className="bg-transparent text-card-foreground rounded-xl">
+        <div className="p-0">
+          <nav className="flex w-full gap-3 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon
               const isActive = activeTab === tab.id
               const isDisabled = tab.requiresWallet && !isConnected
-              
+
               return (
                 <button
                   key={tab.id}
                   onClick={() => !isDisabled && setActiveTab(tab.id)}
                   disabled={isDisabled}
-                  className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors duration-200 ${
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? 'border-primary text-primary'
+                      ? 'bg-primary/15 text-primary shadow-sm'
                       : isDisabled
-                      ? 'border-transparent text-muted-foreground cursor-not-allowed'
-                      : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+                      ? 'bg-transparent text-muted-foreground cursor-not-allowed opacity-60'
+                      : 'bg-transparent text-muted-foreground hover:text-foreground hover:bg-white/5'
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
                   <span>{tab.name}</span>
                   {isDisabled && (
                     <span className="text-xs text-muted-foreground">(Requires Wallet)</span>
