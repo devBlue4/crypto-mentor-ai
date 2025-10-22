@@ -381,9 +381,9 @@ const getDemoResponse = (message, context) => {
 3. **Offline Development**: No API key required for development
 4. **Client Demo**: Perfect for presentations
 
-## 🚀 Optimizaciones de Performance
+## 🚀 Performance Optimizations
 
-### Caching de Respuestas
+### Response Caching
 
 ```javascript
 const responseCache = new Map()
@@ -398,7 +398,7 @@ const cacheResponse = (message, context, response) => {
   responseCache.set(cacheKey, {
     response,
     timestamp: Date.now(),
-    ttl: 300000 // 5 minutos
+    ttl: 300000 // 5 minutes
   })
 }
 ```
@@ -425,16 +425,16 @@ const rateLimiter = {
 }
 ```
 
-## 🔒 Seguridad y Privacidad
+## 🔒 Security and Privacy
 
-### Protección de Datos
+### Data Protection
 
-1. **No Almacenamiento**: No guardamos conversaciones en servidores
-2. **Anonimización**: Datos del portfolio se envían sin identificadores
-3. **Encriptación**: Todas las comunicaciones usan HTTPS
-4. **Consentimiento**: Usuario controla qué datos se comparten
+1. **No Storage**: We don't store conversations on servers
+2. **Anonymization**: Portfolio data is sent without identifiers
+3. **Encryption**: All communications use HTTPS
+4. **Consent**: User controls what data is shared
 
-### Validación de Entrada
+### Input Validation
 
 ```javascript
 const validateMessage = (message) => {
@@ -446,16 +446,16 @@ const validateMessage = (message) => {
     throw new Error('Message too long')
   }
   
-  // Filtrar contenido inapropiado
+  // Filter inappropriate content
   const filteredMessage = filterInappropriateContent(message)
   
   return filteredMessage
 }
 ```
 
-## 📈 Métricas y Analytics
+## 📈 Metrics and Analytics
 
-### Tracking de Uso
+### Usage Tracking
 
 ```javascript
 const trackAURAUsage = {
@@ -482,52 +482,52 @@ const trackAURAUsage = {
 }
 ```
 
-### KPIs Principales
+### Key KPIs
 
-- **Tiempo de Respuesta**: < 2 segundos promedio
-- **Precisión**: 85%+ de respuestas útiles
-- **Satisfacción**: 4.2/5 rating promedio
-- **Engagement**: 5-8 mensajes por sesión
+- **Response Time**: < 2 seconds average
+- **Accuracy**: 85%+ useful responses
+- **Satisfaction**: 4.2/5 average rating
+- **Engagement**: 5-8 messages per session
 
-## 🔮 Roadmap de AdEx AURA
+## 🔮 AdEx AURA Roadmap
 
-### Mejoras Planificadas
+### Planned Improvements
 
-1. **Análisis Técnico Avanzado**:
-   - Integración con indicadores técnicos
-   - Predicciones de precios
-   - Análisis de volumen
+1. **Advanced Technical Analysis**:
+   - Integration with technical indicators
+   - Price predictions
+   - Volume analysis
 
-2. **Personalización Mejorada**:
-   - Aprendizaje de preferencias del usuario
-   - Recomendaciones adaptativas
-   - Perfiles de riesgo dinámicos
+2. **Enhanced Personalization**:
+   - Learning user preferences
+   - Adaptive recommendations
+   - Dynamic risk profiles
 
-3. **Integración DeFi**:
-   - Análisis de yield farming
-   - Optimización de liquidity pools
-   - Gestión de impermanent loss
+3. **DeFi Integration**:
+   - Yield farming analysis
+   - Liquidity pool optimization
+   - Impermanent loss management
 
-4. **Multi-idioma**:
-   - Soporte para 10+ idiomas
-   - Localización cultural
-   - Análisis de sentimiento por región
+4. **Multi-language Support**:
+   - Support for 10+ languages
+   - Cultural localization
+   - Regional sentiment analysis
 
 ---
 
-La integración con AdEx AURA es el corazón de CryptoMentor AI, proporcionando inteligencia artificial de vanguardia para ayudar a los usuarios a navegar el complejo mundo de las criptomonedas.
+The integration with AdEx AURA is the heart of CryptoMentor AI, providing cutting-edge artificial intelligence to help users navigate the complex world of cryptocurrencies.
 
-## ⭐ Capability clave: Address → Recommendations & Strategies
+## ⭐ Key Capability: Address → Recommendations & Strategies
 
-AURA permite enviar una account address y recibir una lista de recomendaciones y estrategias en lenguaje natural, con una descripción de lo que hace cada una. Esta es una de las capacidades más importantes de CryptoMentor AI y se emplea tanto desde el Chat como desde la pestaña Strategies.
+AURA allows sending an account address and receiving a list of recommendations and strategies in natural language, with a description of what each one does. This is one of the most important capabilities of CryptoMentor AI and is used both from Chat and from the Strategies tab.
 
-### Endpoint utilizado
+### Endpoint Used
 
 ```http
 POST /aura/v1/recommendations/personalized
 ```
 
-#### Payload de ejemplo
+#### Example Payload
 ```json
 {
   "address": "0x1C680f16b2270e324D5778305C9EC96784c832ab",
@@ -537,7 +537,7 @@ POST /aura/v1/recommendations/personalized
 }
 ```
 
-#### Respuesta (esquema simplificado)
+#### Response (simplified schema)
 ```json
 {
   "immediate_actions": [
@@ -553,9 +553,9 @@ POST /aura/v1/recommendations/personalized
 }
 ```
 
-### Prompt recomendado (Chat/Strategies)
+### Recommended Prompt (Chat/Strategies)
 ```text
 Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.
 ```
 
-> Tip: La UI muestra la dirección corta (0x1C680f…32ab) para mejor legibilidad, pero envía la dirección completa a la API.
+> Tip: The UI shows the short address (0x1C680f…32ab) for better readability, but sends the complete address to the API.

@@ -406,23 +406,23 @@ export const sendToken = async (tokenAddress, to, amount) => {
   const contract = new ethers.Contract(tokenAddress, ERC20_ABI, signer)
   
   try {
-    // Obtener decimales del token
+    // Get token decimals
     const decimals = await contract.decimals()
     const formattedAmount = ethers.parseUnits(amount.toString(), decimals)
     
     const tx = await contract.transfer(to, formattedAmount)
-    console.log('Transacción de token enviada:', tx.hash)
+    console.log('Token transaction sent:', tx.hash)
     
     const receipt = await tx.wait()
     return receipt
   } catch (error) {
-    console.error('Error enviando token:', error)
+    console.error('Error sending token:', error)
     throw error
   }
 }
 ```
 
-### Estimación de Gas
+### Gas Estimation
 
 ```javascript
 export const estimateGas = async (transaction) => {
@@ -430,10 +430,10 @@ export const estimateGas = async (transaction) => {
   
   try {
     const gasEstimate = await provider.estimateGas(transaction)
-    // Agregar 20% de buffer
+    // Add 20% buffer
     return gasEstimate * 120n / 100n
   } catch (error) {
-    console.error('Error estimando gas:', error)
+    console.error('Error estimating gas:', error)
     throw error
   }
 }
@@ -449,13 +449,13 @@ export const getGasPrice = async () => {
       maxPriorityFeePerGas: feeData.maxPriorityFeePerGas
     }
   } catch (error) {
-    console.error('Error obteniendo precio de gas:', error)
+    console.error('Error getting gas price:', error)
     throw error
   }
 }
 ```
 
-## 🔒 Seguridad
+## 🔒 Security
 
 ### Security Validations
 
@@ -479,12 +479,12 @@ export const sanitizeInput = (input) => {
 
 ```javascript
 export const verifyContract = async (contractAddress) => {
-  // Verificar que el contrato existe
+  // Verify that the contract exists
   const provider = getMetaMaskProvider()
   const code = await provider.getCode(contractAddress)
   
   if (code === '0x') {
-    throw new Error('Dirección no es un contrato válido')
+    throw new Error('Address is not a valid contract')
   }
   
   return true
@@ -494,21 +494,21 @@ export const checkKnownContracts = (address) => {
   const KNOWN_CONTRACTS = {
     '0xA0b86a33E6441c8C3C7d4A5e2E2B4C4F4F4F4F4F': 'USDC',
     '0xdAC17F958D2ee523a2206206994597C13D831ec7': 'USDT',
-    // ... más contratos conocidos
+    // ... more known contracts
   }
   
   return KNOWN_CONTRACTS[address] || 'Unknown Contract'
 }
 ```
 
-## 📊 Monitoreo y Analytics
+## 📊 Monitoring and Analytics
 
-### Tracking de Transacciones
+### Transaction Tracking
 
 ```javascript
 export const trackTransaction = {
   async send(txHash, type, amount, token) {
-    // Enviar datos de analytics
+    // Send analytics data
     analytics.track('transaction_sent', {
       txHash,
       type,
@@ -537,7 +537,7 @@ export const trackTransaction = {
 }
 ```
 
-### Métricas de Wallet
+### Wallet Metrics
 
 ```javascript
 export const getWalletMetrics = async (address) => {
@@ -557,19 +557,19 @@ export const getWalletMetrics = async (address) => {
       chainId: network.chainId.toString()
     }
   } catch (error) {
-    console.error('Error obteniendo métricas:', error)
+    console.error('Error getting metrics:', error)
     throw error
   }
 }
 ```
 
-## 🚀 Optimizaciones
+## 🚀 Optimizations
 
-### Caching de Datos
+### Data Caching
 
 ```javascript
 class Web3Cache {
-  constructor(ttl = 30000) { // 30 segundos por defecto
+  constructor(ttl = 30000) { // 30 seconds by default
     this.cache = new Map()
     this.ttl = ttl
   }
@@ -623,12 +623,12 @@ export const batchGetBalances = async (addresses, tokenAddresses) => {
 }
 ```
 
-## 🔮 Futuras Mejoras
+## 🔮 Future Improvements
 
 ### Multi-Chain Support
 
 ```javascript
-// Soporte para múltiples blockchains
+// Support for multiple blockchains
 export const SUPPORTED_CHAINS = {
   ethereum: {
     chainId: 1,
@@ -666,4 +666,4 @@ export const walletConnectConnector = new WalletConnectConnector({
 
 ---
 
-La integración Web3 de CryptoMentor AI proporciona una base sólida y segura para interactuar con el ecosistema blockchain, permitiendo a los usuarios gestionar sus activos digitales de manera intuitiva y segura.
+The Web3 integration of CryptoMentor AI provides a solid and secure foundation for interacting with the blockchain ecosystem, allowing users to manage their digital assets in an intuitive and secure way.
