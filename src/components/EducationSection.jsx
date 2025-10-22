@@ -366,9 +366,10 @@ const EducationSection = () => {
           <div>
             <div className="flex items-center space-x-2">
               <h3 className="text-lg font-semibold text-gray-900">Education Center</h3>
-              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">AI Quiz</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-medium tracking-wide bg-white/5 text-gray-300 border border-white/10">AI‑powered</span>
             </div>
-            <p className="text-gray-600">Learn about cryptocurrencies with interactive lessons and AI-generated quizzes</p>
+            <p className="text-gray-300">Learn about cryptocurrencies with interactive lessons and AI‑generated quizzes.</p>
+            <div className="text-xs text-gray-400 mt-1">Powered by AI (AURA/OpenAI)</div>
           </div>
         </div>
       </div>
