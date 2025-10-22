@@ -1,0 +1,2 @@
+echo "Running pre-commit hook commands via local Node.js..."
+npx lint-staged --allow-empty

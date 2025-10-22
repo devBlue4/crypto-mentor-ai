@@ -3,9 +3,7 @@ import { auraResponseCache, generateCacheKey } from './cache'
 import { gptAPI } from './gptAPI'
 
 // AdEx AURA API configuration
-const AURA_API_BASE = import.meta.env.DEV
-  ? '/aura/aura/v1' // usar proxy de Vite en desarrollo
-  : (import.meta.env.VITE_AURA_API_BASE || 'https://api.adex.network/aura/v1')
+const AURA_API_BASE = import.meta.env.VITE_AURA_API_BASE || 'https://aura.adex.network/api'
 const AURA_API_KEY = import.meta.env.VITE_AURA_API_KEY
 const OPENAI_API_KEY_PRESENT = !!import.meta.env.VITE_OPENAI_API_KEY
 const DEMO_ENABLED = !(import.meta.env.VITE_DISABLE_DEMO === 'true')
@@ -17,7 +15,7 @@ if (import.meta.env.DEV) {
   console.log('  API Key:', AURA_API_KEY ? `${AURA_API_KEY.substring(0, 8)}...` : 'Not configured')
 }
 
-// Configured axios client
+// Configured axios client para AURA API pública
 const auraClient = axios.create({
   baseURL: AURA_API_BASE,
   headers: {
@@ -27,7 +25,7 @@ const auraClient = axios.create({
     'Accept': 'application/json'
   },
   timeout: 30000,
-  validateStatus: (status) => status >= 200 && status < 300 // deja que axios lance en 4xx/5xx
+  validateStatus: (status) => status >= 200 && status < 300
 })
 
 export const auraAPI = {
@@ -290,6 +288,8 @@ export const auraAPI = {
       throw new Error('AURA API key missing and demo disabled')
     }
     
+    console.log('🔑 AURA API: API Key configured, attempting real API call')
+    
     try {
       console.log('🚀 AURA API: Sending message to real API...', {
         messageLength: message.length,
@@ -355,12 +355,52 @@ export const auraAPI = {
     }
   },
 
-  // Analyze user portfolio
-  async analyzePortfolio(tokens, balance) {
+  // Analyze user portfolio usando la API real de AURA
+  async analyzePortfolio(tokens, balance, walletAddress = null) {
+    // Si tenemos una dirección de wallet, usar la API real de AURA
+    if (walletAddress) {
+      try {
+        console.log('🚀 AURA API: Analyzing portfolio for wallet:', walletAddress)
+        console.log('🔑 AURA API: API Key present:', !!AURA_API_KEY)
+        console.log('🌐 AURA API: API Base URL:', AURA_API_BASE)
+        
+        const recommendations = await this.getPersonalizedRecommendations(walletAddress)
+        
+        console.log('📊 AURA API: Raw recommendations from getPersonalizedRecommendations:', JSON.stringify(recommendations, null, 2))
+        
+        // Convertir la respuesta de AURA a formato de análisis de portfolio
+        const portfolioAnalysis = {
+          total_value_usd: recommendations.portfolio?.reduce((total, network) => 
+            total + network.tokens?.reduce((networkTotal, token) => 
+              networkTotal + (token.balanceUSD || 0), 0) || 0, 0) || 0,
+          diversity_score: this.calculateDiversity(tokens),
+          risk_level: this.calculateRiskLevel(tokens),
+          strategies: recommendations.strategies || [],
+          portfolio: recommendations.portfolio || [],
+          // Métricas adicionales basadas en la respuesta de AURA
+          recommendations: recommendations.strategies?.[0]?.response?.map(strategy => ({
+            name: strategy.name,
+            risk: strategy.risk,
+            description: strategy.actions?.[0]?.description || '',
+            apy: strategy.actions?.[0]?.apy || 'N/A',
+            platforms: strategy.actions?.[0]?.platforms || []
+          })) || []
+        }
+        
+        console.log('🔄 AURA API: Final portfolio analysis:', JSON.stringify(portfolioAnalysis, null, 2))
+        console.log('📋 AURA API: Final recommendations count:', portfolioAnalysis.recommendations?.length || 0)
+        
+        return portfolioAnalysis
+      } catch (error) {
+        console.error('❌ AURA portfolio analysis failed:', error)
+        // Fallback a análisis local
+      }
+    }
+    
+    // Fallback: análisis local tradicional
     const cacheKey = generateCacheKey('portfolio-analysis', JSON.stringify(tokens), balance)
     
-    // Try to get from cache first (only for demo responses)
-    if (!AURA_API_KEY && DEMO_ENABLED) {
+    if (DEMO_ENABLED) {
       const cached = auraResponseCache.get(cacheKey)
       if (cached !== null) {
         return cached
@@ -379,14 +419,26 @@ export const auraAPI = {
         risk_level: this.calculateRiskLevel(tokens)
       }
 
-      const response = await auraClient.post('/analyze/portfolio', portfolioData)
-      const result = response.data
+      // Usar el endpoint de balances de la API pública
+      const url = `${AURA_API_BASE}/portfolio/balances?address=${walletAddress}${AURA_API_KEY ? `&apiKey=${AURA_API_KEY}` : ''}`
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        }
+      })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const result = await response.json()
       
       // Cache successful responses
       auraResponseCache.set(cacheKey, result)
       return result
     } catch (error) {
-      if (!AURA_API_KEY && DEMO_ENABLED) {
+      if (DEMO_ENABLED) {
         const result = this.getDemoPortfolioAnalysis(tokens, balance)
         auraResponseCache.set(cacheKey, result)
         return result
@@ -414,16 +466,58 @@ export const auraAPI = {
     }
   },
 
-  // Get personalized recommendations
-  async getPersonalizedRecommendations(userProfile) {
+  // Get personalized recommendations usando la API real de AURA
+  async getPersonalizedRecommendations(address) {
+    const cacheKey = generateCacheKey('aura-recommendations', address)
+    
+    // Check cache first
+    const cached = auraResponseCache.get(cacheKey)
+    if (cached !== null) {
+      console.log('📋 AURA API: Using cached recommendations')
+      return cached
+    }
+
+    console.log('🔑 AURA API: API Key present for recommendations:', !!AURA_API_KEY)
+    console.log('🌐 AURA API: Server URL for recommendations:', AURA_API_BASE)
+
     try {
-      const response = await auraClient.post('/recommendations/personalized', userProfile)
-      return response.data
-    } catch (error) {
-      if (!AURA_API_KEY && DEMO_ENABLED) {
-        return this.getDemoRecommendations(userProfile)
+      console.log('🚀 AURA API: Calling real AURA server for address:', address)
+      
+      // Llamada a la API pública de AURA usando GET con query parameters
+      const url = `${AURA_API_BASE}/portfolio/strategies?address=${address}${AURA_API_KEY ? `&apiKey=${AURA_API_KEY}` : ''}`
+      console.log('🌐 AURA API: Full URL:', url)
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
-      throw error
+
+      const data = await response.json()
+      console.log('✅ AURA API: Response received from real AURA server')
+      console.log('📊 AURA API: Full response data:', JSON.stringify(data, null, 2))
+      
+      // La respuesta de AURA ya está en el formato correcto
+      const normalizedResponse = data
+
+      console.log('🔄 AURA API: Normalized response:', JSON.stringify(normalizedResponse, null, 2))
+      console.log('📋 AURA API: Recommendations count:', normalizedResponse.recommendations?.length || 0)
+      console.log('📋 AURA API: Portfolio networks count:', normalizedResponse.portfolio?.length || 0)
+
+      // Cache successful responses
+      auraResponseCache.set(cacheKey, normalizedResponse, 5 * 60 * 1000)
+      return normalizedResponse
+    } catch (error) {
+      console.error('❌ AURA API Error:', error)
+      
+      // No usar demo fallback - mostrar error real
+      console.error('❌ AURA API: Real API not available, not using demo data')
+      throw new Error('AURA API not available - please check API configuration')
     }
   },
 
@@ -621,21 +715,109 @@ export const auraAPI = {
   },
 
   getDemoRecommendations(userProfile) {
+    // Generar recomendaciones basadas en la dirección real (wallet vacía)
+    const address = userProfile?.address || 'unknown'
+    const shortAddress = address.length > 10 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address
+    
     return {
-      immediate_actions: [
-        'Review and rebalance portfolio',
-        'Set up price alerts',
-        'Consider DCA in BTC and ETH'
+      address: address,
+      portfolio: [
+        {
+          network: {
+            name: 'Ethereum',
+            chainId: '1',
+            platformId: 'ethereum',
+            explorerUrl: 'https://etherscan.io',
+            iconUrls: []
+          },
+          tokens: [
+            // Wallet vacía - no hay tokens
+          ]
+        }
       ],
-      long_term_strategy: [
-        'Diversify towards DeFi protocols',
-        'Explore infrastructure tokens',
-        'Maintain liquidity for opportunities'
-      ],
-      risk_management: [
-        'Set stop-loss on main positions',
-        'Don\'t invest more than 5% in speculative altcoins',
-        'Maintain emergency fund in stablecoins'
+      strategies: [
+        {
+          llm: {
+            provider: 'demo',
+            model: 'demo'
+          },
+          response: [
+            {
+              name: 'Wallet Setup Strategy',
+              risk: 'low',
+              actions: [
+                {
+                  tokens: 'ETH, USDC',
+                  description: `Your wallet is currently empty. Start by acquiring some ETH for gas fees and USDC for stable value. Consider starting with small amounts to learn the ecosystem.`,
+                  platforms: [
+                    {
+                      name: 'Coinbase',
+                      url: 'https://coinbase.com'
+                    },
+                    {
+                      name: 'Binance',
+                      url: 'https://binance.com'
+                    }
+                  ],
+                  networks: ['ethereum'],
+                  operations: ['swapping'],
+                  apy: 'N/A',
+                  flags: ['beginner friendly']
+                }
+              ]
+            },
+            {
+              name: 'DCA Strategy',
+              risk: 'low',
+              actions: [
+                {
+                  tokens: 'BTC, ETH',
+                  description: `Implement a Dollar Cost Averaging (DCA) strategy. Invest a fixed amount weekly in BTC and ETH to build your portfolio gradually and reduce timing risk.`,
+                  platforms: [
+                    {
+                      name: 'Coinbase',
+                      url: 'https://coinbase.com'
+                    },
+                    {
+                      name: 'Kraken',
+                      url: 'https://kraken.com'
+                    }
+                  ],
+                  networks: ['ethereum'],
+                  operations: ['swapping'],
+                  apy: 'N/A',
+                  flags: ['long-term strategy']
+                }
+              ]
+            },
+            {
+              name: 'DeFi Education',
+              risk: 'low',
+              actions: [
+                {
+                  tokens: 'N/A',
+                  description: `Before investing, educate yourself about DeFi protocols, yield farming, and risk management. Start with established platforms like Aave and Uniswap.`,
+                  platforms: [
+                    {
+                      name: 'Aave',
+                      url: 'https://app.aave.com'
+                    },
+                    {
+                      name: 'Uniswap',
+                      url: 'https://app.uniswap.org'
+                    }
+                  ],
+                  networks: ['ethereum'],
+                  operations: ['education'],
+                  apy: 'N/A',
+                  flags: ['educational']
+                }
+              ]
+            }
+          ],
+          inputTokens: 0,
+          outputTokens: 0
+        }
       ]
     }
   },

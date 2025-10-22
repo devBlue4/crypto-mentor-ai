@@ -39,35 +39,51 @@ const ChatInterface = () => {
       if (addressMatch) {
         const address = addressMatch[0]
         const short = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
-        let items = []
+        
         try {
-          const ai = await getPersonalizedRecommendations({ address, timeframe: '30d' })
-          if (Array.isArray(ai?.immediate_actions)) items = items.concat(ai.immediate_actions)
-          if (Array.isArray(ai?.long_term_strategy)) items = items.concat(ai.long_term_strategy)
-          if (Array.isArray(ai?.risk_management)) items = items.concat(ai.risk_management)
-        } catch (_) {
-          // ignore and fall back
-        }
+          // Usar la API real de AURA para obtener recomendaciones
+          const ai = await getPersonalizedRecommendations(address)
+          
+          let content = `Here are personalized app recommendations and strategies for address ${short(address)}:\n\n`
+          
+          if (ai.recommendations && ai.recommendations.length > 0) {
+            // Usar las recomendaciones reales de AURA
+            content += ai.recommendations.map((strategy, i) => {
+              const action = strategy.actions?.[0]
+              return `${i + 1}. **${strategy.name}** (${strategy.risk} risk)\n   ${action?.description || strategy.description || ''}\n   ${action?.apy ? `Expected APY: ${action.apy}` : ''}`
+            }).join('\n\n')
+          } else {
+            // Fallback si no hay recomendaciones
+            content += `1. **DCA Strategy** (low risk)\n   Invest a fixed amount weekly in BTC/ETH to smooth volatility and avoid bad timing.\n   Expected APY: 3-8%\n\n`
+            content += `2. **Smart Alerts** (low risk)\n   Set price alerts for key support/resistance levels to react quickly when levels break.\n   Expected APY: N/A (risk management)\n\n`
+            content += `3. **Portfolio Rebalancing** (medium risk)\n   Maintain target allocation (e.g., 50% BTC/ETH, 30% alts, 20% stables) to control risk.\n   Expected APY: 5-12%`
+          }
 
-        if (items.length === 0) {
-          items = [
-            'DCA on BTC/ETH: Invest a fixed amount weekly to smooth volatility and avoid bad timing.',
-            'Set smart price alerts: Track key support/resistance so you can react quickly when levels break.',
-            'Quarterly rebalance: Keep a target split (e.g., 50% BTC/ETH, 30% alts, 20% stables) to control risk.'
-          ]
-        }
+          const auraMessage = {
+            id: Date.now() + 1,
+            type: 'aura',
+            content,
+            timestamp: new Date()
+          }
+          setConversation(prev => [...prev, auraMessage])
+          return
+        } catch (error) {
+          console.error('Error getting AURA recommendations:', error)
+          // Fallback en caso de error
+          const fallbackContent = `Here are general app recommendations and strategies for address ${short(address)}:\n\n` +
+            `1. **DCA on BTC/ETH** (low risk)\n   Invest a fixed amount weekly to smooth volatility and avoid bad timing.\n\n` +
+            `2. **Set smart price alerts** (low risk)\n   Track key support/resistance so you can react quickly when levels break.\n\n` +
+            `3. **Quarterly rebalance** (medium risk)\n   Keep a target split (e.g., 50% BTC/ETH, 30% alts, 20% stables) to control risk.`
 
-        const content = `Here are app recommendations and strategies for address ${short(address)}:\n\n` +
-          items.map((it, i) => `${i + 1}. ${it}`).join('\n')
-
-        const auraMessage = {
-          id: Date.now() + 1,
-          type: 'aura',
-          content,
-          timestamp: new Date()
+          const auraMessage = {
+            id: Date.now() + 1,
+            type: 'aura',
+            content: fallbackContent,
+            timestamp: new Date()
+          }
+          setConversation(prev => [...prev, auraMessage])
+          return
         }
-        setConversation(prev => [...prev, auraMessage])
-        return
       }
 
       // Create context based on user's portfolio

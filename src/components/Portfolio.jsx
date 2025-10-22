@@ -22,23 +22,27 @@ const Portfolio = () => {
     }
 
     try {
-      const analysis = await analyzePortfolio(tokens, balance)
+      // Pasar la dirección de wallet para usar la API real de AURA
+      console.log('🔍 Portfolio: Starting analysis with account:', account)
+      console.log('🔍 Portfolio: Current tokens:', tokens)
+      console.log('🔍 Portfolio: Current balance:', balance)
+      
+      const analysis = await analyzePortfolio(tokens, balance, account)
+      
+      console.log('📊 Portfolio: Analysis result received:', JSON.stringify(analysis, null, 2))
+      console.log('📋 Portfolio: Analysis recommendations count:', analysis?.recommendations?.length || 0)
+      console.log('📋 Portfolio: Analysis portfolio count:', analysis?.portfolio?.length || 0)
+      
       setAnalysis(analysis)
       toast.success('Portfolio analysis completed')
     } catch (error) {
-      // Fallback: generate a lightweight local analysis so the UI always shows something
-      const fallback = {
-        total_value_usd: parseFloat(balance) * 2500,
-        diversity_score: Math.min(Math.max(tokens.length * 0.3, 1), 10),
-        risk_level: tokens.length > 3 ? 'medium' : 'low',
-        recommendations: [
-          'Consider adding stablecoins for liquidity',
-          'Use price alerts to monitor key levels',
-          'Rebalance quarterly to your target mix'
-        ]
-      }
-      setAnalysis(fallback)
-      toast('AI temporarily unavailable. Showing local analysis.', { icon: 'ℹ️' })
+      console.error('❌ Portfolio: AURA API not available:', error)
+      
+      // Mostrar mensaje de error en lugar de datos demo
+      setAnalysis(null)
+      toast.error('AURA API not available. Please check your API configuration.', {
+        duration: 5000
+      })
     }
   }
 
@@ -82,7 +86,7 @@ const Portfolio = () => {
     if (isConnected && tokens.length > 0) {
       handleAnalyzePortfolio()
     }
-  }, [tokens, isConnected])
+  }, [tokens, isConnected, account])
 
   if (!isConnected) {
     return (
@@ -217,7 +221,7 @@ const Portfolio = () => {
       )}
 
       {/* AdEx AURA Analysis */}
-      {analysis && (
+      {analysis ? (
         <div className="card">
           <div className="flex items-center space-x-3 mb-6">
             <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg flex items-center justify-center">
@@ -226,6 +230,20 @@ const Portfolio = () => {
             <div>
               <h3 className="text-lg font-semibold text-gray-900">AdEx AURA Analysis</h3>
               <p className="text-sm text-gray-600">Personalized recommendations</p>
+              {analysis.strategies && analysis.strategies.length > 0 && analysis.strategies[0]?.llm?.provider === 'AdEx Aura' && (
+                <div className="mt-1">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    ✓ Live Analysis
+                  </span>
+                </div>
+              )}
+              {(!analysis.strategies || analysis.strategies.length === 0 || analysis.strategies[0]?.llm?.provider !== 'AdEx Aura') && (
+                <div className="mt-1">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    📊 Demo Analysis
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -260,19 +278,132 @@ const Portfolio = () => {
             </div>
           </div>
 
-          {analysis.recommendations && (
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Recommendations</h4>
-              <ul className="space-y-2">
-                {analysis.recommendations.map((rec, index) => (
-                  <li key={index} className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-gray-700">{rec}</span>
-                  </li>
+          {/* Información adicional del portfolio de AURA */}
+          {analysis.portfolio && analysis.portfolio.length > 0 && (
+            <div className="mb-6">
+              <h4 className="font-semibold text-gray-900 mb-3">Portfolio Analysis</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {analysis.portfolio.map((network, index) => (
+                  <div key={index} className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <h5 className="font-medium text-gray-900">{network.network?.name || 'Network'}</h5>
+                      <span className="text-sm text-gray-600">{network.tokens?.length || 0} tokens</span>
+                    </div>
+                    {network.tokens && network.tokens.length > 0 ? (
+                      <div className="space-y-1">
+                        {network.tokens.slice(0, 3).map((token, tokenIndex) => (
+                          <div key={tokenIndex} className="flex justify-between text-sm">
+                            <span className="text-gray-700">{token.symbol}</span>
+                            <span className="text-gray-600">
+                              {token.balanceUSD ? `$${token.balanceUSD.toFixed(2)}` : 'N/A'}
+                            </span>
+                          </div>
+                        ))}
+                        {network.tokens.length > 3 && (
+                          <div className="text-xs text-gray-500">
+                            +{network.tokens.length - 3} more tokens
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-sm text-gray-500 italic">
+                        No tokens found in this network
+                      </div>
+                    )}
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
+
+          {analysis.recommendations && analysis.recommendations.length > 0 && (
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">Recommendations</h4>
+              <div className="space-y-4">
+                {analysis.recommendations.map((rec, index) => {
+                  // Manejar tanto el formato de AURA como el formato de fallback
+                  if (typeof rec === 'string') {
+                    // Formato de fallback (string simple)
+                    return (
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-gray-700">{rec}</span>
+                      </div>
+                    )
+                  } else {
+                    // Formato de AURA (objeto con name, description, etc.)
+                    return (
+                      <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <h5 className="font-semibold text-gray-900">{rec.name || `Strategy ${index + 1}`}</h5>
+                          <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            rec.risk === 'low' 
+                              ? 'bg-green-100 text-green-800'
+                              : rec.risk === 'medium'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : rec.risk === 'high'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {rec.risk || 'medium'} risk
+                          </div>
+                        </div>
+                        <p className="text-gray-700 mb-2">{rec.description}</p>
+                        {rec.apy && rec.apy !== 'N/A' && (
+                          <div className="flex items-center space-x-2 text-sm">
+                            <span className="text-gray-600">Expected APY:</span>
+                            <span className="font-medium text-green-600">{rec.apy}</span>
+                          </div>
+                        )}
+                        {rec.platforms && rec.platforms.length > 0 && (
+                          <div className="mt-2">
+                            <span className="text-sm text-gray-600">Platforms: </span>
+                            {rec.platforms.map((platform, pIndex) => (
+                              <span key={pIndex} className="text-sm text-blue-600">
+                                {platform.name}
+                                {pIndex < rec.platforms.length - 1 ? ', ' : ''}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  }
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="card">
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">A</span>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">AdEx AURA Analysis</h3>
+              <p className="text-sm text-gray-600">API Configuration Required</p>
+            </div>
+          </div>
+          
+          <div className="text-center py-8">
+            <div className="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <span className="text-2xl">🔧</span>
+            </div>
+            <h4 className="text-lg font-semibold text-gray-900 mb-2">AURA API Not Available</h4>
+            <p className="text-gray-600 mb-4">
+              The AdEx AURA API is not responding. Please check your API configuration.
+            </p>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-left">
+              <h5 className="font-medium text-yellow-800 mb-2">Configuration Steps:</h5>
+              <ul className="text-sm text-yellow-700 space-y-1">
+                <li>• Verify your API key in the .env file</li>
+                <li>• Check if the API endpoint is correct</li>
+                <li>• Ensure the AURA API service is running</li>
+                <li>• Contact AdEx support for API access</li>
+              </ul>
+            </div>
+          </div>
         </div>
       )}
     </div>

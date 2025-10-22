@@ -89,10 +89,10 @@ Details: ${friendly}${apiMessage ? `\nMessage: ${apiMessage}` : ''}`,
   }
 
   // Analyze portfolio
-  const analyzePortfolio = async (tokens, balance) => {
+  const analyzePortfolio = async (tokens, balance, walletAddress = null) => {
     setIsLoading(true)
     try {
-      const analysis = await auraAPI.analyzePortfolio(tokens, balance)
+      const analysis = await auraAPI.analyzePortfolio(tokens, balance, walletAddress)
       setPortfolioAnalysis(analysis)
       return analysis
     } catch (error) {
@@ -124,10 +124,10 @@ Details: ${friendly}${apiMessage ? `\nMessage: ${apiMessage}` : ''}`,
   }
 
   // Get personalized recommendations
-  const getPersonalizedRecommendations = async (userProfile) => {
+  const getPersonalizedRecommendations = async (address) => {
     setIsLoading(true)
     try {
-      const recommendations = await auraAPI.getPersonalizedRecommendations(userProfile)
+      const recommendations = await auraAPI.getPersonalizedRecommendations(address)
       return recommendations
     } catch (error) {
       console.error('Error getting recommendations:', error)

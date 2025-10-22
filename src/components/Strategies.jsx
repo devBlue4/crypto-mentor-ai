@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Lightbulb, ArrowRight, Sparkles } from 'lucide-react'
 import { useAura } from '../contexts/AuraContext'
+import toast from 'react-hot-toast'
 
 const sampleStrategies = (address) => [
   {
@@ -36,18 +37,40 @@ const Strategies = () => {
     if (!address || address.length < 6) return
     setLoading(true)
     try {
-      // Try AI recommendations; fall back to curated list
-      const ai = await getPersonalizedRecommendations({ address, timeframe: '30d' })
-      const normalized = Array.isArray(ai?.immediate_actions) || Array.isArray(ai?.long_term_strategy)
-        ? [
-            ...(ai.immediate_actions || []).map((a, i) => ({ id: `im_${i}`, title: a.split(':')[0] || 'Action', description: a })),
-            ...(ai.long_term_strategy || []).map((a, i) => ({ id: `lt_${i}`, title: a.split(':')[0] || 'Strategy', description: a })),
-            ...(ai.risk_management || []).map((a, i) => ({ id: `rm_${i}`, title: 'Risk', description: a }))
-          ]
-        : sampleStrategies(address)
+      // Usar la API real de AURA para obtener recomendaciones
+      console.log('🔍 Strategies: Getting recommendations for address:', address)
+      const ai = await getPersonalizedRecommendations(address)
+      console.log('📊 Strategies: Raw AI response:', JSON.stringify(ai, null, 2))
+      
+      let normalized = []
+      if (ai.strategies && ai.strategies[0]?.response && ai.strategies[0].response.length > 0) {
+        // Usar las recomendaciones reales de AURA
+        normalized = ai.strategies[0].response.map((strategy, i) => {
+          const action = strategy.actions?.[0]
+          return {
+            id: `strategy_${i}`,
+            title: strategy.name,
+            description: action?.description || strategy.description || '',
+            risk: strategy.risk,
+            apy: action?.apy || 'N/A',
+            platforms: action?.platforms || []
+          }
+        })
+      } else {
+        // No mostrar estrategias demo, mostrar lista vacía
+        normalized = []
+      }
+      
+      console.log('🔄 Strategies: Normalized strategies:', JSON.stringify(normalized, null, 2))
+      console.log('📋 Strategies: Strategies count:', normalized.length)
+      
       setIdeas(normalized)
-    } catch (_) {
-      setIdeas(sampleStrategies(address))
+    } catch (error) {
+      console.error('❌ Strategies: AURA API not available:', error)
+      setIdeas([])
+      toast.error('AURA API not available. Please check your API configuration.', {
+        duration: 5000
+      })
     } finally {
       setLoading(false)
     }

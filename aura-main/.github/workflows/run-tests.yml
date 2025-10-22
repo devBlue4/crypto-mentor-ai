@@ -1,0 +1,33 @@
+name: Run tests
+
+on:
+    pull_request:
+        types:
+            - opened
+            - reopened
+            - edited
+            - synchronize
+            - ready_for_review
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    run-tests:
+        timeout-minutes: 10
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v5
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.13.0
+
+            - name: Install packages
+              run: yarn
+
+            - name: Run tests
+              run: yarn run test
