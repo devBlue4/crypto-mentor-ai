@@ -364,8 +364,11 @@ const EducationSection = () => {
             <BookOpen className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Education Center</h3>
-            <p className="text-gray-600">Learn about cryptocurrencies with interactive lessons</p>
+            <div className="flex items-center space-x-2">
+              <h3 className="text-lg font-semibold text-gray-900">Education Center</h3>
+              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">AI Quiz</span>
+            </div>
+            <p className="text-gray-600">Learn about cryptocurrencies with interactive lessons and AI-generated quizzes</p>
           </div>
         </div>
       </div>
