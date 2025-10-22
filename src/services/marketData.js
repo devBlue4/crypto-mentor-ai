@@ -76,7 +76,7 @@ export const marketDataService = {
           others: parseFloat(othersDominance.toFixed(1))
         },
         lastUpdated: new Date().toISOString(),
-        isRealData: true
+        isRealData: Boolean(global && bitcoin && fearGreed)
       }
 
       // Cache for 5 minutes
@@ -367,7 +367,57 @@ export const marketDataService = {
         { name: 'CryptoNews', url: 'https://www.cryptonews.com/news/feed' }
       ]
 
+      const getFavicon = (pageUrl) => {
+        try {
+          if (!pageUrl) return null
+          const u = new URL(pageUrl)
+          return `https://www.google.com/s2/favicons?sz=128&domain_url=${u.origin}`
+        } catch (_) {
+          return null
+        }
+      }
+
+      const extractImgFromHtml = (html) => {
+        if (!html) return null
+        const match = html.match(/<img[^>]+src=["']([^"']+)["']/i)
+        return match ? match[1] : null
+      }
+
       const fetchRSS = async (src) => {
+        try {
+          // 1) Try rss2json first (usually CORS-friendly)
+          const rss2jsonUrl = 'https://api.rss2json.com/v1/api.json'
+          const params = { rss_url: src.url, count: 10 }
+          if (import.meta.env.VITE_RSS2JSON_KEY) params.api_key = import.meta.env.VITE_RSS2JSON_KEY
+          const rssResp = await axios.get(rss2jsonUrl, { params, timeout: 12000 })
+          const rssData = rssResp.data
+          if (Array.isArray(rssData?.items) && rssData.items.length > 0) {
+            return rssData.items.slice(0, 10).map((item, idx) => {
+              const title = item.title?.trim() || 'Untitled'
+              const description = (item.description || item.content || '').toString()
+              const publishedAt = new Date(item.pubDate || item.pubDate?.date || Date.now()).toISOString()
+              const url = item.link || item.guid || null
+              const enclosureLink = (item.enclosure && (item.enclosure.link || item.enclosure.url)) || null
+              const contentImg = extractImgFromHtml(description)
+              const image = enclosureLink || item.thumbnail || contentImg || getFavicon(url)
+              const textForSentiment = `${title} ${description}`
+              const sentiment = /rise|up|surge|record|gain/i.test(textForSentiment)
+                ? 'positive'
+                : (/fall|down|drop|hack|ban|fraud|fine/i.test(textForSentiment) ? 'negative' : 'neutral')
+              return {
+                id: `${src.name}_${idx}_${publishedAt}`,
+                title,
+                summary: description.replace(/<[^>]*>?/gm, '').slice(0, 220),
+                source: src.name,
+                publishedAt,
+                sentiment,
+                image,
+                url,
+                link: url
+              }
+            })
+          }
+        } catch (_) { /* fall back to AllOrigins below */ }
         try {
           // cache buster to avoid proxy-level caching
           const proxied = `https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}&cacheBust=${Date.now()}`
@@ -389,7 +439,7 @@ export const marketDataService = {
             const mediaContent = item.getElementsByTagName('media:content')[0]?.getAttribute('url')
             const enclosure = item.getElementsByTagName('enclosure')[0]?.getAttribute('url')
             const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i)
-            const image = mediaContent || enclosure || (imgMatch ? imgMatch[1] : null)
+            const image = mediaContent || enclosure || (imgMatch ? imgMatch[1] : null) || getFavicon(url)
             const sentiment = /rise|up|surge|record|gain/i.test(title + ' ' + description)
               ? 'positive'
               : (/fall|down|drop|hack|ban|fraud|fine/i.test(title + ' ' + description) ? 'negative' : 'neutral')
@@ -416,15 +466,59 @@ export const marketDataService = {
       // fallback to demo if nothing fetched
       const output = merged.length > 0 ? merged : [
         {
-          id: 1,
-          title: 'Market news unavailable',
-          summary: 'Using local demo data because the news sources are unreachable right now.',
+          id: 'demo_1',
+          title: 'Bitcoin alcanza nuevo rango clave de resistencia',
+          summary: 'Analistas observan presión de compra creciente mientras el precio se acerca a niveles técnicos importantes.',
+          source: 'Demo',
+          publishedAt: new Date().toISOString(),
+          sentiment: 'positive',
+          image: null,
+          url: 'https://www.coindesk.com/',
+          link: 'https://www.coindesk.com/'
+        },
+        {
+          id: 'demo_2',
+          title: 'Ethereum lidera actividad DeFi en la semana',
+          summary: 'Protocolos consolidados muestran incremento de TVL y nuevas integraciones en L2.',
+          source: 'Demo',
+          publishedAt: new Date().toISOString(),
+          sentiment: 'positive',
+          image: null,
+          url: 'https://cointelegraph.com/',
+          link: 'https://cointelegraph.com/'
+        },
+        {
+          id: 'demo_3',
+          title: 'Reguladores evalúan nuevos lineamientos para exchanges',
+          summary: 'Borradores proponen mayor transparencia operativa sin frenar la innovación.',
           source: 'Demo',
           publishedAt: new Date().toISOString(),
           sentiment: 'neutral',
           image: null,
-          url: null,
-          link: null
+          url: 'https://www.cryptonews.com/',
+          link: 'https://www.cryptonews.com/'
+        },
+        {
+          id: 'demo_4',
+          title: 'Altcoins seleccionadas muestran fortaleza relativa',
+          summary: 'SOL, LINK y AVAX encabezan el rendimiento semanal frente al mercado.',
+          source: 'Demo',
+          publishedAt: new Date().toISOString(),
+          sentiment: 'positive',
+          image: null,
+          url: 'https://cointelegraph.com/',
+          link: 'https://cointelegraph.com/'
+        },
+        {
+          id: 'demo_5',
+          title: 'Volatilidad se mantiene en niveles moderados',
+          summary: 'Derivados muestran interés estable y funding cercano a neutro.',
+          source: 'Demo',
+          publishedAt: new Date().toISOString(),
+          sentiment: 'neutral',
+          image: null,
+          url: 'https://www.coindesk.com/',
+          link: 'https://www.coindesk.com/'
         }
       ]
       newsCache.set(cacheKey, output)

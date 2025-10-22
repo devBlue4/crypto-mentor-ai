@@ -42,7 +42,7 @@ const MarketOverview = () => {
       const [overview, history, marketNews] = await Promise.all([
         marketDataService.getMarketOverview(),
         marketDataService.getHistoricalData('bitcoin', days),
-        marketDataService.getMarketNews(true) // force refresh news on each update
+        marketDataService.getMarketNews() // use cached news as antes
       ])
 
       // Validate historical data
@@ -216,7 +216,7 @@ const MarketOverview = () => {
             </div>
           </div>
           <p className="text-2xl font-bold text-gray-900 mb-2">
-            ${(marketData?.bitcoin?.price || 0).toLocaleString()}
+            ${(marketData?.bitcoin?.price || 0).toLocaleString('en-US')}
           </p>
           <div className={`flex items-center space-x-1 ${
             (marketData?.bitcoin?.change24h || 0) >= 0 ? 'text-green-600' : 'text-red-600'
