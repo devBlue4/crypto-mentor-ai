@@ -2,7 +2,7 @@
 
 Este documento describe en detalle cómo CryptoMentor AI se integra con la API de AdEx AURA para proporcionar funcionalidades de inteligencia artificial.
 
-## 🤖 Visión General de AURA
+## 🤖 Visión General de AdEx AURA
 
 ### ¿Qué es AdEx AURA?
 
@@ -13,7 +13,7 @@ AdEx AURA es una API de inteligencia artificial especializada en análisis de cr
 - **Insights de mercado** en tiempo real
 - **Chat inteligente** con conocimiento especializado
 
-### Capacidades de AURA
+### Capacidades de AdEx AURA
 
 1. **Análisis de Portfolio**: Evaluación de diversificación, riesgo y rendimiento
 2. **Recomendaciones de Trading**: Sugerencias basadas en condiciones de mercado
@@ -155,7 +155,7 @@ GET /market/insights?timeframe=24h&include_sentiment=true
 
 ### Contexto del Usuario
 
-AURA utiliza un contexto rico para personalizar las respuestas:
+AdEx AURA utiliza un contexto rico para personalizar las respuestas:
 
 ```javascript
 const userContext = {
@@ -188,7 +188,7 @@ const userContext = {
 
 ### Personalización de Respuestas
 
-AURA adapta sus respuestas basándose en:
+AdEx AURA adapta sus respuestas basándose en:
 
 1. **Nivel de Experiencia**:
    - **Principiante**: Explicaciones simples, conceptos básicos
@@ -219,7 +219,7 @@ const sendMessage = async (message, context = {}) => {
     session_id: getSessionId()
   }
   
-  // 2. Enviar a AURA
+  // 2. Enviar a AdEx AURA
   const response = await auraAPI.sendMessage(message, fullContext)
   
   // 3. Procesar respuesta
@@ -317,7 +317,7 @@ const calculateRiskLevel = (tokens) => {
 
 ### Recomendaciones Automáticas
 
-AURA genera recomendaciones basadas en:
+AdEx AURA genera recomendaciones basadas en:
 
 1. **Análisis de Diversificación**:
    - Concentración en un solo activo
@@ -489,7 +489,7 @@ const trackAURAUsage = {
 - **Satisfacción**: 4.2/5 rating promedio
 - **Engagement**: 5-8 mensajes por sesión
 
-## 🔮 Roadmap de AURA
+## 🔮 Roadmap de AdEx AURA
 
 ### Mejoras Planificadas
 
@@ -516,3 +516,46 @@ const trackAURAUsage = {
 ---
 
 La integración con AdEx AURA es el corazón de CryptoMentor AI, proporcionando inteligencia artificial de vanguardia para ayudar a los usuarios a navegar el complejo mundo de las criptomonedas.
+
+## ⭐ Capability clave: Address → Recommendations & Strategies
+
+AURA permite enviar una account address y recibir una lista de recomendaciones y estrategias en lenguaje natural, con una descripción de lo que hace cada una. Esta es una de las capacidades más importantes de CryptoMentor AI y se emplea tanto desde el Chat como desde la pestaña Strategies.
+
+### Endpoint utilizado
+
+```http
+POST /aura/v1/recommendations/personalized
+```
+
+#### Payload de ejemplo
+```json
+{
+  "address": "0x1C680f16b2270e324D5778305C9EC96784c832ab",
+  "timeframe": "30d",
+  "include_risk": true,
+  "language": "en"
+}
+```
+
+#### Respuesta (esquema simplificado)
+```json
+{
+  "immediate_actions": [
+    "DCA on BTC/ETH: Invest a fixed amount weekly to smooth volatility.",
+    "Set smart price alerts: Track key support/resistance to react fast."
+  ],
+  "long_term_strategy": [
+    "Quarterly rebalance: Keep a target split with BTC/ETH, alts, stables."
+  ],
+  "risk_management": [
+    "Position sizing: Limit exposure to high‑volatility assets."
+  ]
+}
+```
+
+### Prompt recomendado (Chat/Strategies)
+```text
+Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.
+```
+
+> Tip: La UI muestra la dirección corta (0x1C680f…32ab) para mejor legibilidad, pero envía la dirección completa a la API.

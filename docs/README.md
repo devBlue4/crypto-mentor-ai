@@ -25,7 +25,7 @@ Esta carpeta contiene toda la documentación técnica y de usuario para el proye
 
 ### 📊 Específico del Proyecto
 - [Integración Web3](./web3-integration.md) - Detalles de integración con MetaMask
-- [Integración AURA](./aura-integration.md) - Cómo funciona la IA de AdEx
+- [Integración AdEx AURA](./aura-integration.md) - Cómo funciona la IA de AdEx
 - [Datos de Mercado](./market-data.md) - Fuentes de datos y APIs
 - [Seguridad](./security.md) - Consideraciones de seguridad
 
@@ -51,3 +51,18 @@ Para empezar rápidamente:
 ---
 
 *Documentación mantenida por el equipo de CryptoMentor AI*
+
+## ⭐ AdEx AURA API y recomendaciones por dirección
+
+La app está potenciada por la AdEx AURA API. Además del chat y el análisis de portfolio, el agente puede tomar una account address y producir una lista de recomendaciones y estrategias en lenguaje natural, con una descripción de lo que hace cada una.
+
+Ejemplo de prompt (para el Chat o la pestaña Strategies):
+
+```text
+Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.
+```
+
+Resultado esperado:
+- Lista de estrategias y apps recomendadas
+- Descripción en lenguaje simple de lo que hace cada una
+- (Opcional) Agrupar por horizonte temporal/riesgo con pasos accionables

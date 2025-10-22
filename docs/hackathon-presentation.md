@@ -22,9 +22,9 @@
 - Noticias del mercado con análisis de sentimiento
 - Métricas clave: Market Cap, Fear & Greed Index
 
-### 3. Chat con AURA (60 segundos)
+### 3. Chat con AdEx AURA (60 segundos)
 - Pregunta: "¿Cómo está el mercado hoy?"
-- Respuesta contextual de AURA con análisis
+- Respuesta contextual de AdEx AURA con análisis
 - Pregunta: "Analiza mi portfolio"
 - Análisis personalizado basado en holdings reales
 - Recomendaciones específicas y accionables
@@ -32,7 +32,7 @@
 ### 4. Análisis de Portfolio (45 segundos)
 - Vista de tokens y balances
 - Métricas de diversificación y riesgo
-- Score de portfolio calculado por AURA
+- Score de portfolio calculado por AdEx AURA
 - Recomendaciones personalizadas
 
 ### 5. Sistema de Alertas (30 segundos)
@@ -58,7 +58,7 @@
 - **Riesgo alto**: Usuarios toman decisiones sin análisis adecuado
 
 ### Nuestra Solución
-- **IA contextual**: AURA analiza tu portfolio específico
+- **IA contextual**: AdEx AURA analiza tu portfolio específico
 - **Interfaz unificada**: Todo en una sola aplicación
 - **Educación integrada**: Aprende mientras usas la plataforma
 - **Análisis personalizado**: Recomendaciones basadas en tu perfil
@@ -77,7 +77,7 @@ Estado: React Context API
 Notificaciones: React Hot Toast
 ```
 
-### Integración con AURA
+### Integración con AdEx AURA
 ```javascript
 // Ejemplo de uso innovador
 const response = await auraAPI.sendMessage(
@@ -101,8 +101,8 @@ const response = await auraAPI.sendMessage(
 
 ## 🎯 Funcionalidades Clave
 
-### 1. Chat Inteligente con AURA
-- **Contexto completo**: AURA conoce tu portfolio
+### 1. Chat Inteligente con AdEx AURA
+- **Contexto completo**: AdEx AURA conoce tu portfolio
 - **Análisis en tiempo real**: Respuestas basadas en datos actuales
 - **Recomendaciones accionables**: Sugerencias específicas
 - **Educación integrada**: Explica conceptos complejos
@@ -120,7 +120,7 @@ const response = await auraAPI.sendMessage(
 - **Métricas clave**: Fear & Greed, dominancia de mercado
 
 ### 4. Sistema de Alertas Inteligentes
-- **Configuración con IA**: AURA sugiere alertas relevantes
+- **Configuración con IA**: AdEx AURA sugiere alertas relevantes
 - **Múltiples tipos**: Precio, cambio %, volumen
 - **Notificaciones contextuales**: Basadas en tu actividad
 - **Gestión centralizada**: Todas tus alertas en un lugar
@@ -135,10 +135,10 @@ const response = await auraAPI.sendMessage(
 
 ## 🏆 Por qué Debería Ganar
 
-### 1. Uso Innovador de AURA
+### 1. Uso Innovador de AdEx AURA
 - **No solo chat básico**: Análisis contextual completo del portfolio
 - **Recomendaciones personalizadas**: Basadas en holdings reales
-- **Integración profunda**: AURA como cerebro de la aplicación
+- **Integración profunda**: AdEx AURA como cerebro de la aplicación
 - **Contexto rico**: Usuario, portfolio, mercado, historial
 
 ### 2. Solución Real a Problema Real
@@ -165,12 +165,12 @@ const response = await auraAPI.sendMessage(
 
 ### Engagement
 - **Tiempo promedio en app**: 8-12 minutos
-- **Mensajes por sesión**: 5-8 con AURA
+- **Mensajes por sesión**: 5-8 con AdEx AURA
 - **Retención de usuarios**: 85%
 - **Satisfacción**: 4.2/5 estrellas
 
 ### Funcionalidad
-- **Tiempo de respuesta AURA**: <2 segundos
+- **Tiempo de respuesta AdEx AURA**: <2 segundos
 - **Precisión de recomendaciones**: 78%
 - **Uptime de APIs**: 99.5%
 - **Error rate**: <1%
@@ -224,12 +224,17 @@ const response = await auraAPI.sendMessage(
 - Conectar MetaMask
 - Mostrar datos del wallet
 
-#### 2. Chat con AURA (45 segundos)
-"Ahora probemos AURA con contexto real. Preguntémosle sobre el mercado..."
+#### 2. Chat con AdEx AURA (45 segundos)
+"Ahora probemos AdEx AURA con contexto real. Preguntémosle sobre el mercado..."
 - Pregunta sobre mercado
 - Mostrar respuesta contextual
 - "Ahora analicemos mi portfolio específico..."
 - Mostrar análisis personalizado
+
+#### 2.1 Highlight: Address → Recommendations (30 segundos)
+- Pegar la dirección `0x1C680f16b2270e324D5778305C9EC96784c832ab` en el **Chat** o en **Strategies**
+- Prompt: `Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.`
+- Mostrar la lista generada (estrategias + descripción) y explicar que está “Powered by AdEx AURA API”
 
 #### 3. Portfolio Analysis (30 segundos)
 "Veamos el análisis automático de mi portfolio..."
@@ -257,7 +262,7 @@ const response = await auraAPI.sendMessage(
 **A:** Solo leemos datos públicos de wallets, nunca almacenamos claves privadas, y todas las comunicaciones usan HTTPS. Además, incluimos educación sobre seguridad.
 
 ### Q: ¿Qué hace diferente a CryptoMentor AI?
-**A:** La integración profunda con AURA para análisis contextual. No es solo un chat, sino un asistente que conoce tu portfolio y da recomendaciones personalizadas.
+**A:** La integración profunda con AdEx AURA para análisis contextual. No es solo un chat, sino un asistente que conoce tu portfolio y da recomendaciones personalizadas.
 
 ### Q: ¿Cómo escalan el proyecto?
 **A:** Arquitectura modular, APIs bien documentadas, y plan de monetización a través de funcionalidades premium y partnerships.
@@ -272,7 +277,7 @@ const response = await auraAPI.sendMessage(
 
 ## 🎯 Mensajes Clave
 
-1. **Innovación**: Uso único de AURA para análisis contextual
+1. **Innovación**: Uso único de AdEx AURA para análisis contextual
 2. **Impacto**: Democratiza el acceso al trading crypto
 3. **Calidad**: Implementación técnica excelente
 4. **Escalabilidad**: Potencial para ayudar a millones de usuarios

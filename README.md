@@ -4,7 +4,7 @@ An intelligent Web3 trading assistant that uses the AdEx AURA API to provide rea
 
 ## ✨ Key Features
 
-- **🤖 AI AURA Chat**: Intelligent chat interface for crypto questions
+- **🤖 AdEx AURA Chat**: Intelligent chat interface for crypto questions
 - **💼 Portfolio Analysis**: Connect your wallet and receive personalized analysis
 - **📊 Market Dashboard**: Real-time market data visualization
 - **🔔 Smart Alerts**: Configure personalized alerts with AI
@@ -71,7 +71,7 @@ An intelligent Web3 trading assistant that uses the AdEx AURA API to provide rea
 - MetaMask connection
 - ETH balance and ERC-20 tokens visualization
 - Diversification and risk analysis
-- Personalized AURA recommendations
+- Personalized AdEx AURA recommendations
 
 ### AI Chat
 - Intuitive conversational interface
@@ -149,7 +149,7 @@ src/
 │   ├── WalletContext.jsx # Wallet state
 │   └── AuraContext.jsx  # AI state
 ├── services/           # Services and APIs
-│   ├── auraAPI.js     # AURA integration
+│   ├── auraAPI.js     # AdEx AURA integration
 │   ├── walletService.js # Wallet services
 │   └── marketData.js  # Market data
 └── App.jsx            # Main component
@@ -159,7 +159,7 @@ src/
 
 - [ ] **Phase 1**: ✅ Initial setup and base components
 - [ ] **Phase 2**: ✅ Web3 and MetaMask integration
-- [ ] **Phase 3**: ✅ AURA API integration
+- [ ] **Phase 3**: ✅ AdEx AURA API integration
 - [ ] **Phase 4**: ✅ Advanced features
 - [ ] **Phase 5**: 🚧 Optimization and polish
 
@@ -185,7 +185,7 @@ This project is under the MIT License. See the `LICENSE` file for more details.
 
 ## 🙏 Acknowledgments
 
-- **AdEx Team** for the AURA API
+- **AdEx Team** for the AdEx AURA API
 - **Ethers.js** for the excellent Web3 library
 - **TailwindCSS** for the styling framework
 - **React Team** for the amazing framework
@@ -203,3 +203,18 @@ If you have questions or need help:
 **Made with ❤️ for the crypto community**
 
 *CryptoMentor AI - Your intelligent Web3 trading assistant*
+
+## 🔥 Highlight: AdEx AURA API + Address→Recommendations
+
+CryptoMentor AI is powered by the AdEx AURA API. Beyond chat and portfolio analysis, the agent can take an account address and output a list of app recommendations and strategies in natural language form, with a description of what each one does.
+
+Example prompt (paste in AI Chat or the Strategies tab):
+
+```text
+Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.
+```
+
+What you get:
+- A concise list of strategies and recommended apps
+- Plain-English descriptions of what each strategy/app does
+- Optional grouping by risk/time horizon with actionable next steps

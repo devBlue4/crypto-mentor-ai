@@ -98,7 +98,7 @@ export const WalletProvider = ({ children }) => {
     try {
       // List of popular ERC-20 tokens
       const popularTokens = [
-        { address: '0xA0b86a33E6441c8C3C7d4A5e2E2B4C4F4F4F4F4F', symbol: 'USDC', name: 'USD Coin', decimals: 6 },
+        { address: '0xA0b86991C6218B36C1D19D4a2e9Eb0cE3606e48', symbol: 'USDC', name: 'USD Coin', decimals: 6 },
         { address: '0xdAC17F958D2ee523a2206206994597C13D831ec7', symbol: 'USDT', name: 'Tether USD', decimals: 6 },
         { address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', symbol: 'WBTC', name: 'Wrapped Bitcoin', decimals: 8 },
         { address: '0x514910771AF9Ca656af840dff83E8264EcF986CA', symbol: 'LINK', name: 'Chainlink', decimals: 18 },

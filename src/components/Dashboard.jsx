@@ -8,6 +8,7 @@ const ChatInterface = lazy(() => import('./ChatInterface'))
 const MarketOverview = lazy(() => import('./MarketOverview'))
 const AlertsPanel = lazy(() => import('./AlertsPanel'))
 const EducationSection = lazy(() => import('./EducationSection'))
+const Strategies = lazy(() => import('./Strategies'))
 // Removed tabs: CacheManager, PerformanceMonitor, Watchlist, TransactionHistory
 
 const Dashboard = () => {
@@ -45,6 +46,13 @@ const Dashboard = () => {
             name: 'Education',
             icon: BookOpen,
             component: EducationSection
+          }
+          ,
+          {
+            id: 'strategies',
+            name: 'Strategies',
+            icon: TrendingUp,
+            component: Strategies
           }
         ]
 
@@ -141,7 +149,7 @@ const Dashboard = () => {
               <MessageCircle className="w-6 h-6 text-chart-2" />
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">AI AURA</p>
+              <p className="text-sm font-medium text-muted-foreground">AdEx AURA</p>
               <p className="text-2xl font-bold text-foreground">Active</p>
               <p className="text-xs text-chart-2">Ready to help</p>
             </div>

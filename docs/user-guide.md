@@ -77,14 +77,14 @@ AURA analiza automáticamente tu portfolio y te proporciona:
 - **Gestión de Riesgo**: "Reduce concentración en un solo token"
 - **Liquidez**: "Agrega más stablecoins para liquidez"
 
-## 🤖 Chat con AURA
+## 🤖 Chat con AdEx AURA
 
 ### Cómo Usar el Chat
 
 1. Ve a la pestaña **"Chat IA"**
 2. Escribe tu pregunta en el campo de texto
 3. Presiona Enter o haz clic en "Enviar"
-4. AURA responderá con análisis y recomendaciones
+4. AdEx AURA responderá con análisis y recomendaciones
 
 ### Tipos de Preguntas
 
@@ -118,7 +118,7 @@ AURA analiza automáticamente tu portfolio y te proporciona:
 
 ### Características del Chat
 
-- **Contexto Personalizado**: AURA conoce tu portfolio
+- **Contexto Personalizado**: AdEx AURA conoce tu portfolio
 - **Análisis Detallado**: Respuestas con fundamentos técnicos
 - **Recomendaciones Accionables**: Sugerencias específicas
 - **Historial**: Guarda todas tus conversaciones
@@ -202,7 +202,7 @@ AURA analiza automáticamente tu portfolio y te proporciona:
 #### Privacidad
 - **Datos del Portfolio**: Solo se almacenan localmente
 - **Conversaciones**: Historial guardado en tu navegador
-- **Análisis**: Datos anónimos para mejorar AURA
+- **Análisis**: Datos anónimos para mejorar AdEx AURA
 
 ### Integración con APIs
 
@@ -256,7 +256,7 @@ AURA analiza automáticamente tu portfolio y te proporciona:
 - Asegúrate de tener fondos para gas
 - Intenta desconectar y volver a conectar
 
-#### "AURA no responde"
+#### "AdEx AURA no responde"
 - Verifica tu conexión a internet
 - Comprueba que tengas una API key válida
 - Intenta recargar la página
@@ -308,11 +308,22 @@ AURA analiza automáticamente tu portfolio y te proporciona:
 - **Lecciones Completadas**: Progreso educativo
 
 ### Mejorar tu Experiencia
-- **Usa AURA regularmente**: Mejora las recomendaciones
+- **Usa AdEx AURA regularmente**: Mejora las recomendaciones
 - **Configura alertas relevantes**: Mantente informado
 - **Completa las lecciones**: Aumenta tu conocimiento
 - **Diversifica tu portfolio**: Reduce el riesgo
 
+## ⭐ Recomendaciones por Dirección (AdEx AURA)
+
+Además de preguntas normales, puedes pegar una account address (0x…) y el agente (vía AdEx AURA API) generará una lista de recomendaciones y estrategias en lenguaje natural, con una breve descripción de lo que hace cada una.
+
+- Dónde usarlo: pestaña **AI Chat** o **Strategies**
+- Prompt sugerido:
+  ```text
+  Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.
+  ```
+- Consejo: en pantalla verás la dirección en formato corto (0x1C680f…32ab) para mejor lectura, pero se envía completa a la API.
+
 ---
 
-¡Disfruta usando CryptoMentor AI! Si tienes preguntas, no dudes en contactar al equipo de soporte o usar el chat con AURA. 🚀
+¡Disfruta usando CryptoMentor AI! Si tienes preguntas, no dudes en contactar al equipo de soporte o usar el chat con AdEx AURA. 🚀

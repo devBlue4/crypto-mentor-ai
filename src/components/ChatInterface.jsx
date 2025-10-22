@@ -10,7 +10,7 @@ const ChatInterface = () => {
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
   
-  const { conversation, isLoading, sendMessage, clearConversation } = useAura()
+  const { conversation, isLoading, sendMessage, clearConversation, getPersonalizedRecommendations } = useAura()
   const { isConnected, tokens, balance } = useWallet()
 
   // Auto-scroll to end of chat
@@ -18,11 +18,11 @@ const ChatInterface = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [conversation])
 
-  // Welcome messages
+  // Welcome messages (aligned with strategies/recommendations by account address)
   const welcomeMessages = [
-    "Hello! I'm AURA, your Web3 trading assistant. How can I help you?",
-    "I can help you with market analysis, portfolio recommendations, and cryptocurrency education.",
-    "Do you have any specific questions about trading or would you like me to analyze your portfolio?"
+    "Hello! I'm the CryptoMentor AI Agent. How can I help you today?",
+    "I can assist with market analysis, portfolio insights, and education — and I can take an account address and output a list of app recommendations and strategies in natural language, with a short description of what each one does.",
+    "Paste an address (0x...) or ask anything about trading."
   ]
 
   // Send message
@@ -34,6 +34,42 @@ const ChatInterface = () => {
     setIsTyping(true)
 
     try {
+      // If the message contains an Ethereum address, return recommendations/strategies
+      const addressMatch = message.match(/0x[a-fA-F0-9]{40}/)
+      if (addressMatch) {
+        const address = addressMatch[0]
+        const short = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
+        let items = []
+        try {
+          const ai = await getPersonalizedRecommendations({ address, timeframe: '30d' })
+          if (Array.isArray(ai?.immediate_actions)) items = items.concat(ai.immediate_actions)
+          if (Array.isArray(ai?.long_term_strategy)) items = items.concat(ai.long_term_strategy)
+          if (Array.isArray(ai?.risk_management)) items = items.concat(ai.risk_management)
+        } catch (_) {
+          // ignore and fall back
+        }
+
+        if (items.length === 0) {
+          items = [
+            'DCA on BTC/ETH: Invest a fixed amount weekly to smooth volatility and avoid bad timing.',
+            'Set smart price alerts: Track key support/resistance so you can react quickly when levels break.',
+            'Quarterly rebalance: Keep a target split (e.g., 50% BTC/ETH, 30% alts, 20% stables) to control risk.'
+          ]
+        }
+
+        const content = `Here are app recommendations and strategies for address ${short(address)}:\n\n` +
+          items.map((it, i) => `${i + 1}. ${it}`).join('\n')
+
+        const auraMessage = {
+          id: Date.now() + 1,
+          type: 'aura',
+          content,
+          timestamp: new Date()
+        }
+        setConversation(prev => [...prev, auraMessage])
+        return
+      }
+
       // Create context based on user's portfolio
       const context = {
         hasWallet: isConnected,
@@ -60,11 +96,14 @@ const ChatInterface = () => {
 
   // Example messages
   const exampleMessages = [
-    "How is the market today?",
-    "Analyze my portfolio",
-    "What cryptocurrencies do you recommend?",
-    "Explain what DeFi is",
-    "When is a good time to buy Bitcoin?"
+    { label: "How is the market today?", value: "How is the market today?" },
+    { label: "Analyze my portfolio", value: "Analyze my portfolio" },
+    { label: "What cryptocurrencies do you recommend?", value: "What cryptocurrencies do you recommend?" },
+    { label: "Explain what DeFi is", value: "Explain what DeFi is" },
+    {
+      label: "Analyze address 0x1C680f...32ab and give app recommendations and strategies with descriptions",
+      value: "Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies with descriptions"
+    }
   ]
 
   return (
@@ -75,8 +114,8 @@ const ChatInterface = () => {
             <Bot className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Chat with AURA</h3>
-            <p className="text-sm text-gray-600">Your Web3 trading AI assistant</p>
+            <h3 className="text-lg font-semibold text-gray-900">CryptoMentor AI Agent</h3>
+            <p className="text-sm text-gray-600">Powered by AdEx AURA — analyzes your account address and suggests personalized app strategies with natural-language explanations.</p>
           </div>
         </div>
         
@@ -114,10 +153,10 @@ const ChatInterface = () => {
                 {exampleMessages.map((example, index) => (
                   <button
                     key={index}
-                    onClick={() => setInputMessage(example)}
+                    onClick={() => setInputMessage(example.value)}
                     className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors duration-200"
                   >
-                    {example}
+                    {example.label}
                   </button>
                 ))}
               </div>
@@ -215,7 +254,7 @@ const ChatInterface = () => {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Write your crypto question..."
+            placeholder="Ask a question or paste an account address (0x...) for recommendations..."
             className="input-field pr-12"
             disabled={isLoading}
           />
@@ -240,7 +279,7 @@ const ChatInterface = () => {
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
             <span className="text-sm text-green-700 font-medium">
-              Wallet connected - AURA can analyze your portfolio
+              Wallet connected - CryptoMentor AI can analyze your portfolio
             </span>
           </div>
         </div>

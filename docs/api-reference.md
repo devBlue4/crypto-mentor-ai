@@ -140,12 +140,22 @@ GET /market/insights?timeframe=24h&include_sentiment=true
 }
 ```
 
-#### 4. Recomendaciones Personalizadas
+#### 4. Recomendaciones Personalizadas (incluye address → strategies)
 ```http
 POST /recommendations/personalized
 ```
 
-**Request Body:**
+**Request Body (por perfil o address):**
+```json
+{
+  "address": "0x1C680f16b2270e324D5778305C9EC96784c832ab",
+  "timeframe": "30d",
+  "include_risk": true,
+  "language": "en"
+}
+```
+
+Alternativamente por perfil de usuario:
 ```json
 {
   "user_profile": {
@@ -161,19 +171,20 @@ POST /recommendations/personalized
 ```json
 {
   "immediate_actions": [
-    "Revisar y rebalancear portfolio",
-    "Configurar alertas de precio"
+    "DCA on BTC/ETH: Invest a fixed amount weekly to smooth volatility.",
+    "Set smart price alerts: Track key support/resistance to react fast."
   ],
   "long_term_strategy": [
-    "Diversificar hacia DeFi protocols",
-    "Explorar tokens de infraestructura"
+    "Quarterly rebalance: Keep a target split with BTC/ETH, alts, stables."
   ],
   "risk_management": [
-    "Establecer stop-loss en posiciones principales",
-    "No invertir más del 5% en altcoins especulativas"
+    "Position sizing: Limit exposure to high‑volatility assets."
   ]
 }
 ```
+
+> Prompt sugerido (Chat/Strategies):
+> `Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.`
 
 #### 5. Alertas Inteligentes
 ```http

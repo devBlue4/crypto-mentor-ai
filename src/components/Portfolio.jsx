@@ -14,16 +14,31 @@ const Portfolio = () => {
   const [analysis, setAnalysis] = useState(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  // Analizar portfolio con AURA
+  // Analizar portfolio con AdEx AURA
   const handleAnalyzePortfolio = async () => {
-    if (!isConnected || tokens.length === 0) return
+    if (!isConnected) {
+      toast.error('Connect your wallet to analyze with AI')
+      return
+    }
 
     try {
       const analysis = await analyzePortfolio(tokens, balance)
       setAnalysis(analysis)
       toast.success('Portfolio analysis completed')
     } catch (error) {
-      toast.error('Error analyzing portfolio')
+      // Fallback: generate a lightweight local analysis so the UI always shows something
+      const fallback = {
+        total_value_usd: parseFloat(balance) * 2500,
+        diversity_score: Math.min(Math.max(tokens.length * 0.3, 1), 10),
+        risk_level: tokens.length > 3 ? 'medium' : 'low',
+        recommendations: [
+          'Consider adding stablecoins for liquidity',
+          'Use price alerts to monitor key levels',
+          'Rebalance quarterly to your target mix'
+        ]
+      }
+      setAnalysis(fallback)
+      toast('AI temporarily unavailable. Showing local analysis.', { icon: 'ℹ️' })
     }
   }
 
@@ -79,7 +94,7 @@ const Portfolio = () => {
           Connect your Wallet
         </h3>
         <p className="text-gray-600 mb-6">
-          Connect your wallet to see your portfolio analysis and receive personalized recommendations from AURA.
+          Connect your wallet to see your portfolio analysis and receive personalized recommendations from AdEx AURA.
         </p>
         <div className="text-sm text-gray-500">
           Use the "Connect Wallet" button at the top
@@ -160,7 +175,7 @@ const Portfolio = () => {
             </button>
             <button
               onClick={handleAnalyzePortfolio}
-              disabled={auraLoading || tokens.length === 0}
+              disabled={auraLoading || !isConnected}
               className="btn-primary flex items-center space-x-2"
             >
               <span>{auraLoading ? 'Analyzing...' : 'Analyze with AI'}</span>
@@ -201,7 +216,7 @@ const Portfolio = () => {
         </div>
       )}
 
-      {/* AURA Analysis */}
+      {/* AdEx AURA Analysis */}
       {analysis && (
         <div className="card">
           <div className="flex items-center space-x-3 mb-6">
@@ -209,7 +224,7 @@ const Portfolio = () => {
               <span className="text-white font-bold text-sm">A</span>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">AURA Analysis</h3>
+              <h3 className="text-lg font-semibold text-gray-900">AdEx AURA Analysis</h3>
               <p className="text-sm text-gray-600">Personalized recommendations</p>
             </div>
           </div>
