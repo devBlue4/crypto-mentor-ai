@@ -346,9 +346,13 @@ export const marketDataService = {
   },
 
   // Get market news
-  async getMarketNews() {
+  async getMarketNews(force = false) {
     const cacheKey = generateCacheKey('market-news')
     
+    // Allow bypassing cache when force=true (e.g., on refresh/interval)
+    if (force) {
+      newsCache.delete(cacheKey)
+    }
     // Try to get from cache first
     const cached = newsCache.get(cacheKey)
     if (cached !== null) {
@@ -365,7 +369,8 @@ export const marketDataService = {
 
       const fetchRSS = async (src) => {
         try {
-          const proxied = `https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}`
+          // cache buster to avoid proxy-level caching
+          const proxied = `https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}&cacheBust=${Date.now()}`
           const { data } = await axios.get(proxied, { timeout: 12000 })
           const xml = data?.contents || ''
           if (!xml) return []
@@ -377,6 +382,9 @@ export const marketDataService = {
             const description = item.querySelector('description')?.textContent?.trim() || ''
             const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString()
             const publishedAt = new Date(pubDate).toISOString()
+            const rawLink = item.querySelector('link')?.textContent?.trim() || ''
+            const guidLink = item.querySelector('guid')?.textContent?.trim() || ''
+            const url = (rawLink && /^https?:\/\//i.test(rawLink)) ? rawLink : (guidLink && /^https?:\/\//i.test(guidLink) ? guidLink : null)
             // Attempt to extract a thumbnail image if present (media:content, enclosure, or from description)
             const mediaContent = item.getElementsByTagName('media:content')[0]?.getAttribute('url')
             const enclosure = item.getElementsByTagName('enclosure')[0]?.getAttribute('url')
@@ -392,7 +400,9 @@ export const marketDataService = {
               source: src.name,
               publishedAt,
               sentiment,
-              image
+              image,
+              url,
+              link: url
             }
           })
         } catch (_) {
@@ -412,7 +422,9 @@ export const marketDataService = {
           source: 'Demo',
           publishedAt: new Date().toISOString(),
           sentiment: 'neutral',
-          image: null
+          image: null,
+          url: null,
+          link: null
         }
       ]
       newsCache.set(cacheKey, output)

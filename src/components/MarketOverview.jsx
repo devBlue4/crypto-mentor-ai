@@ -42,7 +42,7 @@ const MarketOverview = () => {
       const [overview, history, marketNews] = await Promise.all([
         marketDataService.getMarketOverview(),
         marketDataService.getHistoricalData('bitcoin', days),
-        marketDataService.getMarketNews()
+        marketDataService.getMarketNews(true) // force refresh news on each update
       ])
 
       // Validate historical data
@@ -245,7 +245,7 @@ const MarketOverview = () => {
           {news?.map((article, index) => (
             <a
               key={index}
-              href={article.link || '#'}
+              href={article.url || article.link || '#'}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
