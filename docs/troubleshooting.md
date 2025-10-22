@@ -178,40 +178,6 @@ npm run build
 
 ## 🌐 Problemas de Red y APIs
 
-### Errores CORS (Cross-Origin Resource Sharing)
-
-**Síntomas:**
-- Error: "Access to XMLHttpRequest has been blocked by CORS policy"
-- Error: "No 'Access-Control-Allow-Origin' header is present"
-- APIs funcionan intermitentemente
-
-**Causa:**
-Las APIs externas (CoinGecko, Fear & Greed) bloquean peticiones directas desde el navegador por políticas CORS.
-
-**Solución Implementada:**
-```javascript
-// En desarrollo: Usar proxy de Vite
-const COINGECKO_API = import.meta.env.DEV ? '/api/coingecko' : 'https://api.coingecko.com/api/v3'
-
-// En producción: Fallback automático a datos demo
-if (error.code === 'ERR_NETWORK' || error.message.includes('CORS')) {
-  console.warn('CORS error detected, falling back to mock data')
-  return null // Trigger fallback
-}
-```
-
-**Configuración de Proxy (vite.config.js):**
-```javascript
-proxy: {
-  '/api/coingecko': {
-    target: 'https://api.coingecko.com/api/v3',
-    changeOrigin: true,
-    secure: true,
-    rewrite: (path) => path.replace(/^\/api\/coingecko/, '')
-  }
-}
-```
-
 ### APIs no responden
 
 **CoinGecko API:**
@@ -223,12 +189,10 @@ fetch('https://api.coingecko.com/api/v3/ping')
 ```
 
 **Soluciones:**
-1. **En desarrollo**: El proxy de Vite resuelve automáticamente los problemas CORS
-2. **En producción**: La aplicación usa datos de demostración como fallback
-3. Verifica tu conexión a internet
-4. Espera unos minutos (rate limiting)
-5. Verifica que las APIs estén funcionando
-6. Usa API keys si tienes límites
+1. Verifica tu conexión a internet
+2. Espera unos minutos (rate limiting)
+3. Verifica que las APIs estén funcionando
+4. Usa API keys si tienes límites
 
 ### Datos no se actualizan
 

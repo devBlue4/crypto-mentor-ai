@@ -119,19 +119,6 @@ Para desarrollo, configura una red de prueba:
    - **Currency Symbol**: ETH
    - **Block Explorer**: `https://goerli.etherscan.io`
 
-### 6.1. Configuración de Proxy (Nuevo)
-
-La aplicación ahora incluye configuración automática de proxy para resolver problemas CORS:
-
-**En desarrollo:**
-- Las peticiones a CoinGecko van a través del proxy de Vite
-- No se requieren configuraciones adicionales
-- Los errores CORS se resuelven automáticamente
-
-**En producción:**
-- Fallback automático a datos de demostración si hay problemas CORS
-- La aplicación funciona sin interrupciones
-
 ### 7. Ejecutar la Aplicación
 
 ```bash
