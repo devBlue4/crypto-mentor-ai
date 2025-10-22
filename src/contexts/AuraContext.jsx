@@ -146,7 +146,17 @@ Details: ${friendly}${apiMessage ? `\nMessage: ${apiMessage}` : ''}`,
     analyzePortfolio,
     getMarketInsights,
     clearConversation,
-    getPersonalizedRecommendations
+    getPersonalizedRecommendations,
+    // Education / Quiz
+    generateQuiz: async (topic, options) => {
+      try {
+        return await auraAPI.generateQuiz(topic, options)
+      } catch (e) {
+        // Fallback hard a demo para evitar que la UI se quede bloqueada
+        const count = options?.questionCount || 5
+        return auraAPI.getDemoQuiz(topic, count)
+      }
+    }
   }
 
   return (

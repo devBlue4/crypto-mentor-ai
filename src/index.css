@@ -483,8 +483,6 @@ html, body {
     background-color: rgba(60, 55, 100, 0.8) !important;
   }
   
-  /* Light panel contrast fixes (reverted to original behavior) */
-  
   /* Text color overrides */
   .text-gray-900 {
     color: #e8ebff !important;

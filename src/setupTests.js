@@ -1,12 +1,16 @@
 import '@testing-library/jest-dom'
+import { vi } from 'vitest'
+
+// Alias Jest API to Vitest for legacy tests
+globalThis.jest = vi
 
 // Mock window.ethereum for MetaMask testing
 Object.defineProperty(window, 'ethereum', {
   value: {
     isMetaMask: true,
-    request: jest.fn(),
-    on: jest.fn(),
-    removeListener: jest.fn(),
+    request: vi.fn(),
+    on: vi.fn(),
+    removeListener: vi.fn(),
     selectedAddress: '0x1234567890123456789012345678901234567890',
     chainId: '0x1'
   },
@@ -15,10 +19,10 @@ Object.defineProperty(window, 'ethereum', {
 
 // Mock localStorage
 const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
 }
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock
@@ -27,9 +31,9 @@ Object.defineProperty(window, 'localStorage', {
 // Mock console methods to reduce noise in tests
 global.console = {
   ...console,
-  log: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
+  log: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
 }
 
 // Mock environment variables

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { auraResponseCache, generateCacheKey } from './cache'
+import { gptAPI } from './gptAPI'
 
 // AdEx AURA API configuration
 const AURA_API_BASE = import.meta.env.DEV
@@ -29,6 +30,168 @@ const auraClient = axios.create({
 })
 
 export const auraAPI = {
+  // Generate AI quiz questions (English) for a given topic
+  async generateQuiz(topic, options = {}) {
+    const {
+      questionCount = 5,
+      difficulty = 'beginner', // beginner | intermediate | advanced
+    } = options
+
+    const cacheKey = generateCacheKey('education-quiz', topic, difficulty, String(questionCount))
+    const cached = auraResponseCache.get(cacheKey)
+    if (cached !== null) return cached
+
+    // If no AURA API key, try OpenAI only if configured; otherwise use demo directly
+    if (!AURA_API_KEY || AURA_API_KEY === 'your_aura_api_key_here') {
+      if (OPENAI_API_KEY_PRESENT) {
+        try {
+          const quiz = await this.generateQuizWithGPT(topic, { questionCount, difficulty })
+          auraResponseCache.set(cacheKey, quiz, 5 * 60 * 1000)
+          return quiz
+        } catch (_) {
+          const quiz = this.getDemoQuiz(topic, questionCount)
+          auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
+          return quiz
+        }
+      }
+      const quiz = this.getDemoQuiz(topic, questionCount)
+      auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
+      return quiz
+    }
+
+    // Try AURA native endpoint first
+    try {
+      const payload = {
+        topic,
+        language: 'en',
+        difficulty,
+        question_count: questionCount
+      }
+      const response = await auraClient.post('/education/quiz', payload)
+      const data = response.data
+
+      // Normalize structure
+      const quiz = (data?.questions || []).map((q, idx) => ({
+        id: q.id || `q_${idx + 1}`,
+        question: q.question || q.text || '',
+        options: q.options || q.choices || [],
+        correctIndex: typeof q.correctIndex === 'number'
+          ? q.correctIndex
+          : (typeof q.correct === 'number' ? q.correct : 0),
+        explanation: q.explanation || ''
+      }))
+
+      const result = { topic, difficulty, questions: quiz }
+      auraResponseCache.set(cacheKey, result, 5 * 60 * 1000)
+      return result
+    } catch (error) {
+      console.warn('⚠️ AURA quiz endpoint failed, trying GPT fallback...')
+      try {
+        const quiz = await this.generateQuizWithGPT(topic, { questionCount, difficulty })
+        auraResponseCache.set(cacheKey, quiz, 5 * 60 * 1000)
+        return quiz
+      } catch (_) {
+        const quiz = this.getDemoQuiz(topic, questionCount)
+        auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
+        return quiz
+      }
+    }
+  },
+
+  async generateQuizWithGPT(topic, { questionCount, difficulty }) {
+    // Use a deterministic prompt to obtain a JSON we can parse safely
+    const prompt = [
+      'Create a multiple-choice quiz in JSON for the given crypto topic.',
+      'Rules:',
+      '- Language: English',
+      '- Number of questions: ' + questionCount,
+      '- Difficulty: ' + difficulty,
+      '- Each question must have exactly 4 options',
+      '- Provide the index of the correct option (0-3) and a short explanation',
+      'Output JSON only with this shape:',
+      '{ "questions": [ { "question": string, "options": string[4], "correctIndex": number, "explanation": string } ] }',
+      'Topic: ' + topic
+    ].join('\n')
+
+    const res = await gptAPI.sendMessage(prompt)
+    let data
+    try {
+      data = JSON.parse(res.content)
+    } catch (_) {
+      // Try to extract JSON block if model added prose
+      const match = res.content.match(/\{[\s\S]*\}/)
+      data = match ? JSON.parse(match[0]) : null
+    }
+    if (!data || !Array.isArray(data.questions)) {
+      return this.getDemoQuiz(topic, questionCount)
+    }
+    return { topic, difficulty, questions: data.questions }
+  },
+
+  getDemoQuiz(topic, questionCount = 5) {
+    const baseQuestions = [
+      {
+        question: 'What is a blockchain?',
+        options: [
+          'A centralized database controlled by a single entity',
+          'A distributed ledger maintained by a network of nodes',
+          'A type of cryptocurrency wallet',
+          'A government registry for financial assets'
+        ],
+        correctIndex: 1,
+        explanation: 'A blockchain is a distributed ledger where transactions are recorded across many nodes.'
+      },
+      {
+        question: 'What does DEX stand for?',
+        options: [
+          'Digital Exchange',
+          'Decentralized Exchange',
+          'Derivative Exchange',
+          'Dedicated Exchange'
+        ],
+        correctIndex: 1,
+        explanation: 'DEX stands for Decentralized Exchange, where trades occur on-chain without intermediaries.'
+      },
+      {
+        question: 'What is impermanent loss?',
+        options: [
+          'A permanent loss due to hacks',
+          'A temporary portfolio loss from price divergence in liquidity pools',
+          'Loss from forgetting seed phrase',
+          'Loss due to transaction fees'
+        ],
+        correctIndex: 1,
+        explanation: 'Impermanent loss occurs when deposited token prices diverge compared to holding them.'
+      },
+      {
+        question: 'What is a private key?',
+        options: [
+          'A public identifier for your wallet',
+          'A secret that proves ownership and signs transactions',
+          'A crypto exchange password',
+          'A blockchain explorer feature'
+        ],
+        correctIndex: 1,
+        explanation: 'Private keys are secrets used to sign transactions and control funds.'
+      },
+      {
+        question: 'What does staking typically provide?',
+        options: [
+          'Instant transactions without fees',
+          'Passive rewards for securing the network',
+          'Inflation protection for fiat',
+          'KYC compliance'
+        ],
+        correctIndex: 1,
+        explanation: 'Staking helps secure PoS networks and provides rewards to participants.'
+      }
+    ]
+    const questions = baseQuestions.slice(0, questionCount).map((q, idx) => ({
+      id: `demo_${idx + 1}`,
+      ...q
+    }))
+    return { topic, difficulty: 'beginner', questions }
+  },
   // Normaliza la respuesta del API a un objeto estándar
   normalizeResponse(apiData) {
     return {
@@ -262,54 +425,54 @@ export const auraAPI = {
   getDemoResponse(message, context) {
     const lowerMessage = message.toLowerCase()
     
-    // Greetings
+    // Saludos
     if (lowerMessage.match(/hola|hello|hi|hey/)) {
       return {
-        content: 'Hi! I\'m AURA, your Web3 trading assistant. I can help with market analysis, portfolio recommendations, and crypto education. How can I help you today?',
-        analysis: 'User started conversation',
+        content: '¡Hola! Soy AURA, tu asistente de trading Web3. ¿En qué puedo ayudarte hoy? Puedo ayudarte con análisis de mercado, recomendaciones de portafolio y educación sobre criptomonedas.',
+        analysis: 'Usuario iniciando conversación',
         recommendations: [
-          'Ask about current market conditions',
-          'Request a portfolio analysis',
-          'Learn about a specific cryptocurrency'
+          'Pregunta sobre el mercado actual',
+          'Solicita análisis de tu portafolio',
+          'Aprende sobre criptomonedas específicas'
         ]
       }
     }
 
-    // What is AURA / AdEx AURA?
+    // ¿Qué es AURA / AdEx AURA?
     if (lowerMessage.match(/\b(aura|adex aura)\b|que es aura|qué es aura|what is aura|que es adex|qué es adex|what is adex/i)) {
       return {
-        content: 'AdEx AURA is a crypto-focused AI/API that provides portfolio analysis, trading recommendations, and real-time market insights. In this app, AURA can use your connected wallet context, analyze your tokens, and reply with clear explanations.',
-        analysis: 'Capabilities: chat, portfolio analysis, recommendations, market insights.',
+        content: 'AdEx AURA es una API/IA especializada en cripto que ofrece análisis de portafolio, recomendaciones de trading y insights de mercado en tiempo real. En esta app, AURA contextualiza tu wallet (si está conectada), analiza tus tokens y responde en español con explicaciones claras.',
+        analysis: 'Explicación de capacidades: chat, análisis de portafolio, recomendaciones, mercado.',
         recommendations: [
-          'Connect your wallet for personalized analysis',
-          'Ask about market trends or your portfolio risk',
-          'Set up smart alerts aligned with your goals'
+          'Conecta tu wallet para un análisis personalizado',
+          'Pregunta por tendencias de mercado o riesgo de tu portafolio',
+          'Configura alertas inteligentes según tus objetivos'
         ]
       }
     }
     
-    // Bitcoin price
+    // Precio de Bitcoin
     if (lowerMessage.match(/bitcoin|btc.*price|precio.*bitcoin/i)) {
       return {
-        content: 'Bitcoin is trading around $67,500. Recent weeks show an uptrend with strong support at $65k and resistance near $70k. Rising volume suggests increasing institutional interest.',
-        analysis: 'Technical view: Uptrend with positive momentum. RSI ~58 (neutral). MACD signaling buy.',
+        content: 'El precio actual de Bitcoin es aproximadamente $67,500 USD. Bitcoin ha mostrado una tendencia alcista en las últimas semanas con un soporte fuerte en $65,000 y resistencia en $70,000. El volumen de trading ha aumentado, lo que indica un interés institucional creciente.',
+        analysis: 'Análisis técnico: Tendencia alcista con momentum positivo. RSI en 58 (neutral). MACD mostrando señal de compra.',
         recommendations: [
-          'Consider a DCA strategy for gradual entries',
-          'Set a stop-loss near $64k for risk management',
-          'Watch the $70k resistance for potential profit-taking'
+          'Considera una estrategia DCA (Dollar Cost Averaging) para entradas graduales',
+          'Establece stop-loss en $64,000 para gestionar riesgo',
+          'Monitorea el nivel de resistencia de $70,000 para posibles toma de ganancias'
         ]
       }
     }
     
-    // General market
+    // Mercado general
     if (lowerMessage.match(/market|mercado|como.*esta/i)) {
       return {
-        content: 'Crypto market currently shows a moderate uptrend. Total market cap is ~$3.84T with 24h volume at ~$85B. The Fear & Greed Index is 65 (Greed), indicating positive but not extreme sentiment. BTC dominance ~57.1%.',
-        analysis: 'Market in an accumulation phase with reduced volatility versus prior months.',
+        content: 'El mercado cripto actual muestra una tendencia alcista moderada. La capitalización total del mercado es de $3.84T con un volumen de 24h de $85B. El índice Fear & Greed está en 65 (Optimista), indicando un sentimiento positivo pero no extremo. Bitcoin mantiene su dominancia en 57.1%.',
+        analysis: 'El mercado se encuentra en una fase de acumulación institucional con volatilidad reducida comparada con meses anteriores.',
         recommendations: [
-          'Reasonable timing for core positions in majors',
-          'Keep 20–30% in stablecoins for opportunities',
-          'Consider rebalancing toward infrastructure projects'
+          'Buen momento para posiciones largas en activos principales',
+          'Mantén 20-30% en stablecoins para oportunidades',
+          'Considera rebalancear hacia proyectos de infraestructura'
         ]
       }
     }
@@ -318,22 +481,22 @@ export const auraAPI = {
     if (lowerMessage.match(/portfolio|portafolio|analiz.*mi/i)) {
       if (context.hasWallet) {
         return {
-          content: `I analyzed your connected portfolio. You hold ${context.tokenCount} different tokens, indicating ${context.tokenCount >= 5 ? 'strong' : 'moderate'} diversification. Your current balance suggests a ${context.hasBalance ? 'proactive' : 'conservative'} approach.`,
-          analysis: `Diversification: ${context.tokenCount >= 5 ? 'High' : 'Medium'}. Risk: Medium. Balance: ${context.hasBalance ? 'Active' : 'Needs attention'}.`,
+          content: `He analizado tu portafolio conectado. Tienes ${context.tokenCount} tokens diferentes, lo cual muestra una diversificación ${context.tokenCount >= 5 ? 'excelente' : 'moderada'}. Tu balance actual demuestra un enfoque ${context.hasBalance ? 'activo' : 'conservador'} en el mercado.`,
+          analysis: `Diversificación: ${context.tokenCount >= 5 ? 'Alta' : 'Media'}. Riesgo: Medio. Balance: ${context.hasBalance ? 'Activo' : 'Requiere atención'}.`,
           recommendations: [
-            context.tokenCount < 5 ? 'Consider diversifying further' : 'Maintain current diversification level',
-            'Rebalance every 2–3 months to keep your target allocation',
-            'Consider holding at least 20% in stablecoins for liquidity'
+            context.tokenCount < 5 ? 'Considera diversificar más tu portafolio' : 'Mantén tu nivel de diversificación actual',
+            'Rebalancea cada 2-3 meses para mantener tu asignación objetivo',
+            'Considera tener al menos 20% en stablecoins para liquidez'
           ]
         }
       } else {
         return {
-          content: 'To analyze your portfolio, please connect your wallet. Click "Connect Wallet" in the top-right corner. Once connected, I can provide detailed holdings, diversification, and recommendations.',
-          analysis: 'Wallet not connected – analysis unavailable',
+          content: 'Para analizar tu portafolio necesito que conectes tu wallet. Haz clic en "Connect Wallet" en la esquina superior derecha. Una vez conectada, podré darte un análisis detallado de tus holdings, diversificación y recomendaciones personalizadas.',
+          analysis: 'Wallet no conectada - análisis no disponible',
           recommendations: [
-            'Connect your wallet for personalized analysis',
-            'Use a compatible wallet (MetaMask, WalletConnect)',
-            'Never share your seed phrase with anyone'
+            'Conecta tu wallet para análisis personalizado',
+            'Asegúrate de usar una wallet compatible (MetaMask, WalletConnect)',
+            'Nunca compartas tu frase semilla con nadie'
           ]
         }
       }
@@ -342,12 +505,12 @@ export const auraAPI = {
     // Ethereum
     if (lowerMessage.match(/ethereum|eth(?!\w)/i)) {
       return {
-        content: 'Ethereum trades around $3,850. With the successful PoS transition and growth across DeFi/NFTs, fundamentals remain solid. Staked ETH exceeds 34M, reducing circulating supply.',
-        analysis: 'Strong fundamentals with growing institutional adoption. Staking yield ~4–5% APY.',
+        content: 'Ethereum está cotizando alrededor de $3,850 USD. Con la actualización exitosa a Proof of Stake y el crecimiento del ecosistema DeFi y NFT, ETH muestra fundamentos sólidos. El volumen de staking ha superado los 34M ETH, reduciendo la oferta circulante.',
+        analysis: 'Fundamentos fuertes con adopción institucional creciente. Rendimiento de staking ~4-5% APY.',
         recommendations: [
-          'ETH is a strong long-term core holding',
-          'Consider staking to generate passive yield',
-          'Diversify within the Ethereum ecosystem (DeFi, Layer 2s)'
+          'ETH es una excelente opción para holdings a largo plazo',
+          'Considera hacer staking para generar rendimientos pasivos',
+          'Diversifica dentro del ecosistema Ethereum (DeFi, Layer 2s)'
         ]
       }
     }
@@ -355,39 +518,39 @@ export const auraAPI = {
     // DeFi
     if (lowerMessage.match(/defi|decentralized finance|finanzas descentralizadas/i)) {
       return {
-        content: 'DeFi (Decentralized Finance) are financial apps built on blockchain without intermediaries: lending/borrowing (Aave, Compound), DEXs (Uniswap, SushiSwap), and yield farming. TVL exceeds $100B.',
-        analysis: 'DeFi can outperform traditional finance but carries added risks (smart contracts, impermanent loss).',
+        content: 'DeFi (Finanzas Descentralizadas) son aplicaciones financieras construidas sobre blockchain que operan sin intermediarios. Incluyen lending/borrowing (Aave, Compound), exchanges descentralizados (Uniswap, SushiSwap), y yield farming. El TVL total en DeFi supera los $100B.',
+        analysis: 'DeFi ofrece oportunidades de rendimiento superiores a finanzas tradicionales pero con riesgos adicionales (smart contracts, impermanent loss).',
         recommendations: [
-          'Start with established, audited protocols (Aave, Uniswap)',
-          'Avoid allocating more than 10–20% to high‑risk DeFi',
-          'Understand risks: impermanent loss, contract bugs, rug pulls'
+          'Comienza con protocolos establecidos y auditados (Aave, Uniswap)',
+          'Nunca inviertas más del 10-20% de tu portfolio en DeFi de alto riesgo',
+          'Entiende los riesgos: impermanent loss, smart contract bugs, rug pulls'
         ]
       }
     }
     
-    // General recommendations
+    // Recomendaciones generales
     if (lowerMessage.match(/recommend|recomend|sugiere|aconsejas/i)) {
       return {
-        content: 'Based on current market conditions and best practices, consider a balanced allocation: 40–50% BTC/ETH (majors), 20–30% solid altcoins (e.g., SOL, LINK, AVAX), 20–30% stablecoins for liquidity, and 5–10% high‑risk/high‑reward projects depending on your profile.',
-        analysis: 'This mix balances growth potential with risk management.',
+        content: 'Basándome en el mercado actual y las mejores prácticas, te recomiendo una estrategia balanceada: 40-50% en BTC/ETH (activos principales), 20-30% en altcoins de proyectos sólidos (SOL, LINK, AVAX), 20-30% en stablecoins para liquidez, y 5-10% en proyectos de alto riesgo/alto rendimiento si tu perfil lo permite.',
+        analysis: 'Esta distribución balancea crecimiento potencial con gestión de riesgo adecuada.',
         recommendations: [
-          'Use DCA (periodic buys) instead of timing the market',
-          'Rebalance quarterly',
-          'Keep an emergency fund outside of crypto',
-          'Never invest more than you can afford to lose'
+          'Implementa DCA (compras periódicas) en lugar de intentar timing del mercado',
+          'Rebalancea tu portafolio trimestralmente',
+          'Mantén un fondo de emergencia fuera de cripto',
+          'Nunca inviertas más de lo que puedes permitirte perder'
         ]
       }
     }
     
     // Default response
     return {
-      content: 'Great question. Based on current market conditions and industry trends, I recommend researching this topic further. Crypto markets are dynamic—stay informed and make decisions aligned with your risk profile.',
-      analysis: 'Crypto requires continuous learning and careful analysis before investing.',
+      content: 'Esa es una excelente pregunta. Basándome en el análisis del mercado actual y las tendencias de la industria, te recomendaría investigar más sobre este tema específico. El mercado cripto es muy dinámico, por lo que es importante mantenerse informado y tomar decisiones basadas en investigación sólida y tu perfil de riesgo personal.',
+      analysis: 'El mercado cripto requiere educación continua y análisis cuidadoso antes de tomar decisiones de inversión.',
       recommendations: [
-        'Use reputable sources like CoinDesk, The Block, and CoinGecko',
-        'Maintain a disciplined investment strategy',
-        'Consult professional advisors for major decisions',
-        'Diversify your portfolio to manage risk'
+        'Investiga fuentes confiables como CoinDesk, The Block, y CoinGecko',
+        'Mantén una estrategia de inversión disciplinada',
+        'Considera consultar con asesores financieros para decisiones importantes',
+        'Diversifica tu portafolio para gestionar el riesgo'
       ]
     }
   },

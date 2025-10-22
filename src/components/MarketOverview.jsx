@@ -8,7 +8,6 @@ const MarketOverview = () => {
   const [marketData, setMarketData] = useState(null)
   const [historicalData, setHistoricalData] = useState([])
   const [news, setNews] = useState([])
-  const [newsIndex, setNewsIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [lastUpdated, setLastUpdated] = useState(null)
@@ -62,23 +61,14 @@ const MarketOverview = () => {
       setMarketData(overview)
       setHistoricalData(history)
       setNews(marketNews)
-      // Rotate the news window by 5 items on every refresh
-      if (marketNews && marketNews.length > 0) {
-        setNewsIndex(prev => {
-          const step = 5
-          const len = marketNews.length
-          if (len <= step) return 0
-          return (prev + step) % len
-        })
-      } else {
-        setNewsIndex(0)
-      }
       setLastUpdated(new Date())
       setDataError(false)
       
       // Show success message only if it's real data and not silent
       if (!silent && overview.isRealData) {
         toast.success('Market data updated successfully')
+      } else if (!silent && !overview.isRealData) {
+        toast.error('Using demo data - API unavailable')
       }
     } catch (error) {
       console.error('Error loading market data:', error)
@@ -142,6 +132,7 @@ const MarketOverview = () => {
           {lastUpdated && (
             <p className="text-sm text-muted-foreground">
               Last updated: {lastUpdated.toLocaleTimeString()}
+              {marketData?.isRealData ? ' (Live Data)' : ' (Demo Data)'}
             </p>
           )}
         </div>
@@ -172,7 +163,9 @@ const MarketOverview = () => {
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm font-medium">+3.2%</span>
           </div>
-
+          {!marketData?.isRealData && (
+            <p className="text-xs text-yellow-600 mt-1">Demo data</p>
+          )}
         </div>
 
         <div className="card">
@@ -190,7 +183,9 @@ const MarketOverview = () => {
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm font-medium">+8.5%</span>
           </div>
-
+          {!marketData?.isRealData && (
+            <p className="text-xs text-yellow-600 mt-1">Demo data</p>
+          )}
         </div>
 
         <div className="card">
@@ -207,7 +202,9 @@ const MarketOverview = () => {
           <div className="flex items-center space-x-1 text-yellow-600">
             <span className="text-sm font-medium">{marketData?.fearGreedLabel || 'Neutral'}</span>
           </div>
-
+          {!marketData?.isRealData && (
+            <p className="text-xs text-yellow-600 mt-1">Demo data</p>
+          )}
         </div>
 
         <div className="card">
@@ -233,7 +230,9 @@ const MarketOverview = () => {
               {marketDataService.formatPercentage(marketData?.bitcoin?.change24h || 0)}
             </span>
           </div>
-
+          {!marketData?.isRealData && (
+            <p className="text-xs text-yellow-600 mt-1">Demo data</p>
+          )}
         </div>
       </div>
 
@@ -447,45 +446,53 @@ const MarketOverview = () => {
       <div className="card">
         <h3 className="text-lg font-semibold text-gray-900 mb-6">Market News</h3>
         <div className="space-y-4">
-          {(() => {
-            const step = 5
-            const len = news?.length || 0
-            const windowed = len <= step
-              ? news
-              : [...news.slice(newsIndex), ...news.slice(0, newsIndex)].slice(0, step)
-            return windowed
-          })().map((article, index) => (
-            <a
-              key={index}
-              href={article.url || '#'}
-              target={article.url ? "_blank" : undefined}
-              rel={article.url ? "noopener noreferrer" : undefined}
-              className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 group"
-            >
-              {article.image ? (
-                <img src={article.image} alt="" className="w-14 h-14 rounded object-cover flex-shrink-0" />
-              ) : (
-                <div className={`w-2 h-2 rounded-full mt-2 ${
-                  article.sentiment === 'positive' ? 'bg-green-500' :
-                  article.sentiment === 'negative' ? 'bg-red-500' : 'bg-yellow-500'
-                }`}></div>
-              )}
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-gray-900 mb-1 line-clamp-1 group-hover:underline">
-                  {article.title}
-                </h4>
-                <p className="text-gray-600 text-sm mb-2 line-clamp-2">{article.summary}</p>
+          {news?.map((article, index) => (
+            <div key={index} className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+              <div className={`w-2 h-2 rounded-full mt-2 ${
+                article.sentiment === 'positive' ? 'bg-green-500' :
+                article.sentiment === 'negative' ? 'bg-red-500' : 'bg-yellow-500'
+              }`}></div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900 mb-2">{article.title}</h4>
+                <p className="text-gray-600 text-sm mb-2">{article.summary}</p>
                 <div className="flex items-center justify-between text-xs text-gray-500">
-                  <span className="truncate mr-2">{article.source}</span>
+                  <span>{article.source}</span>
                   <span>{new Date(article.publishedAt).toLocaleDateString('en-US')}</span>
                 </div>
               </div>
-            </a>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Top Performers removed by request */}
+      {/* Top Performers */}
+      <div className="card">
+        <h3 className="text-lg font-semibold text-gray-900 mb-6">Top Performers (24h)</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {marketData?.top_performers?.map((token, index) => (
+            <div key={index} className="p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-semibold text-gray-900">{token.symbol}</span>
+                <span className="text-sm text-gray-500">#{index + 1}</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${
+                parseFloat(token.change) >= 0 ? 'text-green-600' : 'text-red-600'
+              }`}>
+                {parseFloat(token.change) >= 0 ? (
+                  <TrendingUp className="w-4 h-4" />
+                ) : (
+                  <TrendingDown className="w-4 h-4" />
+                )}
+                <span className="font-medium">{token.change}</span>
+              </div>
+            </div>
+          )) || (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              Loading market data...
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

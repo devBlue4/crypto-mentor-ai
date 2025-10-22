@@ -1,17 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BookOpen, Play, CheckCircle, ArrowRight, Lightbulb, TrendingUp, Shield, DollarSign } from 'lucide-react'
-import { gptAPI } from '../services/gptAPI'
+import { useAura } from '../contexts/AuraContext'
+import { auraAPI } from '../services/auraAPI'
+import toast from 'react-hot-toast'
 
 const EducationSection = () => {
   const [activeCategory, setActiveCategory] = useState('basics')
   const [completedLessons, setCompletedLessons] = useState(new Set())
-  const [quizOpen, setQuizOpen] = useState(false)
-  const [quizLoading, setQuizLoading] = useState(false)
-  const [quizData, setQuizData] = useState({ questions: [] })
-  const [quizIndex, setQuizIndex] = useState(0)
-  const [quizAnswers, setQuizAnswers] = useState([])
-  const [quizScore, setQuizScore] = useState(null)
-  const [quizLesson, setQuizLesson] = useState(null)
+  const { generateQuiz } = useAura()
+
+  // Quiz state
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [quiz, setQuiz] = useState(null) // { topic, difficulty, questions }
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [answers, setAnswers] = useState({}) // id -> selectedIndex
+  const [showResults, setShowResults] = useState(false)
+  const PASS_THRESHOLD = 0.7
 
   const categories = [
     {
@@ -147,56 +151,8 @@ const EducationSection = () => {
     ]
   }
 
-  const handleStartLesson = async (lesson) => {
-    setQuizLesson(lesson)
-    setQuizOpen(true)
-    setQuizLoading(true)
-    setQuizIndex(0)
-    setQuizAnswers([])
-    setQuizScore(null)
-    try {
-      const topic = `${lesson.title} — ${lesson.description}`
-      const result = await gptAPI.generateQuiz(topic, { numQuestions: 5, difficulty: lesson.difficulty || 'Beginner' })
-      const questions = Array.isArray(result?.questions) ? result.questions : []
-      setQuizData({ questions })
-    } catch (e) {
-      setQuizData({ questions: [] })
-    } finally {
-      setQuizLoading(false)
-    }
-  }
-
-  const handleSelectOption = (qIdx, optIdx) => {
-    setQuizAnswers(prev => {
-      const copy = [...prev]
-      copy[qIdx] = optIdx
-      return copy
-    })
-  }
-
-  const handleNext = () => {
-    setQuizIndex(i => Math.min(i + 1, (quizData.questions?.length || 1) - 1))
-  }
-
-  const handlePrev = () => {
-    setQuizIndex(i => Math.max(i - 1, 0))
-  }
-
-  const handleSubmitQuiz = () => {
-    const qs = quizData.questions || []
-    let correct = 0
-    qs.forEach((q, i) => {
-      if (quizAnswers[i] === q.correctIndex) correct += 1
-    })
-    const scorePct = qs.length > 0 ? Math.round((correct / qs.length) * 100) : 0
-    setQuizScore(scorePct)
-    if (scorePct >= 60 && quizLesson?.id) {
-      setCompletedLessons(prev => new Set([...prev, quizLesson.id]))
-    }
-  }
-
-  const handleCloseQuiz = () => {
-    setQuizOpen(false)
+  const handleStartLesson = (lessonId) => {
+    setCompletedLessons(prev => new Set([...prev, lessonId]))
   }
 
   const getDifficultyColor = (difficulty) => {
@@ -209,6 +165,195 @@ const EducationSection = () => {
   }
 
   const currentLessons = lessons[activeCategory] || []
+
+  // Remove focus highlight when navigating between questions (run at top-level)
+  useEffect(() => {
+    if (!quiz) return
+    try {
+      const el = document.activeElement
+      if (el && typeof el.blur === 'function') el.blur()
+    } catch (_) {}
+  }, [currentQuestionIndex, quiz])
+
+  const startQuiz = async (topic, difficulty = 'beginner') => {
+    try {
+      setIsGenerating(true)
+      setShowResults(false)
+      setAnswers({})
+      setCurrentQuestionIndex(0)
+      toast.loading('Generating quiz...', { id: 'quiz-gen' })
+      const data = await generateQuiz(topic, { questionCount: 5, difficulty })
+      // Normalize questions to ensure stable IDs and exactly 4 options
+      const normalized = {
+        topic: data.topic || topic,
+        difficulty: (data.difficulty || difficulty),
+        questions: (data.questions || []).map((q, i) => ({
+          id: q.id ?? `q_${i + 1}`,
+          question: q.question || q.text || `Question ${i + 1}`,
+          options: Array.isArray(q.options) && q.options.length === 4
+            ? q.options
+            : (q.options || q.choices || []).slice(0, 4),
+          correctIndex: typeof q.correctIndex === 'number' ? q.correctIndex
+            : typeof q.correct === 'number' ? q.correct
+            : 0,
+          explanation: q.explanation || ''
+        }))
+      }
+      setQuiz(normalized)
+      toast.success('Quiz ready!', { id: 'quiz-gen' })
+    } catch (error) {
+      console.error('Error generating quiz:', error)
+      toast.error('Could not generate quiz. Using demo mode if available.', { id: 'quiz-gen' })
+      try {
+        const demo = auraAPI.getDemoQuiz(topic, 5)
+        const normalized = {
+          ...demo,
+          questions: demo.questions.map((q, i) => ({
+            id: q.id ?? `q_${i + 1}`,
+            question: q.question,
+            options: q.options.slice(0, 4),
+            correctIndex: q.correctIndex ?? 0,
+            explanation: q.explanation || ''
+          }))
+        }
+        setQuiz(normalized)
+      } catch (_) {
+        // Si incluso el demo falla (no debería), mantenemos el estado anterior
+      }
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
+  const selectAnswer = (questionId, optionIndex) => {
+    // No sobreescribir respuestas ya dadas para que el score sea estable
+    setAnswers(prev => (prev.hasOwnProperty(questionId) ? prev : { ...prev, [questionId]: optionIndex }))
+    if (!quiz || showResults) return
+    const isLast = currentQuestionIndex >= (quiz.questions.length - 1)
+    window.setTimeout(() => {
+      if (isLast) {
+        setShowResults(true)
+      } else {
+        setCurrentQuestionIndex(i => Math.min(quiz.questions.length - 1, i + 1))
+      }
+    }, 150)
+  }
+
+  const calculateScore = () => {
+    if (!quiz) return { correct: 0, total: 0 }
+    let correct = 0
+    for (const q of quiz.questions) {
+      if (answers[q.id] === q.correctIndex) correct++
+    }
+    return { correct, total: quiz.questions.length }
+  }
+
+  const submitQuiz = () => {
+    setShowResults(true)
+  }
+
+  const resetQuiz = () => {
+    setQuiz(null)
+    setAnswers({})
+    setShowResults(false)
+    setCurrentQuestionIndex(0)
+  }
+
+  if (quiz) {
+    const question = quiz.questions[currentQuestionIndex]
+    const score = calculateScore()
+    const percent = quiz ? Math.round((score.correct / (quiz.questions.length || 1)) * 100) : 0
+
+    return (
+      <div className="space-y-6">
+        <div className="card">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">AI Quiz: {quiz.topic}</h3>
+              <p className="text-gray-600">Answer the questions in English. Difficulty: {quiz.difficulty}</p>
+            </div>
+            <button onClick={resetQuiz} className="btn-secondary">Back to Education</button>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-gray-600">Question {currentQuestionIndex + 1} of {quiz.questions.length}</p>
+            {!showResults && (
+              <div className="space-x-2">
+                <button
+                  className="btn-secondary"
+                  onClick={() => setCurrentQuestionIndex(i => Math.max(0, i - 1))}
+                  disabled={currentQuestionIndex === 0}
+                >Prev</button>
+                {currentQuestionIndex < quiz.questions.length - 1 ? (
+                  <button
+                    className="btn-primary"
+                    onClick={() => setCurrentQuestionIndex(i => Math.min(quiz.questions.length - 1, i + 1))}
+                  >Next</button>
+                ) : (
+                  <button className="btn-primary" onClick={submitQuiz}>Submit</button>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-900">{question.question}</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {question.options.map((opt, idx) => {
+                const selected = answers[question.id] === idx
+                const isCorrect = idx === question.correctIndex
+                const isWrong = showResults && selected && !isCorrect
+                const isRight = showResults && selected && isCorrect
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => !showResults && selectAnswer(question.id, idx)}
+                    className={`text-left p-4 rounded-lg border transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 ${
+                      showResults
+                        ? isRight
+                          ? 'bg-green-50 border-green-200'
+                          : isWrong
+                          ? 'bg-red-50 border-red-200'
+                          : 'bg-white border-gray-200'
+                        : selected
+                        ? 'bg-gray-800 text-white border-gray-700'
+                        : 'bg-white border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <span className="font-medium text-gray-800">{String.fromCharCode(65 + idx)}.</span>{' '}
+                    <span className={`${showResults ? 'text-gray-800' : selected ? 'text-white' : 'text-gray-700'}`}>{opt}</span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {showResults && (
+              <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <p className="text-sm text-gray-700"><span className="font-semibold">Explanation:</span> {question.explanation || '—'}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {showResults && (
+          <div className="card">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Your Score</h3>
+            <p className="text-gray-700">{score.correct} / {quiz.questions.length} correct</p>
+            <p className="text-gray-700 mb-4">{percent}%</p>
+            <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mb-4 ${percent >= Math.round(PASS_THRESHOLD*100) ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+              {percent >= Math.round(PASS_THRESHOLD*100) ? 'Approved' : 'Not approved'}
+            </div>
+            <div className="flex space-x-2">
+              <button className="btn-secondary" onClick={resetQuiz}>Try another topic</button>
+              <button className="btn-primary" onClick={() => startQuiz(quiz.topic, quiz.difficulty)}>Retake Quiz</button>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -279,7 +424,7 @@ const EducationSection = () => {
           })}
         </div>
 
-        {/* Lessons */}
+        {/* Lessons with AI Quiz */}
         <div className="space-y-4">
           {currentLessons.length === 0 ? (
             <div className="text-center py-12">
@@ -315,22 +460,22 @@ const EducationSection = () => {
                     </div>
                   </div>
                   
-                  <div className="ml-6">
-                    {lesson.completed ? (
-                      <div className="flex items-center space-x-2 text-green-600">
-                        <CheckCircle className="w-5 h-5" />
-                        <span className="font-medium">Completed</span>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => handleStartLesson(lesson)}
-                        className="btn-primary flex items-center space-x-2"
-                      >
-                        <Play className="w-4 h-4" />
-                        <span>Start Quiz</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    )}
+                  <div className="ml-6 flex space-x-3">
+                    <button
+                      onClick={() => startQuiz(lesson.title, lesson.difficulty?.toLowerCase?.() || 'beginner')}
+                      className="btn-primary flex items-center space-x-2 disabled:opacity-50"
+                      disabled={isGenerating}
+                    >
+                      <Play className="w-4 h-4" />
+                      <span>{isGenerating ? 'Generating...' : 'Start AI Quiz'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleStartLesson(lesson.id)}
+                      className="btn-secondary flex items-center space-x-2"
+                    >
+                      <span>Mark as read</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -343,48 +488,48 @@ const EducationSection = () => {
       <div className="card">
         <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Tips</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-4 rounded-lg border border-gray-700 bg-gray-900/50">
+          <div className="p-4 bg-blue-50 rounded-lg">
             <div className="flex items-start space-x-3">
-              <Lightbulb className="w-5 h-5 text-blue-400 mt-1 flex-shrink-0" />
+              <Lightbulb className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-gray-100 mb-2">Never Invest More Than You Can Afford to Lose</h4>
-                <p className="text-sm text-gray-300">
+                <h4 className="font-semibold text-blue-900 mb-2">Never Invest More Than You Can Afford to Lose</h4>
+                <p className="text-sm text-blue-700">
                   Cryptocurrencies are volatile. Only invest money you can afford to lose.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 rounded-lg border border-gray-700 bg-gray-900/50">
+          <div className="p-4 bg-green-50 rounded-lg">
             <div className="flex items-start space-x-3">
-              <Shield className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+              <Shield className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-gray-100 mb-2">Use Two-Factor Authentication</h4>
-                <p className="text-sm text-gray-300">
+                <h4 className="font-semibold text-green-900 mb-2">Use Two-Factor Authentication</h4>
+                <p className="text-sm text-green-700">
                   Protect your accounts with 2FA and keep your private keys secure.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 rounded-lg border border-gray-700 bg-gray-900/50">
+          <div className="p-4 bg-yellow-50 rounded-lg">
             <div className="flex items-start space-x-3">
-              <TrendingUp className="w-5 h-5 text-yellow-400 mt-1 flex-shrink-0" />
+              <TrendingUp className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-gray-100 mb-2">Diversify Your Portfolio</h4>
-                <p className="text-sm text-gray-300">
+                <h4 className="font-semibold text-yellow-900 mb-2">Diversify Your Portfolio</h4>
+                <p className="text-sm text-yellow-700">
                   Don't put all your eggs in one basket. Diversify your investments.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 rounded-lg border border-gray-700 bg-gray-900/50">
+          <div className="p-4 bg-purple-50 rounded-lg">
             <div className="flex items-start space-x-3">
-              <BookOpen className="w-5 h-5 text-purple-400 mt-1 flex-shrink-0" />
+              <BookOpen className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-gray-100 mb-2">Continuous Education</h4>
-                <p className="text-sm text-gray-300">
+                <h4 className="font-semibold text-purple-900 mb-2">Continuous Education</h4>
+                <p className="text-sm text-purple-700">
                   The crypto market evolves quickly. Stay informed and educated.
                 </p>
               </div>
@@ -392,75 +537,6 @@ const EducationSection = () => {
           </div>
         </div>
       </div>
-
-      {/* Quiz Modal */}
-      {quizOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
-          <div className="w-full max-w-2xl card relative">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Quiz: {quizLesson?.title || 'Lesson'}</h3>
-              <button onClick={handleCloseQuiz} className="text-gray-500 hover:text-gray-700">✕</button>
-            </div>
-
-            {quizLoading ? (
-              <div className="py-12 text-center text-gray-600">Generating questions…</div>
-            ) : quizScore !== null ? (
-              <div>
-                <div className="text-center mb-6">
-                  <p className="text-sm text-gray-600">Your score</p>
-                  <p className={`text-4xl font-bold ${quizScore >= 60 ? 'text-green-600' : 'text-red-600'}`}>{quizScore}%</p>
-                  <p className="text-gray-600 mt-2">{quizScore >= 60 ? 'Passed' : 'You can try again'}</p>
-                </div>
-                <div className="flex items-center justify-end space-x-2">
-                  <button className="btn-secondary" onClick={handleCloseQuiz}>Close</button>
-                  <button className="btn-primary" onClick={() => handleStartLesson(quizLesson)}>Retry</button>
-                </div>
-              </div>
-            ) : (
-              <div>
-                {quizData.questions?.length > 0 ? (
-                  <div>
-                    <div className="mb-3 text-sm text-gray-500">Question {quizIndex + 1} of {quizData.questions.length}</div>
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-gray-900">{quizData.questions[quizIndex].question}</h4>
-                    </div>
-                    <div className="space-y-2">
-                      {quizData.questions[quizIndex].options.map((opt, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleSelectOption(quizIndex, idx)}
-                          className={`w-full text-left px-4 py-3 rounded border transition-colors ${
-                            quizAnswers[quizIndex] === idx
-                              ? 'border-purple-500 bg-purple-900/30 text-gray-100'
-                              : 'border-gray-700 hover:border-gray-500 bg-gray-900/40 text-gray-200'
-                          }`}
-                        >
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center justify-between mt-6">
-                      <button className="btn-secondary" onClick={handlePrev} disabled={quizIndex === 0}>Previous</button>
-                      {quizIndex < quizData.questions.length - 1 ? (
-                        <button className="btn-primary" onClick={handleNext} disabled={quizAnswers[quizIndex] == null}>Next</button>
-                      ) : (
-                        <button className="btn-primary" onClick={handleSubmitQuiz} disabled={quizAnswers[quizIndex] == null}>Finish</button>
-                      )}
-                    </div>
-
-                    <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
-                      <div className="bg-primary-600 h-2 rounded-full transition-all" style={{ width: `${((quizIndex + 1) / quizData.questions.length) * 100}%` }}></div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="py-10 text-center text-gray-600">We couldn't generate questions. Please try again.</div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
