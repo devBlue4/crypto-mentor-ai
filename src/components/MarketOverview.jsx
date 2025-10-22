@@ -243,20 +243,33 @@ const MarketOverview = () => {
         <h3 className="text-lg font-semibold text-gray-900 mb-6">Market News</h3>
         <div className="space-y-4">
           {news?.map((article, index) => (
-            <div key={index} className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-              <div className={`w-2 h-2 rounded-full mt-2 ${
-                article.sentiment === 'positive' ? 'bg-green-500' :
-                article.sentiment === 'negative' ? 'bg-red-500' : 'bg-yellow-500'
-              }`}></div>
+            <a
+              key={index}
+              href={article.link || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+            >
+              {article.image ? (
+                <img src={article.image} alt="thumb" className="w-16 h-16 object-cover rounded-md" />
+              ) : (
+                <div className="w-16 h-16 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 text-xs">No Image</div>
+              )}
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900 mb-2">{article.title}</h4>
-                <p className="text-gray-600 text-sm mb-2">{article.summary}</p>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold text-gray-900 mb-1 mr-2 line-clamp-1">{article.title}</h4>
+                  <div className={`w-2 h-2 rounded-full mt-1 ${
+                    article.sentiment === 'positive' ? 'bg-green-500' :
+                    article.sentiment === 'negative' ? 'bg-red-500' : 'bg-yellow-500'
+                  }`}></div>
+                </div>
+                <p className="text-gray-600 text-sm mb-1 line-clamp-2">{article.summary}</p>
                 <div className="flex items-center justify-between text-xs text-gray-500">
                   <span>{article.source}</span>
                   <span>{new Date(article.publishedAt).toLocaleDateString('en-US')}</span>
                 </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

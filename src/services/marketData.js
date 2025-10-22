@@ -356,36 +356,67 @@ export const marketDataService = {
     }
     
     try {
-      // News simulation
-      const news = [
+      // Real news from public RSS feeds (via CORS-friendly proxy)
+      const sources = [
+        { name: 'CoinDesk', url: 'https://www.coindesk.com/arc/outboundfeeds/rss/' },
+        { name: 'Cointelegraph', url: 'https://cointelegraph.com/rss' },
+        { name: 'CryptoNews', url: 'https://www.cryptonews.com/news/feed' }
+      ]
+
+      const fetchRSS = async (src) => {
+        try {
+          const proxied = `https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}`
+          const { data } = await axios.get(proxied, { timeout: 12000 })
+          const xml = data?.contents || ''
+          if (!xml) return []
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(xml, 'application/xml')
+          const items = Array.from(doc.querySelectorAll('item'))
+          return items.slice(0, 10).map((item, idx) => {
+            const title = item.querySelector('title')?.textContent?.trim() || 'Untitled'
+            const description = item.querySelector('description')?.textContent?.trim() || ''
+            const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString()
+            const publishedAt = new Date(pubDate).toISOString()
+            // Attempt to extract a thumbnail image if present (media:content, enclosure, or from description)
+            const mediaContent = item.getElementsByTagName('media:content')[0]?.getAttribute('url')
+            const enclosure = item.getElementsByTagName('enclosure')[0]?.getAttribute('url')
+            const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i)
+            const image = mediaContent || enclosure || (imgMatch ? imgMatch[1] : null)
+            const sentiment = /rise|up|surge|record|gain/i.test(title + ' ' + description)
+              ? 'positive'
+              : (/fall|down|drop|hack|ban|fraud|fine/i.test(title + ' ' + description) ? 'negative' : 'neutral')
+            return {
+              id: `${src.name}_${idx}_${publishedAt}`,
+              title,
+              summary: description.replace(/<[^>]*>?/gm, '').slice(0, 220),
+              source: src.name,
+              publishedAt,
+              sentiment,
+              image
+            }
+          })
+        } catch (_) {
+          return []
+        }
+      }
+
+      const results = await Promise.all(sources.map(fetchRSS))
+      const merged = results.flat().sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)).slice(0, 5)
+
+      // fallback to demo if nothing fetched
+      const output = merged.length > 0 ? merged : [
         {
           id: 1,
-          title: 'Bitcoin reaches new monthly high',
-          summary: 'Bitcoin price surpassed $43,000 USD with record trading volume.',
-          source: 'CryptoNews',
-          publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          sentiment: 'positive'
-        },
-        {
-          id: 2,
-          title: 'Ethereum 2.0 successful update',
-          summary: 'The Ethereum network continues to improve its scalability with the latest updates.',
-          source: 'Ethereum.org',
-          publishedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          sentiment: 'positive'
-        },
-        {
-          id: 3,
-          title: 'Crypto regulations under discussion',
-          summary: 'Regulators are working on new guidelines for the cryptocurrency market.',
-          source: 'Financial Times',
-          publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          sentiment: 'neutral'
+          title: 'Market news unavailable',
+          summary: 'Using local demo data because the news sources are unreachable right now.',
+          source: 'Demo',
+          publishedAt: new Date().toISOString(),
+          sentiment: 'neutral',
+          image: null
         }
       ]
-      
-      newsCache.set(cacheKey, news)
-      return news
+      newsCache.set(cacheKey, output)
+      return output
     } catch (error) {
       console.error('Error getting news:', error)
       const emptyNews = []
