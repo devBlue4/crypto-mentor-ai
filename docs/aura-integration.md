@@ -62,24 +62,24 @@ POST /chat
 }
 ```
 
-**Respuesta:**
+**Response:**
 ```javascript
 {
-  "response": "Tu portfolio muestra una buena diversificación...",
+  "response": "Your portfolio shows good diversification...",
   "analysis": {
     "sentiment": "positive",
     "confidence": 0.85,
-    "key_points": ["Diversificación adecuada", "Riesgo medio"]
+    "key_points": ["Adequate diversification", "Medium risk"]
   },
   "recommendations": [
-    "Considera aumentar exposición a Bitcoin",
-    "Mantén diversificación actual"
+    "Consider increasing Bitcoin exposure",
+    "Maintain current diversification"
   ],
   "confidence": 0.85
 }
 ```
 
-#### 2. Análisis de Portfolio
+#### 2. Portfolio Analysis
 ```javascript
 POST /analyze/portfolio
 {
@@ -101,7 +101,7 @@ POST /analyze/portfolio
 }
 ```
 
-**Respuesta:**
+**Response:**
 ```javascript
 {
   "total_value_usd": 47500,
@@ -113,8 +113,8 @@ POST /analyze/portfolio
     "stablecoins": 0
   },
   "recommendations": [
-    "Considera agregar stablecoins para liquidez",
-    "Balance entre BTC y ETH es adecuado"
+    "Consider adding stablecoins for liquidity",
+    "Balance between BTC and ETH is adequate"
   ],
   "performance_metrics": {
     "daily_change": "+2.5%",
@@ -124,12 +124,12 @@ POST /analyze/portfolio
 }
 ```
 
-#### 3. Insights de Mercado
+#### 3. Market Insights
 ```javascript
 GET /market/insights?timeframe=24h&include_sentiment=true
 ```
 
-**Respuesta:**
+**Response:**
 ```javascript
 {
   "overall_sentiment": "bullish",
@@ -140,8 +140,8 @@ GET /market/insights?timeframe=24h&include_sentiment=true
     { "symbol": "ETH", "change": "+4.8%" }
   ],
   "insights": [
-    "Mercado en tendencia alcista",
-    "Instituciones aumentando exposición"
+    "Market in bullish trend",
+    "Institutions increasing exposure"
   ],
   "technical_analysis": {
     "btc_support": "$42,000",
@@ -151,20 +151,20 @@ GET /market/insights?timeframe=24h&include_sentiment=true
 }
 ```
 
-## 🧠 Contexto y Personalización
+## 🧠 Context and Personalization
 
-### Contexto del Usuario
+### User Context
 
-AdEx AURA utiliza un contexto rico para personalizar las respuestas:
+AdEx AURA uses rich context to personalize responses:
 
 ```javascript
 const userContext = {
-  // Información del usuario
+  // User information
   user_type: "crypto_enthusiast", // beginner, intermediate, advanced
   experience_level: "intermediate",
   risk_tolerance: "medium", // low, medium, high
   
-  // Estado del wallet
+  // Wallet state
   hasWallet: isConnected,
   wallet_address: account,
   balance_eth: parseFloat(balance),
@@ -176,42 +176,42 @@ const userContext = {
     value_usd: parseFloat(t.balance) * getTokenPrice(t.symbol)
   })),
   
-  // Preferencias
+  // Preferences
   interests: ["trading", "portfolio_management", "market_analysis"],
-  language: "es",
+  language: "en",
   
-  // Historial
-  conversation_history: conversation.slice(-5), // Últimas 5 interacciones
+  // History
+  conversation_history: conversation.slice(-5), // Last 5 interactions
   previous_recommendations: recommendations
 }
 ```
 
-### Personalización de Respuestas
+### Response Personalization
 
-AdEx AURA adapta sus respuestas basándose en:
+AdEx AURA adapts its responses based on:
 
-1. **Nivel de Experiencia**:
-   - **Principiante**: Explicaciones simples, conceptos básicos
-   - **Intermedio**: Análisis técnico moderado, estrategias
-   - **Avanzado**: Análisis complejo, estrategias avanzadas
+1. **Experience Level**:
+   - **Beginner**: Simple explanations, basic concepts
+   - **Intermediate**: Moderate technical analysis, strategies
+   - **Advanced**: Complex analysis, advanced strategies
 
-2. **Tolerancia al Riesgo**:
-   - **Bajo**: Recomendaciones conservadoras, stablecoins
-   - **Medio**: Balance entre riesgo y rendimiento
-   - **Alto**: Estrategias agresivas, altcoins
+2. **Risk Tolerance**:
+   - **Low**: Conservative recommendations, stablecoins
+   - **Medium**: Balance between risk and return
+   - **High**: Aggressive strategies, altcoins
 
-3. **Portfolio Actual**:
-   - Análisis de diversificación
-   - Sugerencias de rebalanceo
-   - Alertas sobre concentración
+3. **Current Portfolio**:
+   - Diversification analysis
+   - Rebalancing suggestions
+   - Concentration alerts
 
-## 💬 Sistema de Chat
+## 💬 Chat System
 
-### Flujo de Conversación
+### Conversation Flow
 
 ```javascript
 const sendMessage = async (message, context = {}) => {
-  // 1. Preparar contexto
+  // 1. Prepare context
   const fullContext = {
     ...defaultContext,
     ...context,
@@ -219,10 +219,10 @@ const sendMessage = async (message, context = {}) => {
     session_id: getSessionId()
   }
   
-  // 2. Enviar a AdEx AURA
+  // 2. Send to AdEx AURA
   const response = await auraAPI.sendMessage(message, fullContext)
   
-  // 3. Procesar respuesta
+  // 3. Process response
   const processedResponse = {
     content: response.response,
     analysis: response.analysis,
@@ -231,27 +231,27 @@ const sendMessage = async (message, context = {}) => {
     timestamp: new Date()
   }
   
-  // 4. Actualizar historial
+  // 4. Update history
   updateConversation(processedResponse)
   
   return processedResponse
 }
 ```
 
-### Tipos de Respuesta
+### Response Types
 
-#### Respuesta Simple
+#### Simple Response
 ```javascript
 {
-  "content": "El precio de Bitcoin está en $43,250 USD",
+  "content": "Bitcoin price is at $43,250 USD",
   "confidence": 0.95
 }
 ```
 
-#### Respuesta con Análisis
+#### Response with Analysis
 ```javascript
 {
-  "content": "Bitcoin muestra una tendencia alcista...",
+  "content": "Bitcoin shows a bullish trend...",
   "analysis": {
     "sentiment": "positive",
     "technical_indicators": ["RSI: 65", "MACD: Bullish"],
@@ -261,14 +261,14 @@ const sendMessage = async (message, context = {}) => {
 }
 ```
 
-#### Respuesta con Recomendaciones
+#### Response with Recommendations
 ```javascript
 {
-  "content": "Tu portfolio está bien diversificado...",
+  "content": "Your portfolio is well diversified...",
   "recommendations": [
-    "Considera DCA en Bitcoin",
-    "Mantén 20% en stablecoins",
-    "Revisa posición en altcoins"
+    "Consider DCA on Bitcoin",
+    "Keep 20% in stablecoins",
+    "Review altcoin positions"
   ],
   "action_items": [
     {
@@ -281,17 +281,17 @@ const sendMessage = async (message, context = {}) => {
 }
 ```
 
-## 📊 Análisis de Portfolio
+## 📊 Portfolio Analysis
 
-### Métricas Calculadas
+### Calculated Metrics
 
-#### Diversidad del Portfolio
+#### Portfolio Diversity
 ```javascript
 const calculateDiversity = (tokens) => {
   if (tokens.length === 0) return 0
   if (tokens.length === 1) return 1
   
-  // Fórmula: sqrt(número_de_tokens) * factor_de_balance
+  // Formula: sqrt(number_of_tokens) * balance_factor
   const tokenCount = tokens.length
   const balanceFactor = calculateBalanceFactor(tokens)
   
@@ -299,7 +299,7 @@ const calculateDiversity = (tokens) => {
 }
 ```
 
-#### Nivel de Riesgo
+#### Risk Level
 ```javascript
 const calculateRiskLevel = (tokens) => {
   const highRiskTokens = ['MEME', 'DOGE', 'SHIB', 'PEPE']
@@ -315,38 +315,38 @@ const calculateRiskLevel = (tokens) => {
 }
 ```
 
-### Recomendaciones Automáticas
+### Automatic Recommendations
 
-AdEx AURA genera recomendaciones basadas en:
+AdEx AURA generates recommendations based on:
 
-1. **Análisis de Diversificación**:
-   - Concentración en un solo activo
-   - Falta de stablecoins
-   - Exceso de altcoins especulativas
+1. **Diversification Analysis**:
+   - Concentration in a single asset
+   - Lack of stablecoins
+   - Excess of speculative altcoins
 
-2. **Análisis de Riesgo**:
-   - Volatilidad del portfolio
-   - Correlación entre activos
-   - Liquidez disponible
+2. **Risk Analysis**:
+   - Portfolio volatility
+   - Correlation between assets
+   - Available liquidity
 
-3. **Condiciones de Mercado**:
-   - Tendencias actuales
-   - Niveles de soporte/resistencia
-   - Sentimiento del mercado
+3. **Market Conditions**:
+   - Current trends
+   - Support/resistance levels
+   - Market sentiment
 
-## 🔄 Fallback y Demo Mode
+## 🔄 Fallback and Demo Mode
 
-### Sistema de Fallback
+### Fallback System
 
-Cuando no hay API key disponible, CryptoMentor AI utiliza respuestas demo:
+When no API key is available, CryptoMentor AI uses demo responses:
 
 ```javascript
 const getDemoResponse = (message, context) => {
   const responses = {
-    'hola': '¡Hola! Soy AURA, tu asistente de trading Web3...',
-    'precio bitcoin': 'El precio actual de Bitcoin está en $43,250 USD...',
-    'portfolio': 'Veo que tienes un portfolio diversificado...',
-    'default': 'Interesante pregunta. Basándome en el análisis...'
+    'hello': 'Hello! I'm AURA, your Web3 trading assistant...',
+    'bitcoin price': 'The current Bitcoin price is $43,250 USD...',
+    'portfolio': 'I see you have a diversified portfolio...',
+    'default': 'Interesting question. Based on the analysis...'
   }
   
   const lowerMessage = message.toLowerCase()
@@ -364,22 +364,22 @@ const getDemoResponse = (message, context) => {
     analysis: {
       sentiment: 'neutral',
       confidence: 0.8,
-      key_points: ['Análisis técnico favorable']
+      key_points: ['Favorable technical analysis']
     },
     recommendations: [
-      'Considera DCA en activos principales',
-      'Mantén diversificación del portfolio'
+      'Consider DCA on main assets',
+      'Maintain portfolio diversification'
     ]
   }
 }
 ```
 
-### Beneficios del Demo Mode
+### Demo Mode Benefits
 
-1. **Funcionalidad Completa**: Todas las características funcionan
-2. **Experiencia Realista**: Respuestas coherentes y útiles
-3. **Desarrollo Offline**: No requiere API key para desarrollo
-4. **Demo para Clientes**: Perfecto para presentaciones
+1. **Complete Functionality**: All features work
+2. **Realistic Experience**: Coherent and useful responses
+3. **Offline Development**: No API key required for development
+4. **Client Demo**: Perfect for presentations
 
 ## 🚀 Optimizaciones de Performance
 

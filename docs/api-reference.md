@@ -56,21 +56,21 @@ POST /chat
 **Response:**
 ```json
 {
-  "response": "Tu portfolio muestra una buena diversificación...",
+  "response": "Your portfolio shows good diversification...",
   "analysis": {
     "sentiment": "positive",
     "confidence": 0.85,
-    "key_points": ["Diversificación adecuada", "Riesgo medio"]
+    "key_points": ["Adequate diversification", "Medium risk"]
   },
   "recommendations": [
-    "Considera aumentar exposición a Bitcoin",
-    "Mantén diversificación actual"
+    "Consider increasing Bitcoin exposure",
+    "Maintain current diversification"
   ],
   "confidence": 0.85
 }
 ```
 
-#### 2. Análisis de Portfolio
+#### 2. Portfolio Analysis
 ```http
 POST /analyze/portfolio
 ```
@@ -103,7 +103,7 @@ POST /analyze/portfolio
     "stablecoins": 0
   },
   "recommendations": [
-    "Considera agregar stablecoins para liquidez"
+    "Consider adding stablecoins for liquidity"
   ],
   "performance_metrics": {
     "daily_change": "+2.5%",
@@ -113,7 +113,7 @@ POST /analyze/portfolio
 }
 ```
 
-#### 3. Insights de Mercado
+#### 3. Market Insights
 ```http
 GET /market/insights?timeframe=24h&include_sentiment=true
 ```
@@ -129,8 +129,8 @@ GET /market/insights?timeframe=24h&include_sentiment=true
     { "symbol": "ETH", "change": "+4.8%" }
   ],
   "insights": [
-    "Mercado en tendencia alcista",
-    "Instituciones aumentando exposición"
+    "Market in bullish trend",
+    "Institutions increasing exposure"
   ],
   "technical_analysis": {
     "btc_support": "$42,000",
@@ -140,12 +140,12 @@ GET /market/insights?timeframe=24h&include_sentiment=true
 }
 ```
 
-#### 4. Recomendaciones Personalizadas (incluye address → strategies)
+#### 4. Personalized Recommendations (includes address → strategies)
 ```http
 POST /recommendations/personalized
 ```
 
-**Request Body (por perfil o address):**
+**Request Body (by profile or address):**
 ```json
 {
   "address": "0x1C680f16b2270e324D5778305C9EC96784c832ab",
@@ -155,7 +155,7 @@ POST /recommendations/personalized
 }
 ```
 
-Alternativamente por perfil de usuario:
+Alternatively by user profile:
 ```json
 {
   "user_profile": {
@@ -186,7 +186,7 @@ Alternativamente por perfil de usuario:
 > Prompt sugerido (Chat/Strategies):
 > `Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.`
 
-#### 5. Alertas Inteligentes
+#### 5. Smart Alerts
 ```http
 POST /alerts/smart
 ```
@@ -220,10 +220,10 @@ POST /alerts/smart
 ### Error Codes
 ```json
 {
-  "400": "Bad Request - Parámetros inválidos",
-  "401": "Unauthorized - API key inválida",
-  "429": "Too Many Requests - Rate limit excedido",
-  "500": "Internal Server Error - Error del servidor"
+  "400": "Bad Request - Invalid parameters",
+  "401": "Unauthorized - Invalid API key",
+  "429": "Too Many Requests - Rate limit exceeded",
+  "500": "Internal Server Error - Server error"
 }
 ```
 
@@ -234,9 +234,9 @@ POST /alerts/smart
 https://api.coingecko.com/api/v3
 ```
 
-### Endpoints Utilizados
+### Used Endpoints
 
-#### 1. Precios Globales
+#### 1. Global Prices
 ```http
 GET /global
 ```
@@ -261,7 +261,7 @@ GET /global
 }
 ```
 
-#### 2. Precios de Tokens Específicos
+#### 2. Specific Token Prices
 ```http
 GET /simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true
 ```
@@ -280,7 +280,7 @@ GET /simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=tru
 }
 ```
 
-#### 3. Datos Históricos
+#### 3. Historical Data
 ```http
 GET /coins/bitcoin/market_chart?vs_currency=usd&days=7&interval=daily
 ```
@@ -311,9 +311,9 @@ GET /coins/bitcoin/market_chart?vs_currency=usd&days=7&interval=daily
 https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY
 ```
 
-### Endpoints Utilizados
+### Used Endpoints
 
-#### 1. Balance de Wallet
+#### 1. Wallet Balance
 ```http
 POST /
 ```
@@ -337,7 +337,7 @@ POST /
 }
 ```
 
-#### 2. Información de Token
+#### 2. Token Information
 ```http
 POST /
 ```
@@ -377,9 +377,9 @@ POST /
 https://mainnet.infura.io/v3/YOUR_PROJECT_ID
 ```
 
-### Endpoints Utilizados
+### Used Endpoints
 
-#### 1. Información de Red
+#### 1. Network Information
 ```http
 POST /
 ```
@@ -403,7 +403,7 @@ POST /
 }
 ```
 
-#### 2. Conteo de Transacciones
+#### 2. Transaction Count
 ```http
 POST /
 ```
@@ -429,24 +429,24 @@ POST /
 
 ## 🔧 auraAPI.js
 
-### Descripción
-Servicio interno para integrar con la API de AdEx AURA.
+### Description
+Internal service to integrate with the AdEx AURA API.
 
-### Métodos
+### Methods
 
 #### `sendMessage(message, context)`
-Envía un mensaje al chat de AURA.
+Sends a message to AURA chat.
 
-**Parámetros:**
-- `message` (string): Mensaje del usuario
-- `context` (object): Contexto del usuario y portfolio
+**Parameters:**
+- `message` (string): User message
+- `context` (object): User and portfolio context
 
-**Retorna:** Promise con respuesta de AURA
+**Returns:** Promise with AURA response
 
-**Ejemplo:**
+**Example:**
 ```javascript
 const response = await auraAPI.sendMessage(
-  "¿Cómo está mi portfolio?",
+  "How is my portfolio?",
   {
     hasWallet: true,
     tokens: ['BTC', 'ETH'],
@@ -456,192 +456,192 @@ const response = await auraAPI.sendMessage(
 ```
 
 #### `analyzePortfolio(tokens, balance)`
-Analiza el portfolio del usuario.
+Analyzes the user's portfolio.
 
-**Parámetros:**
-- `tokens` (array): Lista de tokens del usuario
-- `balance` (string): Balance de ETH
+**Parameters:**
+- `tokens` (array): User's token list
+- `balance` (string): ETH balance
 
-**Retorna:** Promise con análisis del portfolio
+**Returns:** Promise with portfolio analysis
 
 #### `getMarketInsights()`
-Obtiene insights del mercado.
+Gets market insights.
 
-**Retorna:** Promise con datos de mercado
+**Returns:** Promise with market data
 
 #### `getPersonalizedRecommendations(userProfile)`
-Obtiene recomendaciones personalizadas.
+Gets personalized recommendations.
 
-**Parámetros:**
-- `userProfile` (object): Perfil del usuario
+**Parameters:**
+- `userProfile` (object): User profile
 
-**Retorna:** Promise con recomendaciones
+**Returns:** Promise with recommendations
 
 #### `setupSmartAlerts(alertConfig)`
-Configura alertas inteligentes.
+Sets up smart alerts.
 
-**Parámetros:**
-- `alertConfig` (object): Configuración de la alerta
+**Parameters:**
+- `alertConfig` (object): Alert configuration
 
-**Retorna:** Promise con confirmación
+**Returns:** Promise with confirmation
 
 ### Fallback Demo
-Si no hay API key disponible, el servicio utiliza respuestas demo:
+If no API key is available, the service uses demo responses:
 
 ```javascript
 const getDemoResponse = (message, context) => {
   const responses = {
-    'hola': '¡Hola! Soy AURA, tu asistente de trading Web3...',
-    'precio bitcoin': 'El precio actual de Bitcoin está en $43,250 USD...',
-    'portfolio': 'Veo que tienes un portfolio diversificado...'
+    'hello': 'Hello! I'm AURA, your Web3 trading assistant...',
+    'bitcoin price': 'The current Bitcoin price is $43,250 USD...',
+    'portfolio': 'I see you have a diversified portfolio...'
   }
   
-  // Lógica de selección de respuesta demo
+  // Demo response selection logic
   return selectedResponse
 }
 ```
 
 ## 💼 walletService.js
 
-### Descripción
-Servicio para operaciones de wallet y Web3.
+### Description
+Service for wallet and Web3 operations.
 
-### Métodos
+### Methods
 
 #### `connectWallet()`
-Conecta a MetaMask.
+Connects to MetaMask.
 
-**Retorna:** Promise con dirección de la cuenta
+**Returns:** Promise with account address
 
 #### `getEthBalance(address)`
-Obtiene balance de ETH.
+Gets ETH balance.
 
-**Parámetros:**
-- `address` (string): Dirección del wallet
+**Parameters:**
+- `address` (string): Wallet address
 
-**Retorna:** Promise con balance en ETH
+**Returns:** Promise with ETH balance
 
 #### `getTokenBalance(tokenAddress, walletAddress)`
-Obtiene balance de token ERC-20.
+Gets ERC-20 token balance.
 
-**Parámetros:**
-- `tokenAddress` (string): Dirección del contrato del token
-- `walletAddress` (string): Dirección del wallet
+**Parameters:**
+- `tokenAddress` (string): Token contract address
+- `walletAddress` (string): Wallet address
 
-**Retorna:** Promise con balance del token
+**Returns:** Promise with token balance
 
 #### `getTokensWithBalance(walletAddress, tokens)`
-Obtiene tokens con balance > 0.
+Gets tokens with balance > 0.
 
-**Parámetros:**
-- `walletAddress` (string): Dirección del wallet
-- `tokens` (array): Lista de tokens a verificar
+**Parameters:**
+- `walletAddress` (string): Wallet address
+- `tokens` (array): List of tokens to check
 
-**Retorna:** Promise con array de tokens con balance
+**Returns:** Promise with array of tokens with balance
 
 #### `getCurrentNetwork()`
-Obtiene información de la red actual.
+Gets current network information.
 
-**Retorna:** Promise con información de la red
+**Returns:** Promise with network information
 
 #### `switchNetwork(chainId)`
-Cambia a una red específica.
+Switches to a specific network.
 
-**Parámetros:**
-- `chainId` (string): ID de la cadena
+**Parameters:**
+- `chainId` (string): Chain ID
 
-**Retorna:** Promise
+**Returns:** Promise
 
 #### `calculatePortfolioValue(tokens, ethBalance)`
-Calcula valor total del portfolio.
+Calculates total portfolio value.
 
-**Parámetros:**
-- `tokens` (array): Lista de tokens
-- `ethBalance` (string): Balance de ETH
+**Parameters:**
+- `tokens` (array): List of tokens
+- `ethBalance` (string): ETH balance
 
-**Retorna:** Promise con valor total en USD
+**Returns:** Promise with total value in USD
 
-### Utilidades
+### Utilities
 
 #### `formatAddress(address)`
-Formatea dirección para mostrar.
+Formats address for display.
 
 #### `formatBalance(balance, decimals)`
-Formatea balance para mostrar.
+Formats balance for display.
 
 #### `getTokenPrice(symbol)`
-Obtiene precio del token (simulado).
+Gets token price (simulated).
 
 ## 📈 marketData.js
 
-### Descripción
-Servicio para datos de mercado y análisis.
+### Description
+Service for market data and analysis.
 
-### Métodos
+### Methods
 
 #### `getMarketOverview()`
-Obtiene datos generales del mercado.
+Gets general market data.
 
-**Retorna:** Promise con datos del mercado
+**Returns:** Promise with market data
 
 #### `getTokenPrices(symbols)`
-Obtiene precios de tokens específicos.
+Gets specific token prices.
 
-**Parámetros:**
-- `symbols` (array): Símbolos de tokens
+**Parameters:**
+- `symbols` (array): Token symbols
 
-**Retorna:** Promise con precios
+**Returns:** Promise with prices
 
 #### `getHistoricalData(symbol, days)`
-Obtiene datos históricos de precios.
+Gets historical price data.
 
-**Parámetros:**
-- `symbol` (string): Símbolo del token
-- `days` (number): Número de días
+**Parameters:**
+- `symbol` (string): Token symbol
+- `days` (number): Number of days
 
-**Retorna:** Promise con datos históricos
+**Returns:** Promise with historical data
 
 #### `getMarketNews()`
-Obtiene noticias del mercado.
+Gets market news.
 
-**Retorna:** Promise con array de noticias
+**Returns:** Promise with news array
 
 #### `getTechnicalAnalysis(symbol)`
-Obtiene análisis técnico.
+Gets technical analysis.
 
-**Parámetros:**
-- `symbol` (string): Símbolo del token
+**Parameters:**
+- `symbol` (string): Token symbol
 
-**Retorna:** Promise con análisis técnico
+**Returns:** Promise with technical analysis
 
 #### `calculatePortfolioMetrics(tokens, totalValue)`
-Calcula métricas del portfolio.
+Calculates portfolio metrics.
 
-**Parámetros:**
-- `tokens` (array): Lista de tokens
-- `totalValue` (number): Valor total
+**Parameters:**
+- `tokens` (array): Token list
+- `totalValue` (number): Total value
 
-**Retorna:** Objeto con métricas
+**Returns:** Object with metrics
 
-### Utilidades
+### Utilities
 
 #### `formatNumber(number, decimals)`
-Formatea números para mostrar.
+Formats numbers for display.
 
 #### `formatPercentage(number, decimals)`
-Formatea porcentajes.
+Formats percentages.
 
-## 🔒 Configuración de Seguridad
+## 🔒 Security Configuration
 
-### Variables de Entorno
+### Environment Variables
 ```env
-# APIs Principales
+# Main APIs
 VITE_AURA_API_KEY=your_aura_api_key_here
 VITE_COINGECKO_API_KEY=your_coingecko_api_key_here
 VITE_ALCHEMY_API_KEY=your_alchemy_api_key_here
 VITE_INFURA_API_KEY=your_infura_api_key_here
 
-# Configuración de App
+# App Configuration
 VITE_APP_NAME=CryptoMentor AI
 VITE_APP_VERSION=1.0.0
 VITE_APP_ENVIRONMENT=development
@@ -654,12 +654,12 @@ const rateLimiter = {
   limit: 100, // requests per minute
   
   checkLimit(userId) {
-    // Lógica de rate limiting
+    // Rate limiting logic
   }
 }
 ```
 
-### Validación de Entrada
+### Input Validation
 ```javascript
 const validateInput = (input) => {
   if (!input || typeof input !== 'string') {
@@ -674,9 +674,9 @@ const validateInput = (input) => {
 }
 ```
 
-## 📊 Monitoreo y Analytics
+## 📊 Monitoring and Analytics
 
-### Métricas de API
+### API Metrics
 ```javascript
 const apiMetrics = {
   responseTime: [],
@@ -714,7 +714,7 @@ const logger = {
 }
 ```
 
-## 🚀 Optimizaciones
+## 🚀 Optimizations
 
 ### Caching
 ```javascript
@@ -753,20 +753,20 @@ const batchRequests = async (requests) => {
 }
 ```
 
-## 🔮 Roadmap de APIs
+## 🔮 API Roadmap
 
-### Próximas Integraciones
-- **DeFi Pulse API**: Datos de protocolos DeFi
-- **Glassnode API**: Análisis on-chain
-- **Messari API**: Datos institucionales
-- **Twitter API**: Análisis de sentimiento social
+### Upcoming Integrations
+- **DeFi Pulse API**: DeFi protocol data
+- **Glassnode API**: On-chain analysis
+- **Messari API**: Institutional data
+- **Twitter API**: Social sentiment analysis
 
-### Mejoras Planificadas
-- **GraphQL**: API unificada
-- **WebSocket**: Datos en tiempo real
-- **Caching Redis**: Caché distribuido
-- **CDN**: Distribución global de datos
+### Planned Improvements
+- **GraphQL**: Unified API
+- **WebSocket**: Real-time data
+- **Redis Caching**: Distributed cache
+- **CDN**: Global data distribution
 
 ---
 
-Esta documentación proporciona una referencia completa de todas las APIs utilizadas en CryptoMentor AI, facilitando la integración, mantenimiento y desarrollo del proyecto.
+This documentation provides a complete reference of all APIs used in CryptoMentor AI, facilitating integration, maintenance and project development.

@@ -181,14 +181,14 @@ export const AuraProvider = ({ children }) => {
 }
 ```
 
-### Estado Local vs Global
+### Local vs Global State
 
-| Tipo | Cuándo Usar | Ejemplos |
+| Type | When to Use | Examples |
 |------|-------------|----------|
-| **Estado Local** | Solo el componente lo necesita | Formularios, UI temporal |
-| **Estado Global** | Múltiples componentes lo necesitan | Wallet, conversación IA |
+| **Local State** | Only the component needs it | Forms, temporary UI |
+| **Global State** | Multiple components need it | Wallet, AI conversation |
 
-## 🌐 Integración de APIs
+## 🌐 API Integration
 
 ### Service Layer Pattern
 
@@ -220,16 +220,16 @@ export const walletService = {
 ### Error Handling Strategy
 
 ```javascript
-// Nivel de Servicio
+// Service Level
 try {
   const data = await api.call()
   return data
 } catch (error) {
   console.error('API Error:', error)
-  throw new Error('Error procesando solicitud')
+  throw new Error('Error processing request')
 }
 
-// Nivel de Componente
+// Component Level
 const [error, setError] = useState(null)
 
 useEffect(() => {
@@ -239,7 +239,7 @@ useEffect(() => {
       setData(data)
     } catch (err) {
       setError(err.message)
-      toast.error('Error cargando datos')
+      toast.error('Error loading data')
     }
   }
   fetchData()
@@ -287,25 +287,25 @@ theme: {
 }
 ```
 
-## 🔒 Seguridad
+## 🔒 Security
 
-### Principios de Seguridad
+### Security Principles
 
-1. **Never Trust Client**: Validación en servidor
-2. **Least Privilege**: Mínimos permisos necesarios
-3. **Defense in Depth**: Múltiples capas de seguridad
-4. **Secure by Default**: Configuración segura por defecto
+1. **Never Trust Client**: Server-side validation
+2. **Least Privilege**: Minimum necessary permissions
+3. **Defense in Depth**: Multiple security layers
+4. **Secure by Default**: Secure configuration by default
 
 ### Web3 Security
 
 ```javascript
-// Validación de red
+// Network validation
 const isValidNetwork = (chainId) => {
   const allowedNetworks = ['0x1', '0x5'] // Mainnet, Goerli
   return allowedNetworks.includes(chainId)
 }
 
-// Validación de dirección
+// Address validation
 const isValidAddress = (address) => {
   return ethers.isAddress(address)
 }
@@ -336,20 +336,20 @@ const rateLimiter = {
 
 ## 📊 Performance
 
-### Optimization de Rendering
+### Rendering Optimization
 
 ```javascript
-// React.memo para componentes puros
+// React.memo for pure components
 const ExpensiveComponent = React.memo(({ data }) => {
   return <div>{data}</div>
 })
 
-// useMemo para cálculos costosos
+// useMemo for expensive calculations
 const expensiveValue = useMemo(() => {
   return heavyCalculation(data)
 }, [data])
 
-// useCallback para funciones estables
+// useCallback for stable functions
 const handleClick = useCallback(() => {
   doSomething()
 }, [dependency])
@@ -358,11 +358,11 @@ const handleClick = useCallback(() => {
 ### Code Splitting
 
 ```javascript
-// Lazy loading de componentes
+// Lazy loading components
 const Portfolio = lazy(() => import('./components/Portfolio'))
 const ChatInterface = lazy(() => import('./components/ChatInterface'))
 
-// Uso con Suspense
+// Usage with Suspense
 <Suspense fallback={<Loading />}>
   <Portfolio />
 </Suspense>
@@ -393,11 +393,11 @@ export default defineConfig({
 
 ```
     ┌─────────────────┐
-    │   E2E Tests     │ ← Pocos, críticos
+    │   E2E Tests     │ ← Few, critical
     ├─────────────────┤
-    │ Integration     │ ← Algunos, componentes
+    │ Integration     │ ← Some, components
     ├─────────────────┤
-    │ Unit Tests      │ ← Muchos, funciones
+    │ Unit Tests      │ ← Many, functions
     └─────────────────┘
 ```
 
@@ -413,13 +413,13 @@ export default defineConfig({
 ### Build Process
 
 ```bash
-# Desarrollo
+# Development
 npm run dev
 
-# Build de producción
+# Production build
 npm run build
 
-# Preview del build
+# Build preview
 npm run preview
 ```
 
@@ -432,7 +432,7 @@ npm run preview
 ### Environment Configuration
 
 ```javascript
-// Configuración por ambiente
+// Environment configuration
 const config = {
   development: {
     apiUrl: 'http://localhost:3001',
@@ -445,12 +445,12 @@ const config = {
 }
 ```
 
-## 📈 Monitoring y Analytics
+## 📈 Monitoring and Analytics
 
 ### Error Tracking
 
 ```javascript
-// Error boundary con logging
+// Error boundary with logging
 componentDidCatch(error, errorInfo) {
   // Log to external service
   logError(error, errorInfo)
@@ -470,23 +470,23 @@ getLCP(console.log)
 getTTFB(console.log)
 ```
 
-## 🔮 Arquitectura Futura
+## 🔮 Future Architecture
 
-### Roadmap Técnico
+### Technical Roadmap
 
-1. **Micro-frontends**: Separación en módulos independientes
-2. **GraphQL**: API unificada para datos
-3. **PWA**: Aplicación web progresiva
-4. **Offline Support**: Funcionalidad sin conexión
-5. **Real-time**: WebSockets para datos en tiempo real
+1. **Micro-frontends**: Separation into independent modules
+2. **GraphQL**: Unified API for data
+3. **PWA**: Progressive web application
+4. **Offline Support**: Functionality without connection
+5. **Real-time**: WebSockets for real-time data
 
 ### Scalability
 
-- **Horizontal Scaling**: Múltiples instancias
-- **Database Sharding**: Particionado de datos
-- **CDN**: Distribución global de contenido
+- **Horizontal Scaling**: Multiple instances
+- **Database Sharding**: Data partitioning
+- **CDN**: Global content distribution
 - **Caching**: Redis, Memcached
 
 ---
 
-Esta arquitectura está diseñada para ser **escalable**, **mantenible** y **performante**, siguiendo las mejores prácticas de desarrollo moderno.
+This architecture is designed to be **scalable**, **maintainable** and **performant**, following modern development best practices.

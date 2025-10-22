@@ -297,11 +297,11 @@ const exampleMessages = [
 Overview of the cryptocurrency market with charts and statistics.
 
 ### Features
-- **Market Stats**: Estadísticas principales del mercado
-- **Interactive Charts**: Gráficos de precios y dominancia
-- **Market News**: Noticias del mercado crypto
-- **Top Performers**: Mejores rendimientos de 24h
-- **Loading States**: Estados de carga para datos
+- **Market Stats**: Main market statistics
+- **Interactive Charts**: Price and dominance charts
+- **Market News**: Crypto market news
+- **Top Performers**: Best 24h performers
+- **Loading States**: Loading states for data
 
 ### Props
 Receives no props
@@ -329,32 +329,32 @@ const loadMarketData = async () => {
 }
 ```
 
-### Gráficos Utilizados
-- **LineChart**: Precio de Bitcoin en 7 días
-- **PieChart**: Dominancia de mercado
-- **ResponsiveContainer**: Contenedores responsivos de Recharts
+### Charts Used
+- **LineChart**: Bitcoin price over 7 days
+- **PieChart**: Market dominance
+- **ResponsiveContainer**: Responsive Recharts containers
 
-### Datos Mostrados
-- Market Cap total
-- Volumen 24h
+### Data Shown
+- Total Market Cap
+- 24h Volume
 - Fear & Greed Index
-- Precio de Bitcoin
-- Gráfico histórico de precios
-- Distribución de dominancia
-- Noticias del mercado
+- Bitcoin Price
+- Historical price chart
+- Dominance distribution
+- Market news
 - Top performers
 
 ## 🔔 AlertsPanel.jsx
 
 ### Purpose
-Sistema para crear, gestionar y monitorear alertas de precios de criptomonedas.
+System for creating, managing and monitoring cryptocurrency price alerts.
 
 ### Features
-- **Alert Creation**: Formulario para crear nuevas alertas
-- **Alert Management**: Lista de alertas con opciones de editar/eliminar
-- **Alert Statistics**: Estadísticas de alertas (total, activas, activadas)
-- **Alert Types**: Diferentes tipos de alertas (precio, cambio, volumen)
-- **Modal Interface**: Modal para crear alertas
+- **Alert Creation**: Form to create new alerts
+- **Alert Management**: Alert list with edit/delete options
+- **Alert Statistics**: Alert statistics (total, active, triggered)
+- **Alert Types**: Different alert types (price, change, volume)
+- **Modal Interface**: Modal for creating alerts
 
 ### Props
 Receives no props
@@ -375,7 +375,7 @@ const handleCreateAlert = async () => {
   }
   
   await setupSmartAlerts(alertConfig)
-  // Agregar alerta a la lista
+  // Add alert to list
 }
 
 const toggleAlert = (id) => {
@@ -385,34 +385,34 @@ const toggleAlert = (id) => {
 }
 ```
 
-### Tipos de Alertas
+### Alert Types
 ```javascript
 const alertTypes = [
-  { value: 'price', label: 'Precio' },
-  { value: 'change', label: 'Cambio %' },
-  { value: 'volume', label: 'Volumen' }
+  { value: 'price', label: 'Price' },
+  { value: 'change', label: 'Change %' },
+  { value: 'volume', label: 'Volume' }
 ]
 
 const conditions = [
-  { value: 'above', label: 'Por encima de' },
-  { value: 'below', label: 'Por debajo de' }
+  { value: 'above', label: 'Above' },
+  { value: 'below', label: 'Below' }
 ]
 ```
 
 ### Contexts Used
-- `useAura`: Para configurar alertas inteligentes
+- `useAura`: To configure smart alerts
 
 ## 📚 EducationSection.jsx
 
 ### Purpose
-Centro de aprendizaje interactivo con lecciones sobre criptomonedas.
+Interactive learning center with cryptocurrency lessons.
 
 ### Features
-- **Categorized Lessons**: Lecciones organizadas por categorías
-- **Progress Tracking**: Seguimiento del progreso de aprendizaje
-- **Difficulty Levels**: Diferentes niveles de dificultad
-- **Interactive Learning**: Lecciones interactivas
-- **Quick Tips**: Consejos rápidos y mejores prácticas
+- **Categorized Lessons**: Lessons organized by categories
+- **Progress Tracking**: Learning progress tracking
+- **Difficulty Levels**: Different difficulty levels
+- **Interactive Learning**: Interactive lessons
+- **Quick Tips**: Quick tips and best practices
 
 ### Props
 Receives no props
@@ -423,12 +423,12 @@ const [activeCategory, setActiveCategory] = useState('basics')
 const [completedLessons, setCompletedLessons] = useState(new Set())
 ```
 
-### Categorías de Aprendizaje
+### Learning Categories
 ```javascript
 const categories = [
   {
     id: 'basics',
-    name: 'Conceptos Básicos',
+    name: 'Basic Concepts',
     icon: BookOpen,
     color: 'bg-blue-100 text-blue-600'
   },
@@ -446,7 +446,7 @@ const categories = [
   },
   {
     id: 'security',
-    name: 'Seguridad',
+    name: 'Security',
     icon: Shield,
     color: 'bg-red-100 text-red-600'
   }
@@ -460,23 +460,23 @@ const handleStartLesson = (lessonId) => {
 }
 ```
 
-### Lecciones por Categoría
-- **Básicos**: Conceptos fundamentales de crypto
-- **Trading**: Estrategias y análisis técnico
-- **DeFi**: Protocolos descentralizados
-- **Seguridad**: Mejores prácticas de seguridad
+### Lessons by Category
+- **Basics**: Fundamental crypto concepts
+- **Trading**: Strategies and technical analysis
+- **DeFi**: Decentralized protocols
+- **Security**: Security best practices
 
 ## 🔗 WalletConnect.jsx
 
 ### Purpose
-Componente para conectar y manejar la conexión con MetaMask.
+Component for connecting and managing MetaMask connection.
 
 ### Features
-- **MetaMask Detection**: Detecta si MetaMask está instalado
-- **Connection Flow**: Flujo de conexión con wallet
-- **Error Handling**: Manejo de errores de conexión
-- **Installation Guide**: Modal para instalar MetaMask
-- **Loading States**: Estados de carga durante conexión
+- **MetaMask Detection**: Detects if MetaMask is installed
+- **Connection Flow**: Wallet connection flow
+- **Error Handling**: Connection error handling
+- **Installation Guide**: Modal to install MetaMask
+- **Loading States**: Loading states during connection
 
 ### Props
 Receives no props
@@ -497,7 +497,7 @@ const handleConnect = async () => {
   try {
     await connectWallet()
   } catch (error) {
-    toast.error('Error al conectar wallet')
+    toast.error('Error connecting wallet')
   }
 }
 
@@ -507,30 +507,30 @@ const installMetaMask = () => {
 ```
 
 ### Contexts Used
-- `useWallet`: Para funciones de conexión
+- `useWallet`: For connection functions
 
-### Modal de Instalación
-- Información sobre MetaMask
-- Botón para descargar
-- Explicación de qué es MetaMask
-- Opciones de cancelar
+### Installation Modal
+- MetaMask information
+- Download button
+- Explanation of what MetaMask is
+- Cancel options
 
 ## 🛡️ ErrorBoundary.jsx
 
 ### Purpose
-Componente para capturar y manejar errores de JavaScript en componentes hijos.
+Component to catch and handle JavaScript errors in child components.
 
 ### Features
-- **Error Catching**: Captura errores en componentes hijos
-- **Error Display**: Muestra interfaz amigable de error
-- **Retry Mechanism**: Permite reintentar la operación
-- **Development Info**: Información detallada en desarrollo
-- **Graceful Degradation**: Degradación elegante en caso de error
+- **Error Catching**: Catches errors in child components
+- **Error Display**: Shows friendly error interface
+- **Retry Mechanism**: Allows retrying the operation
+- **Development Info**: Detailed information in development
+- **Graceful Degradation**: Graceful degradation in case of error
 
 ### Props
 ```javascript
 {
-  children: React.ReactNode  // Componentes hijos a monitorear
+  children: React.ReactNode  // Child components to monitor
 }
 ```
 
@@ -541,7 +541,7 @@ const [error, setError] = useState(null)
 const [errorInfo, setErrorInfo] = useState(null)
 ```
 
-### Métodos del Ciclo de Vida
+### Lifecycle Methods
 ```javascript
 static getDerivedStateFromError(error) {
   return { hasError: true }
@@ -567,14 +567,14 @@ const handleRetry = () => {
 }
 ```
 
-### Features del Error UI
-- Icono de error
-- Mensaje amigable
-- Botón de reintentar
-- Botón de recargar página
-- Detalles del error (solo en desarrollo)
+### Error UI Features
+- Error icon
+- Friendly message
+- Retry button
+- Reload page button
+- Error details (development only)
 
-## 🎨 Patrones de Diseño Utilizados
+## 🎨 Design Patterns Used
 
 ### 1. Compound Components
 ```jsx
@@ -620,7 +620,7 @@ const useWalletConnection = () => {
 }
 ```
 
-## 🔧 Optimizaciones de Performance
+## 🔧 Performance Optimizations
 
 ### 1. React.memo
 ```jsx
@@ -654,7 +654,7 @@ const Portfolio = lazy(() => import('./components/Portfolio'))
 
 ## 📱 Responsive Design
 
-### Breakpoints Utilizados
+### Breakpoints Used
 ```css
 /* Tailwind CSS Breakpoints */
 sm: 640px   /* Small devices */
@@ -664,15 +664,15 @@ xl: 1280px  /* Extra large devices */
 2xl: 1536px /* 2X large devices */
 ```
 
-### Patrones Responsive
-- **Mobile First**: Diseño desde móvil hacia desktop
-- **Flexible Grids**: Uso de CSS Grid y Flexbox
-- **Responsive Images**: Imágenes que se adaptan al tamaño
-- **Touch Friendly**: Botones y elementos táctiles apropiados
+### Responsive Patterns
+- **Mobile First**: Design from mobile to desktop
+- **Flexible Grids**: Use of CSS Grid and Flexbox
+- **Responsive Images**: Images that adapt to size
+- **Touch Friendly**: Appropriate touch buttons and elements
 
-## 🧪 Testing de Componentes
+## 🧪 Component Testing
 
-### Estrategia de Testing
+### Testing Strategy
 ```javascript
 // Unit Tests
 import { render, screen } from '@testing-library/react'
@@ -680,23 +680,23 @@ import Portfolio from './Portfolio'
 
 test('renders portfolio when wallet is connected', () => {
   render(<Portfolio />)
-  expect(screen.getByText('Valor Total')).toBeInTheDocument()
+  expect(screen.getByText('Total Value')).toBeInTheDocument()
 })
 
 // Integration Tests
 test('connects wallet successfully', async () => {
   const { user } = render(<WalletConnect />)
-  await user.click(screen.getByText('Conectar Wallet'))
-  expect(screen.getByText('Wallet Conectado')).toBeInTheDocument()
+  await user.click(screen.getByText('Connect Wallet'))
+  expect(screen.getByText('Wallet Connected')).toBeInTheDocument()
 })
 ```
 
-### Herramientas de Testing
-- **Jest**: Framework de testing
-- **React Testing Library**: Testing de componentes React
-- **Cypress**: Testing end-to-end
-- **Storybook**: Desarrollo y documentación de componentes
+### Testing Tools
+- **Jest**: Testing framework
+- **React Testing Library**: React component testing
+- **Cypress**: End-to-end testing
+- **Storybook**: Component development and documentation
 
 ---
 
-Esta documentación proporciona una guía completa de todos los componentes de CryptoMentor AI, facilitando el mantenimiento, desarrollo y colaboración en el proyecto.
+This documentation provides a complete guide to all CryptoMentor AI components, facilitating maintenance, development and collaboration on the project.

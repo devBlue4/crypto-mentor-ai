@@ -1,68 +1,68 @@
-# Documentación de CryptoMentor AI 📚
+# CryptoMentor AI Documentation 📚
 
-Esta carpeta contiene toda la documentación técnica y de usuario para el proyecto CryptoMentor AI.
+This folder contains all technical and user documentation for the CryptoMentor AI project.
 
-## 📖 Índice de Documentación
+## 📖 Documentation Index
 
-### 🚀 Para Desarrolladores
-- [Guía de Instalación](./installation.md) - Configuración del entorno de desarrollo
-- [Arquitectura del Sistema](./architecture.md) - Estructura y diseño del proyecto
-- [Guía de Contribución](./contributing.md) - Cómo contribuir al proyecto
-- [API Reference](./api-reference.md) - Documentación de APIs y servicios
-- [Guía de Deployment](./deployment.md) - Cómo desplegar la aplicación
+### 🚀 For Developers
+- [Installation Guide](./installation.md) - Development environment setup
+- [System Architecture](./architecture.md) - Project structure and design
+- [Contributing Guide](./contributing.md) - How to contribute to the project
+- [API Reference](./api-reference.md) - APIs and services documentation
+- [Deployment Guide](./deployment.md) - How to deploy the application
 
-### 👥 Para Usuarios
-- [Guía de Usuario](./user-guide.md) - Manual completo de usuario
-- [FAQ](./faq.md) - Preguntas frecuentes
-- [Troubleshooting](./troubleshooting.md) - Solución de problemas comunes
+### 👥 For Users
+- [User Guide](./user-guide.md) - Complete user manual
+- [FAQ](./faq.md) - Frequently asked questions
+- [Troubleshooting](./troubleshooting.md) - Common problem solutions
 
-### 🛠️ Técnico
-- [Componentes](./components.md) - Documentación de componentes React
-- [Servicios](./services.md) - Documentación de servicios y APIs
-- [Contextos](./contexts.md) - Gestión de estado con React Context
-- [Estilos](./styling.md) - Guía de TailwindCSS y diseño
-- [Testing](./testing.md) - Estrategias de testing
+### 🛠️ Technical
+- [Components](./components.md) - React components documentation
+- [Services](./services.md) - Services and APIs documentation
+- [Contexts](./contexts.md) - State management with React Context
+- [Styling](./styling.md) - TailwindCSS and design guide
+- [Testing](./testing.md) - Testing strategies
 
-### 📊 Específico del Proyecto
-- [Integración Web3](./web3-integration.md) - Detalles de integración con MetaMask
-- [Integración AdEx AURA](./aura-integration.md) - Cómo funciona la IA de AdEx
-- [Datos de Mercado](./market-data.md) - Fuentes de datos y APIs
-- [Seguridad](./security.md) - Consideraciones de seguridad
+### 📊 Project Specific
+- [Web3 Integration](./web3-integration.md) - MetaMask integration details
+- [AdEx AURA Integration](./aura-integration.md) - How AdEx AI works
+- [Market Data](./market-data.md) - Data sources and APIs
+- [Security](./security.md) - Security considerations
 
-### 🎯 Para el Hackathon
-- [Presentación del Proyecto](./hackathon-presentation.md) - Resumen para judges
-- [Demo Guide](./demo-guide.md) - Cómo hacer una demo efectiva
-- [Roadmap](./roadmap.md) - Planes futuros del proyecto
+### 🎯 For Hackathon
+- [Project Presentation](./hackathon-presentation.md) - Summary for judges
+- [Demo Guide](./demo-guide.md) - How to make an effective demo
+- [Roadmap](./roadmap.md) - Future project plans
 
-## 🔧 Configuración Rápida
+## 🔧 Quick Setup
 
-Para empezar rápidamente:
+To get started quickly:
 
-1. **Desarrollo**: Ver [Guía de Instalación](./installation.md)
-2. **Uso**: Ver [Guía de Usuario](./user-guide.md)
-3. **Contribuir**: Ver [Guía de Contribución](./contributing.md)
+1. **Development**: See [Installation Guide](./installation.md)
+2. **Usage**: See [User Guide](./user-guide.md)
+3. **Contributing**: See [Contributing Guide](./contributing.md)
 
-## 📞 Soporte
+## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/crypto-mentor-ai/issues)
-- **Discusiones**: [GitHub Discussions](https://github.com/tu-usuario/crypto-mentor-ai/discussions)
+- **Issues**: [GitHub Issues](https://github.com/your-username/crypto-mentor-ai/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/your-username/crypto-mentor-ai/discussions)
 - **Email**: support@cryptomentor.ai
 
 ---
 
-*Documentación mantenida por el equipo de CryptoMentor AI*
+*Documentation maintained by the CryptoMentor AI team*
 
-## ⭐ AdEx AURA API y recomendaciones por dirección
+## ⭐ AdEx AURA API and address-based recommendations
 
-La app está potenciada por la AdEx AURA API. Además del chat y el análisis de portfolio, el agente puede tomar una account address y producir una lista de recomendaciones y estrategias en lenguaje natural, con una descripción de lo que hace cada una.
+The app is powered by the AdEx AURA API. In addition to chat and portfolio analysis, the agent can take an account address and produce a list of recommendations and strategies in natural language, with a description of what each one does.
 
-Ejemplo de prompt (para el Chat o la pestaña Strategies):
+Example prompt (for Chat or Strategies tab):
 
 ```text
 Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.
 ```
 
-Resultado esperado:
-- Lista de estrategias y apps recomendadas
-- Descripción en lenguaje simple de lo que hace cada una
-- (Opcional) Agrupar por horizonte temporal/riesgo con pasos accionables
+Expected result:
+- List of recommended strategies and apps
+- Simple language description of what each one does
+- (Optional) Group by time horizon/risk with actionable steps
