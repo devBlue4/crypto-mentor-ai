@@ -1,46 +1,46 @@
-# Documentación de Componentes - CryptoMentor AI
+# Components Documentation - CryptoMentor AI
 
-Este documento proporciona una descripción detallada de todos los componentes React utilizados en CryptoMentor AI.
+This document provides a detailed description of all React components used in CryptoMentor AI.
 
-## 📋 Índice de Componentes
+## 📋 Components Index
 
-### Componentes Principales
-- [App.jsx](#appjsx) - Componente raíz de la aplicación
-- [Dashboard.jsx](#dashboardjsx) - Dashboard principal con navegación
-- [Header.jsx](#headerjsx) - Navegación superior
-- [LoadingScreen.jsx](#loadingscreenjsx) - Pantalla de carga inicial
+### Main Components
+- [App.jsx](#appjsx) - Root component of the application
+- [Dashboard.jsx](#dashboardjsx) - Main dashboard with navigation
+- [Header.jsx](#headerjsx) - Top navigation
+- [LoadingScreen.jsx](#loadingscreenjsx) - Initial loading screen
 
-### Componentes de Funcionalidad
-- [Portfolio.jsx](#portfoliojsx) - Gestión de portfolio
-- [ChatInterface.jsx](#chatinterfacejsx) - Chat con IA AURA
-- [MarketOverview.jsx](#marketoverviewjsx) - Vista de mercado
-- [AlertsPanel.jsx](#alertspaneljsx) - Sistema de alertas
-- [EducationSection.jsx](#educationsectionjsx) - Centro educativo
+### Functionality Components
+- [Portfolio.jsx](#portfoliojsx) - Portfolio management
+- [ChatInterface.jsx](#chatinterfacejsx) - Chat with AURA AI
+- [MarketOverview.jsx](#marketoverviewjsx) - Market view
+- [AlertsPanel.jsx](#alertspaneljsx) - Alert system
+- [EducationSection.jsx](#educationsectionjsx) - Education center
 
-### Componentes de Utilidad
-- [WalletConnect.jsx](#walletconnectjsx) - Conexión de wallet
-- [ErrorBoundary.jsx](#errorboundaryjsx) - Manejo de errores
+### Utility Components
+- [WalletConnect.jsx](#walletconnectjsx) - Wallet connection
+- [ErrorBoundary.jsx](#errorboundaryjsx) - Error handling
 
 ## 🏗️ App.jsx
 
-### Propósito
-Componente raíz que configura la aplicación, maneja el estado global y proporciona la estructura base.
+### Purpose
+Root component that configures the application, manages global state and provides the base structure.
 
-### Características
-- **Error Boundary**: Captura errores de componentes hijos
-- **Context Providers**: Proporciona contextos de Wallet y AURA
-- **Loading State**: Maneja la pantalla de carga inicial
-- **Toast Notifications**: Configura notificaciones globales
+### Features
+- **Error Boundary**: Captures errors from child components
+- **Context Providers**: Provides Wallet and AURA contexts
+- **Loading State**: Handles initial loading screen
+- **Toast Notifications**: Configures global notifications
 
 ### Props
-No recibe props (componente raíz)
+Receives no props (root component)
 
-### Estado Interno
+### Internal State
 ```javascript
 const [isLoading, setIsLoading] = useState(true)
 ```
 
-### Estructura
+### Structure
 ```jsx
 <ErrorBoundary>
   <WalletProvider>
@@ -57,35 +57,35 @@ const [isLoading, setIsLoading] = useState(true)
 </ErrorBoundary>
 ```
 
-### Hooks Utilizados
-- `useState`: Para manejar el estado de carga
-- `useEffect`: Para simular la carga inicial
+### Hooks Used
+- `useState`: To handle loading state
+- `useEffect`: To simulate initial loading
 
 ## 📊 Dashboard.jsx
 
-### Propósito
-Componente principal que actúa como contenedor y navegador entre diferentes secciones de la aplicación.
+### Purpose
+Main component that acts as container and navigator between different application sections.
 
-### Características
-- **Tab Navigation**: Navegación por pestañas
-- **Conditional Rendering**: Renderiza componentes basado en la pestaña activa
-- **Welcome Section**: Mensaje de bienvenida personalizado
-- **Quick Stats**: Estadísticas rápidas del dashboard
+### Features
+- **Tab Navigation**: Tab-based navigation
+- **Conditional Rendering**: Renders components based on active tab
+- **Welcome Section**: Personalized welcome message
+- **Quick Stats**: Quick dashboard statistics
 
 ### Props
-No recibe props directos, usa contextos para obtener datos
+Receives no direct props, uses contexts to get data
 
-### Estado Interno
+### Internal State
 ```javascript
 const [activeTab, setActiveTab] = useState('overview')
 ```
 
-### Tabs Configurables
+### Configurable Tabs
 ```javascript
 const tabs = [
   {
     id: 'overview',
-    name: 'Resumen',
+    name: 'Overview',
     icon: BarChart3,
     component: MarketOverview
   },
@@ -98,115 +98,115 @@ const tabs = [
   },
   {
     id: 'chat',
-    name: 'Chat IA',
+    name: 'AI Chat',
     icon: MessageCircle,
     component: ChatInterface
   },
   {
     id: 'alerts',
-    name: 'Alertas',
+    name: 'Alerts',
     icon: AlertTriangle,
     component: AlertsPanel
   },
   {
     id: 'education',
-    name: 'Educación',
+    name: 'Education',
     icon: BookOpen,
     component: EducationSection
   }
 ]
 ```
 
-### Contextos Utilizados
-- `useWallet`: Para verificar estado de conexión del wallet
+### Contexts Used
+- `useWallet`: To verify wallet connection state
 
 ## 🎯 Header.jsx
 
-### Propósito
-Navegación superior que incluye logo, menú de navegación y estado del wallet.
+### Purpose
+Top navigation that includes logo, navigation menu and wallet status.
 
-### Características
-- **Responsive Design**: Menú colapsable en móvil
-- **Wallet Status**: Muestra estado de conexión del wallet
-- **Navigation Links**: Enlaces a diferentes secciones
-- **Mobile Menu**: Menú hamburguesa para dispositivos móviles
+### Features
+- **Responsive Design**: Collapsible menu on mobile
+- **Wallet Status**: Shows wallet connection state
+- **Navigation Links**: Links to different sections
+- **Mobile Menu**: Hamburger menu for mobile devices
 
 ### Props
-No recibe props
+Receives no props
 
-### Estado Interno
+### Internal State
 ```javascript
 const [isMenuOpen, setIsMenuOpen] = useState(false)
 ```
 
-### Navegación
+### Navigation
 ```javascript
 const navigation = [
   { name: 'Dashboard', href: '#dashboard', icon: TrendingUp },
-  { name: 'Chat IA', href: '#chat', icon: Brain },
-  { name: 'Alertas', href: '#alerts', icon: AlertCircle }
+  { name: 'AI Chat', href: '#chat', icon: Brain },
+  { name: 'Alerts', href: '#alerts', icon: AlertCircle }
 ]
 ```
 
-### Contextos Utilizados
-- `useWallet`: Para obtener información del wallet conectado
+### Contexts Used
+- `useWallet`: To get connected wallet information
 
 ## ⏳ LoadingScreen.jsx
 
-### Propósito
-Pantalla de carga inicial que se muestra mientras la aplicación se inicializa.
+### Purpose
+Initial loading screen shown while the application initializes.
 
-### Características
-- **Branding**: Logo y nombre de la aplicación
-- **Feature Cards**: Muestra características principales
-- **Loading Animation**: Animación de carga con progress bar
-- **Responsive**: Adaptado para diferentes tamaños de pantalla
+### Features
+- **Branding**: Logo and application name
+- **Feature Cards**: Shows main features
+- **Loading Animation**: Loading animation with progress bar
+- **Responsive**: Adapted for different screen sizes
 
 ### Props
-No recibe props
+Receives no props
 
-### Características Destacadas
+### Highlighted Features
 ```javascript
 const features = [
   {
     icon: Brain,
-    title: 'IA Avanzada',
-    description: 'Análisis inteligente con AdEx AURA'
+    title: 'Advanced AI',
+    description: 'Intelligent analysis with AdEx AURA'
   },
   {
     icon: TrendingUp,
-    title: 'Trading Web3',
-    description: 'Gestión de portfolio en tiempo real'
+    title: 'Web3 Trading',
+    description: 'Real-time portfolio management'
   },
   {
     icon: DollarSign,
-    title: 'Análisis de Mercado',
-    description: 'Insights y recomendaciones personalizadas'
+    title: 'Market Analysis',
+    description: 'Personalized insights and recommendations'
   },
   {
     icon: Shield,
-    title: 'Seguro y Confiable',
-    description: 'Conecta tu wallet de forma segura'
+    title: 'Secure and Reliable',
+    description: 'Connect your wallet securely'
   }
 ]
 ```
 
 ## 💼 Portfolio.jsx
 
-### Propósito
-Componente para gestionar y analizar el portfolio de criptomonedas del usuario.
+### Purpose
+Component for managing and analyzing the user's cryptocurrency portfolio.
 
-### Características
-- **Portfolio Summary**: Resumen de valor total, balance ETH y número de tokens
-- **Token List**: Lista de tokens con balances
-- **AURA Analysis**: Análisis del portfolio con IA
-- **Portfolio Actions**: Botones para actualizar y analizar
-- **Empty State**: Mensaje cuando no hay wallet conectado
+### Features
+- **Portfolio Summary**: Summary of total value, ETH balance and number of tokens
+- **Token List**: List of tokens with balances
+- **AURA Analysis**: Portfolio analysis with AI
+- **Portfolio Actions**: Buttons to update and analyze
+- **Empty State**: Message when no wallet is connected
 
 ### Props
-No recibe props, usa contextos
+Receives no props, uses contexts
 
-### Estado Interno
+### Internal State
 ```javascript
 const [portfolioValue, setPortfolioValue] = useState(0)
 const [portfolioChange, setPortfolioChange] = useState(0)
@@ -214,7 +214,7 @@ const [analysis, setAnalysis] = useState(null)
 const [isRefreshing, setIsRefreshing] = useState(false)
 ```
 
-### Funciones Principales
+### Main Functions
 ```javascript
 const handleAnalyzePortfolio = async () => {
   const analysis = await analyzePortfolio(tokens, balance)
@@ -228,41 +228,41 @@ const refreshPortfolio = async () => {
 }
 ```
 
-### Contextos Utilizados
-- `useWallet`: Para obtener datos del wallet
-- `useAura`: Para análisis del portfolio
+### Contexts Used
+- `useWallet`: To get wallet data
+- `useAura`: For portfolio analysis
 
-### Métricas Mostradas
-- Valor total del portfolio
-- Balance de ETH
-- Número de tokens
-- Score de diversidad
-- Nivel de riesgo
-- Recomendaciones personalizadas
+### Metrics Shown
+- Total portfolio value
+- ETH balance
+- Number of tokens
+- Diversity score
+- Risk level
+- Personalized recommendations
 
 ## 💬 ChatInterface.jsx
 
-### Propósito
-Interfaz de chat para interactuar con la IA AURA.
+### Purpose
+Chat interface to interact with AURA AI.
 
-### Características
-- **Message History**: Historial de conversación
-- **Typing Indicator**: Indicador de que AURA está escribiendo
-- **Example Messages**: Mensajes de ejemplo para empezar
-- **Context Awareness**: AURA conoce el portfolio del usuario
-- **Message Types**: Diferentes tipos de mensajes (usuario, AURA, error)
-- **Auto-scroll**: Scroll automático a nuevos mensajes
+### Features
+- **Message History**: Conversation history
+- **Typing Indicator**: Indicator that AURA is typing
+- **Example Messages**: Example messages to get started
+- **Context Awareness**: AURA knows the user's portfolio
+- **Message Types**: Different message types (user, AURA, error)
+- **Auto-scroll**: Automatic scroll to new messages
 
 ### Props
-No recibe props
+Receives no props
 
-### Estado Interno
+### Internal State
 ```javascript
 const [inputMessage, setInputMessage] = useState('')
 const [isTyping, setIsTyping] = useState(false)
 ```
 
-### Funciones Principales
+### Main Functions
 ```javascript
 const handleSendMessage = async () => {
   const context = {
@@ -276,27 +276,27 @@ const handleSendMessage = async () => {
 }
 ```
 
-### Mensajes de Ejemplo
+### Example Messages
 ```javascript
 const exampleMessages = [
-  "¿Cómo está el mercado hoy?",
-  "Analiza mi portfolio",
-  "¿Qué criptomonedas recomiendas?",
-  "Explica qué es DeFi",
-  "¿Cuándo es buen momento para comprar Bitcoin?"
+  "How is the market today?",
+  "Analyze my portfolio",
+  "What cryptocurrencies do you recommend?",
+  "Explain what DeFi is",
+  "When is a good time to buy Bitcoin?"
 ]
 ```
 
-### Contextos Utilizados
-- `useAura`: Para enviar mensajes y obtener respuestas
-- `useWallet`: Para contexto del portfolio
+### Contexts Used
+- `useAura`: To send messages and get responses
+- `useWallet`: For portfolio context
 
 ## 📈 MarketOverview.jsx
 
-### Propósito
-Vista general del mercado de criptomonedas con gráficos y estadísticas.
+### Purpose
+Overview of the cryptocurrency market with charts and statistics.
 
-### Características
+### Features
 - **Market Stats**: Estadísticas principales del mercado
 - **Interactive Charts**: Gráficos de precios y dominancia
 - **Market News**: Noticias del mercado crypto
@@ -304,9 +304,9 @@ Vista general del mercado de criptomonedas con gráficos y estadísticas.
 - **Loading States**: Estados de carga para datos
 
 ### Props
-No recibe props
+Receives no props
 
-### Estado Interno
+### Internal State
 ```javascript
 const [marketData, setMarketData] = useState(null)
 const [historicalData, setHistoricalData] = useState([])
@@ -314,7 +314,7 @@ const [news, setNews] = useState([])
 const [loading, setLoading] = useState(true)
 ```
 
-### Funciones Principales
+### Main Functions
 ```javascript
 const loadMarketData = async () => {
   const [overview, history, marketNews] = await Promise.all([
@@ -346,10 +346,10 @@ const loadMarketData = async () => {
 
 ## 🔔 AlertsPanel.jsx
 
-### Propósito
+### Purpose
 Sistema para crear, gestionar y monitorear alertas de precios de criptomonedas.
 
-### Características
+### Features
 - **Alert Creation**: Formulario para crear nuevas alertas
 - **Alert Management**: Lista de alertas con opciones de editar/eliminar
 - **Alert Statistics**: Estadísticas de alertas (total, activas, activadas)
@@ -357,16 +357,16 @@ Sistema para crear, gestionar y monitorear alertas de precios de criptomonedas.
 - **Modal Interface**: Modal para crear alertas
 
 ### Props
-No recibe props
+Receives no props
 
-### Estado Interno
+### Internal State
 ```javascript
 const [alerts, setAlerts] = useState([])
 const [showCreateModal, setShowCreateModal] = useState(false)
 const [editingAlert, setEditingAlert] = useState(null)
 ```
 
-### Funciones Principales
+### Main Functions
 ```javascript
 const handleCreateAlert = async () => {
   const alertConfig = {
@@ -399,15 +399,15 @@ const conditions = [
 ]
 ```
 
-### Contextos Utilizados
+### Contexts Used
 - `useAura`: Para configurar alertas inteligentes
 
 ## 📚 EducationSection.jsx
 
-### Propósito
+### Purpose
 Centro de aprendizaje interactivo con lecciones sobre criptomonedas.
 
-### Características
+### Features
 - **Categorized Lessons**: Lecciones organizadas por categorías
 - **Progress Tracking**: Seguimiento del progreso de aprendizaje
 - **Difficulty Levels**: Diferentes niveles de dificultad
@@ -415,9 +415,9 @@ Centro de aprendizaje interactivo con lecciones sobre criptomonedas.
 - **Quick Tips**: Consejos rápidos y mejores prácticas
 
 ### Props
-No recibe props
+Receives no props
 
-### Estado Interno
+### Internal State
 ```javascript
 const [activeCategory, setActiveCategory] = useState('basics')
 const [completedLessons, setCompletedLessons] = useState(new Set())
@@ -453,7 +453,7 @@ const categories = [
 ]
 ```
 
-### Funciones Principales
+### Main Functions
 ```javascript
 const handleStartLesson = (lessonId) => {
   setCompletedLessons(prev => new Set([...prev, lessonId]))
@@ -468,10 +468,10 @@ const handleStartLesson = (lessonId) => {
 
 ## 🔗 WalletConnect.jsx
 
-### Propósito
+### Purpose
 Componente para conectar y manejar la conexión con MetaMask.
 
-### Características
+### Features
 - **MetaMask Detection**: Detecta si MetaMask está instalado
 - **Connection Flow**: Flujo de conexión con wallet
 - **Error Handling**: Manejo de errores de conexión
@@ -479,14 +479,14 @@ Componente para conectar y manejar la conexión con MetaMask.
 - **Loading States**: Estados de carga durante conexión
 
 ### Props
-No recibe props
+Receives no props
 
-### Estado Interno
+### Internal State
 ```javascript
 const [showModal, setShowModal] = useState(false)
 ```
 
-### Funciones Principales
+### Main Functions
 ```javascript
 const handleConnect = async () => {
   if (!isMetaMaskInstalled()) {
@@ -506,7 +506,7 @@ const installMetaMask = () => {
 }
 ```
 
-### Contextos Utilizados
+### Contexts Used
 - `useWallet`: Para funciones de conexión
 
 ### Modal de Instalación
@@ -517,10 +517,10 @@ const installMetaMask = () => {
 
 ## 🛡️ ErrorBoundary.jsx
 
-### Propósito
+### Purpose
 Componente para capturar y manejar errores de JavaScript en componentes hijos.
 
-### Características
+### Features
 - **Error Catching**: Captura errores en componentes hijos
 - **Error Display**: Muestra interfaz amigable de error
 - **Retry Mechanism**: Permite reintentar la operación
@@ -534,7 +534,7 @@ Componente para capturar y manejar errores de JavaScript en componentes hijos.
 }
 ```
 
-### Estado Interno
+### Internal State
 ```javascript
 const [hasError, setHasError] = useState(false)
 const [error, setError] = useState(null)
@@ -560,14 +560,14 @@ componentDidCatch(error, errorInfo) {
 }
 ```
 
-### Funciones Principales
+### Main Functions
 ```javascript
 const handleRetry = () => {
   this.setState({ hasError: false, error: null, errorInfo: null })
 }
 ```
 
-### Características del Error UI
+### Features del Error UI
 - Icono de error
 - Mensaje amigable
 - Botón de reintentar

@@ -1,472 +1,472 @@
-# Solución de Problemas - CryptoMentor AI
+# Troubleshooting - CryptoMentor AI
 
-Esta guía te ayudará a resolver problemas comunes que pueden surgir al usar CryptoMentor AI.
+This guide will help you resolve common issues that may arise when using CryptoMentor AI.
 
-## 🚨 Problemas Críticos
+## 🚨 Critical Issues
 
-### La aplicación no carga / Pantalla blanca
+### Application doesn't load / White screen
 
-**Síntomas:**
-- Pantalla completamente blanca
-- Consola muestra errores
-- Aplicación no responde
+**Symptoms:**
+- Completely white screen
+- Console shows errors
+- Application not responding
 
-**Diagnóstico:**
-1. Abre las herramientas de desarrollador (F12)
-2. Ve a la pestaña "Console"
-3. Busca errores en rojo
+**Diagnosis:**
+1. Open developer tools (F12)
+2. Go to "Console" tab
+3. Look for errors in red
 
-**Soluciones:**
+**Solutions:**
 
 #### Error: "Cannot read properties of undefined"
 ```javascript
-// Problema: Acceso a propiedades de objetos undefined
-// Solución: Agregar verificaciones
+// Problem: Accessing properties of undefined objects
+// Solution: Add checks
 const data = marketData?.property || defaultValue
 ```
 
 #### Error: "Module not found"
 ```bash
-# Solución: Reinstalar dependencias
+# Solution: Reinstall dependencies
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 #### Error: "Port 3000 is already in use"
 ```bash
-# Solución: Usar puerto diferente
+# Solution: Use different port
 npm run dev -- --port 3001
 ```
 
-### MetaMask no se conecta
+### MetaMask won't connect
 
-**Síntomas:**
-- Botón "Conectar Wallet" no funciona
-- Error "MetaMask not found"
-- Conexión falla repetidamente
+**Symptoms:**
+- "Connect Wallet" button doesn't work
+- "MetaMask not found" error
+- Connection fails repeatedly
 
-**Diagnóstico:**
+**Diagnosis:**
 ```javascript
-// Verificar en consola del navegador
-console.log(typeof window.ethereum) // Debe mostrar "object"
+// Check in browser console
+console.log(typeof window.ethereum) // Should show "object"
 ```
 
-**Soluciones:**
+**Solutions:**
 
-#### MetaMask no está instalado
-1. Ve a [metamask.io](https://metamask.io/download/)
-2. Descarga la extensión para tu navegador
-3. Crea una nueva wallet o importa una existente
-4. Recarga la página
+#### MetaMask not installed
+1. Go to [metamask.io](https://metamask.io/download/)
+2. Download the extension for your browser
+3. Create a new wallet or import an existing one
+4. Reload the page
 
-#### MetaMask no está desbloqueado
-1. Haz clic en el icono de MetaMask
-2. Ingresa tu contraseña
-3. Asegúrate de que esté desbloqueado
-4. Intenta conectar de nuevo
+#### MetaMask not unlocked
+1. Click on the MetaMask icon
+2. Enter your password
+3. Make sure it's unlocked
+4. Try connecting again
 
-#### Red incorrecta
-1. Abre MetaMask
-2. Verifica que estés en la red correcta
-3. Cambia a Ethereum Mainnet o Goerli Testnet
-4. Recarga la aplicación
+#### Wrong network
+1. Open MetaMask
+2. Verify you're on the correct network
+3. Switch to Ethereum Mainnet or Goerli Testnet
+4. Reload the application
 
-#### Permisos denegados
-1. Ve a la configuración de MetaMask
-2. Revoca permisos para el sitio
-3. Recarga la página
-4. Conecta de nuevo y acepta permisos
+#### Permissions denied
+1. Go to MetaMask settings
+2. Revoke permissions for the site
+3. Reload the page
+4. Connect again and accept permissions
 
-### AURA no responde
+### AURA not responding
 
-**Síntomas:**
-- Chat no envía mensajes
-- Indicador de "escribiendo" infinito
-- Error "Failed to send message"
+**Symptoms:**
+- Chat doesn't send messages
+- Infinite "typing" indicator
+- "Failed to send message" error
 
-**Diagnóstico:**
+**Diagnosis:**
 ```javascript
-// Verificar API key en consola
-console.log(import.meta.env.VITE_AURA_API_KEY) // Debe mostrar tu key
+// Check API key in console
+console.log(import.meta.env.VITE_AURA_API_KEY) // Should show your key
 ```
 
-**Soluciones:**
+**Solutions:**
 
-#### Sin API key
-1. Verifica que tengas un archivo `.env`
-2. Agrega tu API key de AURA:
+#### No API key
+1. Verify you have a `.env` file
+2. Add your AURA API key:
    ```env
-   VITE_AURA_API_KEY=tu_api_key_aqui
+   VITE_AURA_API_KEY=your_api_key_here
    ```
-3. Reinicia el servidor de desarrollo
+3. Restart the development server
 
-#### API key inválida
-1. Verifica que la API key sea correcta
-2. Confirma que no tenga espacios extra
-3. Regenera la API key si es necesario
-4. Actualiza el archivo `.env`
+#### Invalid API key
+1. Verify the API key is correct
+2. Confirm it doesn't have extra spaces
+3. Regenerate the API key if necessary
+4. Update the `.env` file
 
-#### Rate limit excedido
-1. Espera unos minutos
-2. Reduce la frecuencia de mensajes
-3. Contacta soporte si persiste
+#### Rate limit exceeded
+1. Wait a few minutes
+2. Reduce message frequency
+3. Contact support if it persists
 
-#### Sin conexión a internet
-1. Verifica tu conexión
-2. Prueba otros sitios web
-3. Reinicia tu router si es necesario
+#### No internet connection
+1. Check your connection
+2. Try other websites
+3. Restart your router if necessary
 
-## 💻 Problemas de Desarrollo
+## 💻 Development Issues
 
-### Errores de compilación
+### Compilation errors
 
 **Error: "Cannot resolve dependency"**
 ```bash
-# Solución
+# Solution
 npm install
-# O específicamente
-npm install nombre-del-paquete
+# Or specifically
+npm install package-name
 ```
 
 **Error: "ESLint errors"**
 ```bash
-# Ver errores
+# View errors
 npm run lint
 
-# Corregir automáticamente
+# Fix automatically
 npm run lint:fix
 ```
 
 **Error: "TypeScript errors"**
 ```bash
-# Verificar tipos
+# Check types
 npx tsc --noEmit
 
-# Instalar tipos faltantes
-npm install --save-dev @types/nombre-del-paquete
+# Install missing types
+npm install --save-dev @types/package-name
 ```
 
-### Problemas de build
+### Build issues
 
 **Error: "Build failed"**
 ```bash
-# Limpiar build anterior
+# Clean previous build
 rm -rf dist
 
-# Reinstalar dependencias
+# Reinstall dependencies
 rm -rf node_modules
 npm install
 
-# Build de nuevo
+# Build again
 npm run build
 ```
 
 **Error: "Out of memory"**
 ```bash
-# Aumentar memoria de Node.js
+# Increase Node.js memory
 export NODE_OPTIONS="--max-old-space-size=4096"
 npm run build
 ```
 
-### Problemas de hot reload
+### Hot reload issues
 
-**Cambios no se reflejan:**
-1. Verifica que el servidor esté corriendo
-2. Recarga la página manualmente
-3. Reinicia el servidor de desarrollo
-4. Limpia cache del navegador
+**Changes not reflected:**
+1. Verify the server is running
+2. Manually reload the page
+3. Restart the development server
+4. Clear browser cache
 
-## 🌐 Problemas de Red y APIs
+## 🌐 Network and API Issues
 
-### APIs no responden
+### APIs not responding
 
 **CoinGecko API:**
 ```javascript
-// Verificar en consola
+// Check in console
 fetch('https://api.coingecko.com/api/v3/ping')
   .then(response => response.json())
   .then(data => console.log(data))
 ```
 
-**Soluciones:**
-1. Verifica tu conexión a internet
-2. Espera unos minutos (rate limiting)
-3. Verifica que las APIs estén funcionando
-4. Usa API keys si tienes límites
+**Solutions:**
+1. Check your internet connection
+2. Wait a few minutes (rate limiting)
+3. Verify that APIs are working
+4. Use API keys if you have limits
 
-### Datos no se actualizan
+### Data not updating
 
-**Portfolio no actualiza:**
-1. Haz clic en "Actualizar" en el portfolio
-2. Desconecta y vuelve a conectar el wallet
-3. Verifica que estés en la red correcta
-4. Recarga la página
+**Portfolio not updating:**
+1. Click "Update" in the portfolio
+2. Disconnect and reconnect the wallet
+3. Verify you're on the correct network
+4. Reload the page
 
-**Precios desactualizados:**
-1. Los precios se actualizan cada 30 segundos
-2. Usa el botón "Actualizar" para forzar actualización
-3. Verifica que las APIs de precios funcionen
+**Outdated prices:**
+1. Prices update every 30 seconds
+2. Use the "Update" button to force update
+3. Verify that price APIs are working
 
-## 📱 Problemas de Navegador
+## 📱 Browser Issues
 
 ### Chrome
 
-**Extensiones conflictivas:**
-1. Deshabilita extensiones temporalmente
-2. Usa modo incógnito para probar
-3. Identifica la extensión problemática
-4. Configura excepciones si es necesario
+**Conflicting extensions:**
+1. Temporarily disable extensions
+2. Use incognito mode to test
+3. Identify the problematic extension
+4. Configure exceptions if necessary
 
-**Cache corrupto:**
-1. Presiona Ctrl+Shift+R (hard refresh)
-2. Ve a Configuración > Privacidad > Limpiar datos
-3. Selecciona "Imágenes y archivos en caché"
-4. Haz clic en "Borrar datos"
+**Corrupted cache:**
+1. Press Ctrl+Shift+R (hard refresh)
+2. Go to Settings > Privacy > Clear data
+3. Select "Images and cached files"
+4. Click "Clear data"
 
 ### Firefox
 
-**Problemas de rendimiento:**
-1. Deshabilita extensiones innecesarias
-2. Reinicia Firefox
-3. Usa modo seguro para probar
-4. Actualiza Firefox a la última versión
+**Performance issues:**
+1. Disable unnecessary extensions
+2. Restart Firefox
+3. Use safe mode to test
+4. Update Firefox to the latest version
 
 ### Safari
 
-**Problemas de compatibilidad:**
-1. Actualiza Safari a la última versión
-2. Habilita JavaScript
-3. Deshabilita bloqueadores de contenido
-4. Limpia cache y cookies
+**Compatibility issues:**
+1. Update Safari to the latest version
+2. Enable JavaScript
+3. Disable content blockers
+4. Clear cache and cookies
 
 ### Edge
 
-**Problemas de Web3:**
-1. Actualiza Edge a la última versión
-2. Verifica que MetaMask esté instalado
-3. Habilita extensiones en modo privado
-4. Reinicia el navegador
+**Web3 issues:**
+1. Update Edge to the latest version
+2. Verify MetaMask is installed
+3. Enable extensions in private mode
+4. Restart the browser
 
-## 🔧 Problemas de Wallet
+## 🔧 Wallet Issues
 
-### Transacciones fallan
+### Transactions fail
 
 **Error: "Insufficient funds"**
-1. Verifica que tengas suficiente ETH para gas
-2. Reduce el gas limit si es posible
-3. Aumenta el gas price si la red está congestionada
+1. Verify you have enough ETH for gas
+2. Reduce gas limit if possible
+3. Increase gas price if network is congested
 
 **Error: "Transaction rejected"**
-1. Asegúrate de confirmar en MetaMask
-2. Verifica que los parámetros sean correctos
-3. No canceles la transacción
+1. Make sure to confirm in MetaMask
+2. Verify parameters are correct
+3. Don't cancel the transaction
 
 **Error: "Nonce too low"**
-1. Espera a que la transacción anterior se confirme
-2. Reinicia MetaMask
-3. Usa una nueva cuenta si persiste
+1. Wait for the previous transaction to confirm
+2. Restart MetaMask
+3. Use a new account if it persists
 
-### Balance incorrecto
+### Incorrect balance
 
-**Balance no actualiza:**
-1. Espera unos minutos para confirmación
-2. Verifica la transacción en el explorador
-3. Recarga la página
-4. Actualiza MetaMask
+**Balance not updating:**
+1. Wait a few minutes for confirmation
+2. Verify the transaction in the explorer
+3. Reload the page
+4. Update MetaMask
 
-**Tokens no aparecen:**
-1. Agrega el token manualmente en MetaMask
-2. Verifica que uses la dirección correcta del contrato
-3. Confirma que el token sea ERC-20
+**Tokens not appearing:**
+1. Add the token manually in MetaMask
+2. Verify you're using the correct contract address
+3. Confirm the token is ERC-20
 
-## 🎨 Problemas de UI/UX
+## 🎨 UI/UX Issues
 
-### Diseño roto
+### Broken design
 
-**Estilos no cargan:**
-1. Verifica que TailwindCSS esté instalado
-2. Revisa la configuración de PostCSS
-3. Limpia cache del navegador
-4. Reinicia el servidor de desarrollo
+**Styles not loading:**
+1. Verify TailwindCSS is installed
+2. Check PostCSS configuration
+3. Clear browser cache
+4. Restart the development server
 
-**Componentes no renderizan:**
-1. Verifica errores en la consola
-2. Revisa imports de componentes
-3. Confirma que los props sean correctos
-4. Usa React DevTools para debugging
+**Components not rendering:**
+1. Check for errors in console
+2. Review component imports
+3. Confirm props are correct
+4. Use React DevTools for debugging
 
-### Responsividad
+### Responsiveness
 
-**Diseño no se adapta:**
-1. Verifica breakpoints de TailwindCSS
-2. Usa herramientas de desarrollador para probar
-3. Revisa CSS personalizado
-4. Confirma viewport meta tag
+**Design not adapting:**
+1. Verify TailwindCSS breakpoints
+2. Use developer tools to test
+3. Review custom CSS
+4. Confirm viewport meta tag
 
-## 📊 Problemas de Datos
+## 📊 Data Issues
 
-### Gráficos no cargan
+### Charts not loading
 
-**Recharts no renderiza:**
-1. Verifica que los datos estén en formato correcto
-2. Confirma que ResponsiveContainer tenga dimensiones
-3. Revisa errores en la consola
-4. Actualiza Recharts si es necesario
+**Recharts not rendering:**
+1. Verify data is in correct format
+2. Confirm ResponsiveContainer has dimensions
+3. Check for errors in console
+4. Update Recharts if necessary
 
-**Datos faltantes:**
-1. Verifica que las APIs respondan
-2. Confirma que los datos tengan la estructura esperada
-3. Agrega datos de fallback
-4. Revisa el manejo de estados de carga
+**Missing data:**
+1. Verify APIs are responding
+2. Confirm data has expected structure
+3. Add fallback data
+4. Review loading state handling
 
-### Cálculos incorrectos
+### Incorrect calculations
 
-**Valores de portfolio:**
-1. Verifica precios de tokens
-2. Confirma conversiones de unidades
-3. Revisa fórmulas de cálculo
-4. Actualiza datos manualmente
+**Portfolio values:**
+1. Verify token prices
+2. Confirm unit conversions
+3. Review calculation formulas
+4. Update data manually
 
-## 🔒 Problemas de Seguridad
+## 🔒 Security Issues
 
-### Advertencias de seguridad
+### Security warnings
 
-**"Not secure" en navegador:**
-1. Usa HTTPS en producción
-2. Verifica certificados SSL
-3. No uses HTTP para datos sensibles
+**"Not secure" in browser:**
+1. Use HTTPS in production
+2. Verify SSL certificates
+3. Don't use HTTP for sensitive data
 
-**Advertencias de MetaMask:**
-1. Lee cuidadosamente las advertencias
-2. Verifica direcciones de contratos
-3. No compartas claves privadas
-4. Usa solo sitios confiables
+**MetaMask warnings:**
+1. Read warnings carefully
+2. Verify contract addresses
+3. Don't share private keys
+4. Use only trusted sites
 
-### Validaciones fallan
+### Validations fail
 
-**Direcciones inválidas:**
+**Invalid addresses:**
 ```javascript
-// Verificar formato
-ethers.isAddress(address) // Debe retornar true
+// Check format
+ethers.isAddress(address) // Should return true
 ```
 
-**Montos inválidos:**
+**Invalid amounts:**
 ```javascript
-// Verificar formato numérico
+// Check numeric format
 const amount = parseFloat(input)
 if (isNaN(amount) || amount <= 0) {
-  throw new Error('Amount inválido')
+  throw new Error('Invalid amount')
 }
 ```
 
-## 🚀 Problemas de Performance
+## 🚀 Performance Issues
 
-### Aplicación lenta
+### Slow application
 
-**Diagnóstico:**
-1. Abre herramientas de desarrollador
-2. Ve a pestaña "Performance"
-3. Graba una sesión de uso
-4. Identifica cuellos de botella
+**Diagnosis:**
+1. Open developer tools
+2. Go to "Performance" tab
+3. Record a usage session
+4. Identify bottlenecks
 
-**Soluciones:**
-1. Optimiza imágenes y assets
-2. Implementa lazy loading
-3. Usa React.memo para componentes
-4. Optimiza re-renders
+**Solutions:**
+1. Optimize images and assets
+2. Implement lazy loading
+3. Use React.memo for components
+4. Optimize re-renders
 
-### Memoria alta
+### High memory
 
-**Identificar memory leaks:**
-1. Usa herramientas de profiling
-2. Verifica event listeners no removidos
-3. Confirma que useEffect se limpie
-4. Revisa referencias circulares
+**Identify memory leaks:**
+1. Use profiling tools
+2. Check for unremoved event listeners
+3. Confirm useEffect cleanup
+4. Review circular references
 
-## 📝 Logging y Debugging
+## 📝 Logging and Debugging
 
-### Habilitar logs detallados
+### Enable detailed logs
 
 ```javascript
-// En desarrollo
+// In development
 if (process.env.NODE_ENV === 'development') {
   console.log('Debug info:', data)
 }
 ```
 
-### Usar React DevTools
+### Use React DevTools
 
-1. Instala React DevTools extension
-2. Inspecciona componentes
-3. Revisa props y state
-4. Identifica re-renders innecesarios
+1. Install React DevTools extension
+2. Inspect components
+3. Review props and state
+4. Identify unnecessary re-renders
 
 ### Network debugging
 
-1. Abre herramientas de desarrollador
-2. Ve a pestaña "Network"
-3. Revisa requests fallidos
-4. Verifica headers y respuestas
+1. Open developer tools
+2. Go to "Network" tab
+3. Review failed requests
+4. Verify headers and responses
 
-## 🆘 Cuándo Contactar Soporte
+## 🆘 When to Contact Support
 
-### Contacta soporte si:
+### Contact support if:
 
-- **Errores críticos** que impiden el uso
-- **Pérdida de datos** o transacciones
-- **Problemas de seguridad** sospechosos
-- **Bugs reproducibles** con pasos claros
+- **Critical errors** that prevent usage
+- **Data loss** or transactions
+- **Security issues** that are suspicious
+- **Reproducible bugs** with clear steps
 
-### Información para incluir:
+### Information to include:
 
-1. **Descripción del problema**
-2. **Pasos para reproducir**
-3. **Capturas de pantalla**
-4. **Logs de consola**
-5. **Navegador y versión**
-6. **Sistema operativo**
+1. **Problem description**
+2. **Steps to reproduce**
+3. **Screenshots**
+4. **Console logs**
+5. **Browser and version**
+6. **Operating system**
 
-### Canales de soporte:
+### Support channels:
 
 - **Email**: support@cryptomentor.ai
-- **Discord**: [Comunidad](https://discord.gg/cryptomentor)
-- **GitHub**: [Issues](https://github.com/tu-usuario/crypto-mentor-ai/issues)
+- **Discord**: [Community](https://discord.gg/cryptomentor)
+- **GitHub**: [Issues](https://github.com/your-username/crypto-mentor-ai/issues)
 
-## 🔧 Herramientas de Debugging
+## 🔧 Debugging Tools
 
-### Extensiones útiles:
+### Useful extensions:
 
 - **React Developer Tools**
-- **Redux DevTools** (si usas Redux)
+- **Redux DevTools** (if using Redux)
 - **MetaMask**
 - **Web3 Developer Tools**
 
-### Comandos útiles:
+### Useful commands:
 
 ```bash
-# Verificar dependencias
+# Check dependencies
 npm audit
 
-# Limpiar cache
+# Clear cache
 npm cache clean --force
 
-# Verificar versiones
+# Check versions
 npm outdated
 
 # Debug mode
 DEBUG=* npm run dev
 ```
 
-### Scripts de utilidad:
+### Utility scripts:
 
 ```bash
-# Verificar configuración
+# Check configuration
 npm run setup
 
-# Limpiar build
+# Clean build
 npm run clean
 
-# Verificar linting
+# Check linting
 npm run lint
 
 # Tests
@@ -475,4 +475,4 @@ npm test
 
 ---
 
-Si sigues teniendo problemas después de revisar esta guía, no dudes en contactar soporte con toda la información relevante. 🚀
+If you continue to have issues after reviewing this guide, don't hesitate to contact support with all relevant information. 🚀

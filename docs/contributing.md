@@ -1,134 +1,134 @@
-# Guía de Contribución - CryptoMentor AI
+# Contributing Guide - CryptoMentor AI
 
-¡Gracias por tu interés en contribuir a CryptoMentor AI! Esta guía te ayudará a empezar y entender cómo contribuir efectivamente al proyecto.
+Thank you for your interest in contributing to CryptoMentor AI! This guide will help you get started and understand how to contribute effectively to the project.
 
-## 🚀 Cómo Contribuir
+## 🚀 How to Contribute
 
-### 1. Fork del Proyecto
+### 1. Fork the Project
 ```bash
-# Fork el repositorio en GitHub
-# Luego clona tu fork
-git clone https://github.com/tu-usuario/crypto-mentor-ai.git
+# Fork the repository on GitHub
+# Then clone your fork
+git clone https://github.com/your-username/crypto-mentor-ai.git
 cd crypto-mentor-ai
 ```
 
-### 2. Configurar el Entorno
+### 2. Set Up Environment
 ```bash
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Configurar variables de entorno
+# Configure environment variables
 cp env.example .env
-# Edita .env con tus API keys
+# Edit .env with your API keys
 
-# Ejecutar en modo desarrollo
+# Run in development mode
 npm run dev
 ```
 
-### 3. Crear una Rama
+### 3. Create a Branch
 ```bash
-# Crear rama para tu feature
-git checkout -b feature/nueva-funcionalidad
+# Create branch for your feature
+git checkout -b feature/new-functionality
 
-# O para bugfix
-git checkout -b fix/correccion-bug
+# Or for bugfix
+git checkout -b fix/bug-correction
 ```
 
-### 4. Hacer Cambios
-- Sigue las convenciones de código
-- Agrega tests si es necesario
-- Actualiza documentación
-- Commit con mensajes descriptivos
+### 4. Make Changes
+- Follow code conventions
+- Add tests if necessary
+- Update documentation
+- Commit with descriptive messages
 
 ### 5. Pull Request
 ```bash
-# Push de tu rama
-git push origin feature/nueva-funcionalidad
+# Push your branch
+git push origin feature/new-functionality
 
-# Crear Pull Request en GitHub
+# Create Pull Request on GitHub
 ```
 
-## 📋 Tipos de Contribuciones
+## 📋 Types of Contributions
 
-### 🐛 Reportar Bugs
-1. Verifica que no esté reportado
-2. Usa el template de bug report
-3. Incluye pasos para reproducir
-4. Adjunta logs y capturas
+### 🐛 Report Bugs
+1. Check that it hasn't been reported
+2. Use the bug report template
+3. Include steps to reproduce
+4. Attach logs and screenshots
 
-### ✨ Sugerir Funcionalidades
-1. Verifica que no esté sugerido
-2. Usa el template de feature request
-3. Explica el caso de uso
-4. Considera implementación
+### ✨ Suggest Features
+1. Check that it hasn't been suggested
+2. Use the feature request template
+3. Explain the use case
+4. Consider implementation
 
-### 🔧 Mejorar Código
-1. Identifica áreas de mejora
-2. Sigue patrones existentes
-3. Agrega tests
-4. Documenta cambios
+### 🔧 Improve Code
+1. Identify areas for improvement
+2. Follow existing patterns
+3. Add tests
+4. Document changes
 
-### 📚 Mejorar Documentación
-1. Identifica contenido desactualizado
-2. Mejora claridad
-3. Agrega ejemplos
-4. Corrige errores
+### 📚 Improve Documentation
+1. Identify outdated content
+2. Improve clarity
+3. Add examples
+4. Fix errors
 
-## 🎯 Áreas de Contribución
+## 🎯 Contribution Areas
 
-### Prioridad Alta
-- **Testing**: Agregar tests unitarios e integración
-- **Performance**: Optimizar rendimiento
-- **Accessibility**: Mejorar accesibilidad
-- **Mobile**: Optimizar para móviles
+### High Priority
+- **Testing**: Add unit and integration tests
+- **Performance**: Optimize performance
+- **Accessibility**: Improve accessibility
+- **Mobile**: Optimize for mobile
 
-### Prioridad Media
-- **New Features**: Funcionalidades nuevas
-- **UI/UX**: Mejoras de interfaz
-- **Documentation**: Documentación técnica
-- **Internationalization**: Soporte multi-idioma
+### Medium Priority
+- **New Features**: New functionality
+- **UI/UX**: Interface improvements
+- **Documentation**: Technical documentation
+- **Internationalization**: Multi-language support
 
-### Prioridad Baja
-- **Refactoring**: Mejoras de código
-- **Optimization**: Optimizaciones menores
-- **Style**: Mejoras de estilo
-- **Examples**: Ejemplos de uso
+### Low Priority
+- **Refactoring**: Code improvements
+- **Optimization**: Minor optimizations
+- **Style**: Style improvements
+- **Examples**: Usage examples
 
-## 🛠️ Estándares de Código
+## 🛠️ Code Standards
 
 ### JavaScript/React
 ```javascript
-// Usar const/let, no var
+// Use const/let, not var
 const MyComponent = ({ prop1, prop2 }) => {
-  // Usar hooks correctamente
+  // Use hooks correctly
   const [state, setState] = useState(initialState)
   
-  // Funciones con nombres descriptivos
+  // Functions with descriptive names
   const handleClick = () => {
-    // Lógica aquí
+    // Logic here
   }
   
   return (
     <div className="component-name">
-      {/* JSX aquí */}
+      {/* JSX here */}
     </div>
   )
 }
 ```
 
 ### Naming Conventions
-- **Componentes**: PascalCase (`MyComponent`)
-- **Funciones**: camelCase (`handleClick`)
+- **Components**: PascalCase (`MyComponent`)
+- **Functions**: camelCase (`handleClick`)
 - **Variables**: camelCase (`userData`)
-- **Constantes**: UPPER_SNAKE_CASE (`API_BASE_URL`)
-- **Archivos**: kebab-case (`my-component.jsx`)
+- **Constants**: UPPER_SNAKE_CASE (`API_BASE_URL`)
+- **Files**: kebab-case (`my-component.jsx`)
 
 ### CSS/TailwindCSS
 ```css
-/* Usar clases de TailwindCSS */
+/* Use TailwindCSS classes */
 <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
 
-/* Para estilos personalizados */
+/* For custom styles */
 .custom-class {
   @apply bg-primary-500 text-white;
 }
@@ -136,25 +136,25 @@ const MyComponent = ({ prop1, prop2 }) => {
 
 ### Imports
 ```javascript
-// Orden de imports
-// 1. React y librerías externas
+// Import order
+// 1. React and external libraries
 import React, { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 
-// 2. Componentes internos
+// 2. Internal components
 import Dashboard from './components/Dashboard'
 import { useWallet } from './contexts/WalletContext'
 
-// 3. Servicios y utilidades
+// 3. Services and utilities
 import { walletService } from './services/walletService'
 
-// 4. Estilos
+// 4. Styles
 import './MyComponent.css'
 ```
 
 ## 🧪 Testing
 
-### Escribir Tests
+### Writing Tests
 ```javascript
 // Component.test.jsx
 import { render, screen } from '@testing-library/react'
@@ -177,12 +177,12 @@ describe('MyComponent', () => {
 })
 ```
 
-### Ejecutar Tests
+### Running Tests
 ```bash
-# Todos los tests
+# All tests
 npm test
 
-# Tests en modo watch
+# Tests in watch mode
 npm run test:watch
 
 # Coverage
@@ -191,160 +191,160 @@ npm run test:coverage
 
 ## 📝 Commits
 
-### Formato de Mensajes
+### Message Format
 ```
-type(scope): descripción breve
+type(scope): brief description
 
-Descripción más detallada si es necesario
+More detailed description if necessary
 
-- Cambio específico 1
-- Cambio específico 2
+- Specific change 1
+- Specific change 2
 
 Fixes #123
 ```
 
-### Tipos de Commit
-- `feat`: Nueva funcionalidad
-- `fix`: Corrección de bug
-- `docs`: Cambios en documentación
-- `style`: Cambios de formato/estilo
-- `refactor`: Refactoring de código
-- `test`: Agregar o modificar tests
-- `chore`: Cambios en build/configuración
+### Commit Types
+- `feat`: New functionality
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Format/style changes
+- `refactor`: Code refactoring
+- `test`: Add or modify tests
+- `chore`: Build/configuration changes
 
-### Ejemplos
+### Examples
 ```bash
-git commit -m "feat(portfolio): agregar análisis de riesgo"
-git commit -m "fix(chat): corregir error de conexión con AURA"
-git commit -m "docs(api): actualizar documentación de endpoints"
+git commit -m "feat(portfolio): add risk analysis"
+git commit -m "fix(chat): fix AURA connection error"
+git commit -m "docs(api): update endpoint documentation"
 ```
 
 ## 🔄 Pull Request Process
 
-### Antes de Crear PR
-1. **Actualiza tu fork** con los últimos cambios
-2. **Ejecuta tests** para asegurar que todo funciona
-3. **Revisa tu código** para errores obvios
-4. **Actualiza documentación** si es necesario
+### Before Creating PR
+1. **Update your fork** with latest changes
+2. **Run tests** to ensure everything works
+3. **Review your code** for obvious errors
+4. **Update documentation** if necessary
 
-### Template de PR
+### PR Template
 ```markdown
-## Descripción
-Breve descripción de los cambios
+## Description
+Brief description of changes
 
-## Tipo de Cambio
+## Type of Change
 - [ ] Bug fix
-- [ ] Nueva funcionalidad
+- [ ] New functionality
 - [ ] Breaking change
-- [ ] Documentación
+- [ ] Documentation
 
 ## Testing
-- [ ] Tests unitarios agregados/actualizados
-- [ ] Tests de integración agregados/actualizados
-- [ ] Tests manuales ejecutados
+- [ ] Unit tests added/updated
+- [ ] Integration tests added/updated
+- [ ] Manual tests executed
 
-## Screenshots (si aplica)
-[Agregar capturas de pantalla]
+## Screenshots (if applicable)
+[Add screenshots]
 
 ## Checklist
-- [ ] Código sigue estándares del proyecto
-- [ ] Self-review completado
-- [ ] Documentación actualizada
-- [ ] Tests pasan
+- [ ] Code follows project standards
+- [ ] Self-review completed
+- [ ] Documentation updated
+- [ ] Tests pass
 ```
 
 ### Review Process
-1. **Automated checks** deben pasar
-2. **Review de código** por maintainers
-3. **Feedback** y cambios si es necesario
-4. **Approval** y merge
+1. **Automated checks** must pass
+2. **Code review** by maintainers
+3. **Feedback** and changes if necessary
+4. **Approval** and merge
 
-## 🏗️ Arquitectura del Proyecto
+## 🏗️ Project Architecture
 
-### Estructura de Carpetas
+### Folder Structure
 ```
 src/
-├── components/          # Componentes React
-│   ├── common/         # Componentes reutilizables
-│   ├── features/       # Componentes específicos
-│   └── layout/         # Componentes de layout
+├── components/          # React components
+│   ├── common/         # Reusable components
+│   ├── features/       # Specific components
+│   └── layout/         # Layout components
 ├── contexts/           # React Contexts
-├── services/           # Servicios y APIs
+├── services/           # Services and APIs
 ├── hooks/              # Custom hooks
-├── utils/              # Utilidades
-├── constants/          # Constantes
+├── utils/              # Utilities
+├── constants/          # Constants
 └── types/              # TypeScript types
 ```
 
-### Patrones de Diseño
-- **Component Composition**: Composición sobre herencia
-- **Custom Hooks**: Lógica reutilizable
-- **Context API**: Estado global
-- **Service Layer**: Separación de lógica de negocio
+### Design Patterns
+- **Component Composition**: Composition over inheritance
+- **Custom Hooks**: Reusable logic
+- **Context API**: Global state
+- **Service Layer**: Business logic separation
 
-## 🎨 Diseño y UI
+## 🎨 Design and UI
 
 ### Design System
-- **Colores**: Usar tokens de TailwindCSS
-- **Tipografía**: Sistema de tipografía consistente
-- **Espaciado**: Usar scale de TailwindCSS
-- **Componentes**: Seguir patrones existentes
+- **Colors**: Use TailwindCSS tokens
+- **Typography**: Consistent typography system
+- **Spacing**: Use TailwindCSS scale
+- **Components**: Follow existing patterns
 
 ### Responsive Design
 ```jsx
 // Mobile first approach
 <div className="flex flex-col md:flex-row lg:flex-col">
   <div className="w-full md:w-1/2 lg:w-full">
-    {/* Contenido */}
+    {/* Content */}
   </div>
 </div>
 ```
 
 ### Accessibility
-- **Semantic HTML**: Usar elementos apropiados
-- **ARIA labels**: Para elementos interactivos
-- **Keyboard navigation**: Soporte completo de teclado
-- **Color contrast**: Cumplir WCAG guidelines
+- **Semantic HTML**: Use appropriate elements
+- **ARIA labels**: For interactive elements
+- **Keyboard navigation**: Full keyboard support
+- **Color contrast**: Meet WCAG guidelines
 
-## 🔒 Seguridad
+## 🔒 Security
 
-### Principios de Seguridad
-- **Never trust client**: Validación en servidor
-- **Input validation**: Validar todas las entradas
-- **Secure defaults**: Configuración segura por defecto
-- **Principle of least privilege**: Mínimos permisos
+### Security Principles
+- **Never trust client**: Server-side validation
+- **Input validation**: Validate all inputs
+- **Secure defaults**: Secure configuration by default
+- **Principle of least privilege**: Minimum permissions
 
 ### Web3 Security
-- **No private keys**: Nunca almacenar claves privadas
-- **Address validation**: Validar direcciones
-- **Contract verification**: Verificar contratos
-- **User warnings**: Advertencias de seguridad
+- **No private keys**: Never store private keys
+- **Address validation**: Validate addresses
+- **Contract verification**: Verify contracts
+- **User warnings**: Security warnings
 
 ## 📊 Performance
 
-### Optimizaciones
-- **Code splitting**: Cargar código cuando se necesita
-- **Lazy loading**: Cargar componentes bajo demanda
-- **Memoization**: Usar React.memo y useMemo
-- **Bundle analysis**: Analizar tamaño de bundle
+### Optimizations
+- **Code splitting**: Load code when needed
+- **Lazy loading**: Load components on demand
+- **Memoization**: Use React.memo and useMemo
+- **Bundle analysis**: Analyze bundle size
 
 ### Monitoring
-- **Web Vitals**: Monitorear métricas de performance
-- **Error tracking**: Rastrear errores en producción
-- **Analytics**: Métricas de uso
-- **Performance budgets**: Límites de performance
+- **Web Vitals**: Monitor performance metrics
+- **Error tracking**: Track errors in production
+- **Analytics**: Usage metrics
+- **Performance budgets**: Performance limits
 
 ## 🌍 Internationalization
 
-### Preparación para i18n
+### i18n Preparation
 ```javascript
-// Usar keys para texto
+// Use keys for text
 const messages = {
-  'welcome.title': 'Bienvenido a CryptoMentor AI',
-  'welcome.subtitle': 'Tu asistente de trading Web3'
+  'welcome.title': 'Welcome to CryptoMentor AI',
+  'welcome.subtitle': 'Your Web3 trading assistant'
 }
 
-// Componente preparado para i18n
+// Component prepared for i18n
 const Welcome = () => (
   <div>
     <h1>{t('welcome.title')}</h1>
@@ -382,36 +382,36 @@ jobs:
         run: npm run build
 ```
 
-## 📞 Comunicación
+## 📞 Communication
 
-### Canales
-- **GitHub Issues**: Bugs y feature requests
-- **GitHub Discussions**: Discusiones generales
-- **Discord**: Chat en tiempo real
-- **Email**: Contacto directo
+### Channels
+- **GitHub Issues**: Bugs and feature requests
+- **GitHub Discussions**: General discussions
+- **Discord**: Real-time chat
+- **Email**: Direct contact
 
 ### Code of Conduct
-- **Respeto**: Tratar a todos con respeto
-- **Inclusión**: Ambiente inclusivo para todos
-- **Colaboración**: Trabajar juntos constructivamente
-- **Profesionalismo**: Comportamiento profesional
+- **Respect**: Treat everyone with respect
+- **Inclusion**: Inclusive environment for all
+- **Collaboration**: Work together constructively
+- **Professionalism**: Professional behavior
 
-## 🏆 Reconocimiento
+## 🏆 Recognition
 
 ### Contributors
-- **GitHub Contributors**: Reconocimiento automático
-- **README**: Lista de contributors principales
-- **Release Notes**: Créditos en releases
-- **Community**: Reconocimiento en comunidad
+- **GitHub Contributors**: Automatic recognition
+- **README**: List of main contributors
+- **Release Notes**: Credits in releases
+- **Community**: Community recognition
 
-### Incentivos
-- **Swag**: Merchandise para contributors
-- **Certificates**: Certificados de contribución
-- **Mentorship**: Oportunidades de mentoría
-- **Career**: Referencias y networking
+### Incentives
+- **Swag**: Merchandise for contributors
+- **Certificates**: Contribution certificates
+- **Mentorship**: Mentorship opportunities
+- **Career**: References and networking
 
 ---
 
-¡Gracias por contribuir a CryptoMentor AI! Tu contribución hace que el proyecto sea mejor para todos. 🚀
+Thank you for contributing to CryptoMentor AI! Your contribution makes the project better for everyone. 🚀
 
-¿Tienes preguntas? ¡Únete a nuestro Discord o crea un issue en GitHub!
+Have questions? Join our Discord or create an issue on GitHub!

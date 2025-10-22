@@ -1,19 +1,19 @@
 # API Reference - CryptoMentor AI
 
-Este documento describe todas las APIs, servicios y endpoints utilizados en CryptoMentor AI.
+This document describes all APIs, services and endpoints used in CryptoMentor AI.
 
-## 📋 Índice de APIs
+## 📋 API Index
 
-### APIs Externas
-- [AdEx AURA API](#adex-aura-api) - Inteligencia artificial para análisis crypto
-- [CoinGecko API](#coingecko-api) - Datos de precios y mercado
-- [Alchemy API](#alchemy-api) - Datos de blockchain
-- [Infura API](#infura-api) - Nodos de Ethereum
+### External APIs
+- [AdEx AURA API](#adex-aura-api) - Artificial intelligence for crypto analysis
+- [CoinGecko API](#coingecko-api) - Price and market data
+- [Alchemy API](#alchemy-api) - Blockchain data
+- [Infura API](#infura-api) - Ethereum nodes
 
-### Servicios Internos
-- [auraAPI.js](#auraapijs) - Servicio de integración con AURA
-- [walletService.js](#walletservicejs) - Servicio de wallet y Web3
-- [marketData.js](#marketdatajs) - Servicio de datos de mercado
+### Internal Services
+- [auraAPI.js](#auraapijs) - AURA integration service
+- [walletService.js](#walletservicejs) - Wallet and Web3 service
+- [marketData.js](#marketdatajs) - Market data service
 
 ## 🤖 AdEx AURA API
 
@@ -22,14 +22,14 @@ Este documento describe todas las APIs, servicios y endpoints utilizados en Cryp
 https://api.adex.network/aura/v1
 ```
 
-### Autenticación
+### Authentication
 ```javascript
 Authorization: Bearer YOUR_AURA_API_KEY
 ```
 
 ### Endpoints
 
-#### 1. Chat con IA
+#### 1. AI Chat
 ```http
 POST /chat
 ```
@@ -37,7 +37,7 @@ POST /chat
 **Request Body:**
 ```json
 {
-  "message": "¿Cómo está mi portfolio?",
+  "message": "How is my portfolio?",
   "context": {
     "user_type": "crypto_enthusiast",
     "experience_level": "intermediate",
@@ -217,7 +217,7 @@ POST /alerts/smart
 }
 ```
 
-### Códigos de Error
+### Error Codes
 ```json
 {
   "400": "Bad Request - Parámetros inválidos",

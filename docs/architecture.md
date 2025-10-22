@@ -1,19 +1,19 @@
-# Arquitectura del Sistema - CryptoMentor AI
+# System Architecture - CryptoMentor AI
 
-Este documento describe la arquitectura técnica de CryptoMentor AI, incluyendo la estructura del código, patrones de diseño y decisiones arquitectónicas.
+This document describes the technical architecture of CryptoMentor AI, including code structure, design patterns and architectural decisions.
 
-## 🏗️ Arquitectura General
+## 🏗️ General Architecture
 
-### Patrón de Arquitectura
-CryptoMentor AI utiliza una **arquitectura de frontend moderno** basada en React con las siguientes características:
+### Architecture Pattern
+CryptoMentor AI uses a **modern frontend architecture** based on React with the following characteristics:
 
-- **Single Page Application (SPA)**: Navegación sin recarga de página
-- **Component-Based Architecture**: Componentes reutilizables y modulares
-- **Context API**: Gestión de estado global sin Redux
-- **Service Layer**: Separación de lógica de negocio
-- **Progressive Enhancement**: Funciona sin JavaScript habilitado
+- **Single Page Application (SPA)**: Navigation without page reload
+- **Component-Based Architecture**: Reusable and modular components
+- **Context API**: Global state management without Redux
+- **Service Layer**: Business logic separation
+- **Progressive Enhancement**: Works without JavaScript enabled
 
-### Diagrama de Arquitectura
+### Architecture Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -43,45 +43,45 @@ CryptoMentor AI utiliza una **arquitectura de frontend moderno** basada en React
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 📁 Estructura del Código
+## 📁 Code Structure
 
-### Organización de Carpetas
+### Folder Organization
 
 ```
 src/
-├── components/              # Componentes React reutilizables
-│   ├── Dashboard.jsx       # Dashboard principal
-│   ├── Portfolio.jsx       # Gestión de portfolio
-│   ├── ChatInterface.jsx   # Chat con IA
-│   ├── MarketOverview.jsx  # Vista de mercado
-│   ├── AlertsPanel.jsx     # Sistema de alertas
-│   ├── EducationSection.jsx # Centro educativo
-│   ├── Header.jsx          # Navegación principal
-│   ├── LoadingScreen.jsx   # Pantalla de carga
-│   ├── WalletConnect.jsx   # Conexión de wallet
-│   └── ErrorBoundary.jsx   # Manejo de errores
-├── contexts/               # Gestión de estado global
-│   ├── WalletContext.jsx   # Estado del wallet Web3
-│   └── AuraContext.jsx     # Estado de IA AURA
-├── services/               # Lógica de negocio y APIs
-│   ├── auraAPI.js         # Integración con AdEx AURA
-│   ├── walletService.js    # Operaciones Web3
-│   └── marketData.js       # Datos de mercado
-├── App.jsx                # Componente raíz
-├── main.jsx               # Punto de entrada
-└── index.css              # Estilos globales
+├── components/              # Reusable React components
+│   ├── Dashboard.jsx       # Main dashboard
+│   ├── Portfolio.jsx       # Portfolio management
+│   ├── ChatInterface.jsx   # AI chat
+│   ├── MarketOverview.jsx  # Market view
+│   ├── AlertsPanel.jsx     # Alert system
+│   ├── EducationSection.jsx # Education center
+│   ├── Header.jsx          # Main navigation
+│   ├── LoadingScreen.jsx   # Loading screen
+│   ├── WalletConnect.jsx   # Wallet connection
+│   └── ErrorBoundary.jsx   # Error handling
+├── contexts/               # Global state management
+│   ├── WalletContext.jsx   # Web3 wallet state
+│   └── AuraContext.jsx     # AURA AI state
+├── services/               # Business logic and APIs
+│   ├── auraAPI.js         # AdEx AURA integration
+│   ├── walletService.js    # Web3 operations
+│   └── marketData.js       # Market data
+├── App.jsx                # Root component
+├── main.jsx               # Entry point
+└── index.css              # Global styles
 ```
 
-### Principios de Organización
+### Organization Principles
 
-1. **Separación de Responsabilidades**: Cada archivo tiene una responsabilidad específica
-2. **Cohesión Alta**: Componentes relacionados están cerca
-3. **Acoplamiento Bajo**: Dependencias mínimas entre módulos
-4. **Reutilización**: Componentes y servicios reutilizables
+1. **Separation of Responsibilities**: Each file has a specific responsibility
+2. **High Cohesion**: Related components are close together
+3. **Low Coupling**: Minimal dependencies between modules
+4. **Reusability**: Reusable components and services
 
-## 🧩 Componentes React
+## 🧩 React Components
 
-### Jerarquía de Componentes
+### Component Hierarchy
 
 ```
 App
@@ -98,9 +98,9 @@ App
 │               └── EducationSection
 ```
 
-### Patrones de Componentes
+### Component Patterns
 
-#### 1. Functional Components con Hooks
+#### 1. Functional Components with Hooks
 ```javascript
 const Component = () => {
   const [state, setState] = useState(initialState)
@@ -116,7 +116,7 @@ const Component = () => {
 
 #### 2. Compound Components
 ```javascript
-// Ejemplo: Dashboard con pestañas
+// Example: Dashboard with tabs
 <Dashboard>
   <TabPanel id="overview">
     <MarketOverview />
@@ -136,7 +136,7 @@ const Component = () => {
 </DataProvider>
 ```
 
-## 🔄 Gestión de Estado
+## 🔄 State Management
 
 ### Context API Pattern
 
@@ -336,7 +336,7 @@ const rateLimiter = {
 
 ## 📊 Performance
 
-### Optimización de Rendering
+### Optimization de Rendering
 
 ```javascript
 // React.memo para componentes puros
@@ -480,7 +480,7 @@ getTTFB(console.log)
 4. **Offline Support**: Funcionalidad sin conexión
 5. **Real-time**: WebSockets para datos en tiempo real
 
-### Escalabilidad
+### Scalability
 
 - **Horizontal Scaling**: Múltiples instancias
 - **Database Sharding**: Particionado de datos

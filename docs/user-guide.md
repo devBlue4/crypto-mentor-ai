@@ -1,329 +1,329 @@
-# Guía de Usuario - CryptoMentor AI
+# User Guide - CryptoMentor AI
 
-¡Bienvenido a CryptoMentor AI! Esta guía te ayudará a aprovechar al máximo todas las funcionalidades de tu asistente inteligente de trading Web3.
+Welcome to CryptoMentor AI! This guide will help you make the most of all the features of your intelligent Web3 trading assistant.
 
-## 🚀 Primeros Pasos
+## 🚀 Getting Started
 
-### Conectar tu Wallet
+### Connect Your Wallet
 
-1. **Instala MetaMask** (si no lo tienes):
-   - Ve a [metamask.io](https://metamask.io/download/)
-   - Descarga la extensión para tu navegador
-   - Sigue las instrucciones para crear tu wallet
+1. **Install MetaMask** (if you don't have it):
+   - Go to [metamask.io](https://metamask.io/download/)
+   - Download the extension for your browser
+   - Follow the instructions to create your wallet
 
-2. **Conecta tu Wallet**:
-   - Haz clic en "Conectar Wallet" en la esquina superior derecha
-   - Selecciona tu cuenta en MetaMask
-   - Confirma la conexión
+2. **Connect Your Wallet**:
+   - Click "Connect Wallet" in the top right corner
+   - Select your account in MetaMask
+   - Confirm the connection
 
-3. **Verifica la Conexión**:
-   - Deberías ver tu dirección de wallet truncada
-   - El indicador verde confirma que estás conectado
+3. **Verify Connection**:
+   - You should see your truncated wallet address
+   - The green indicator confirms you are connected
 
-### Configurar tu Primera Alerta
+### Set Up Your First Alert
 
-1. Ve a la pestaña **"Alertas"**
-2. Haz clic en **"Nueva Alerta"**
-3. Configura:
-   - **Tipo**: Precio, Cambio %, o Volumen
-   - **Criptomoneda**: Selecciona el token
-   - **Condición**: Por encima o por debajo
-   - **Valor**: Ingresa el precio o porcentaje
-4. Haz clic en **"Crear Alerta"**
+1. Go to the **"Alerts"** tab
+2. Click **"New Alert"**
+3. Configure:
+   - **Type**: Price, Change %, or Volume
+   - **Cryptocurrency**: Select the token
+   - **Condition**: Above or below
+   - **Value**: Enter the price or percentage
+4. Click **"Create Alert"**
 
-## 📊 Dashboard Principal
+## 📊 Main Dashboard
 
-### Resumen del Mercado
+### Market Summary
 
-El dashboard te muestra:
+The dashboard shows you:
 
-- **Market Cap Total**: Capitalización total del mercado crypto
-- **Volumen 24h**: Volumen de trading en las últimas 24 horas
-- **Fear & Greed Index**: Sentimiento del mercado (0-100)
-- **Precio Bitcoin**: Precio actual y cambio de 24h
+- **Total Market Cap**: Total crypto market capitalization
+- **24h Volume**: Trading volume in the last 24 hours
+- **Fear & Greed Index**: Market sentiment (0-100)
+- **Bitcoin Price**: Current price and 24h change
 
-### Gráficos Interactivos
+### Interactive Charts
 
-- **Gráfico de Precios**: Evolución del precio de Bitcoin en 7 días
-- **Dominancia de Mercado**: Distribución de Bitcoin, Ethereum y otros
+- **Price Chart**: Bitcoin price evolution over 7 days
+- **Market Dominance**: Distribution of Bitcoin, Ethereum and others
 
-### Noticias del Mercado
+### Market News
 
-- Artículos relevantes del ecosistema crypto
-- Análisis de sentimiento (positivo, negativo, neutral)
-- Fuentes confiables y fechas de publicación
+- Relevant articles from the crypto ecosystem
+- Sentiment analysis (positive, negative, neutral)
+- Reliable sources and publication dates
 
-## 💼 Gestión de Portfolio
+## 💼 Portfolio Management
 
-### Ver tu Portfolio
+### View Your Portfolio
 
-1. Ve a la pestaña **"Portfolio"**
-2. Si tu wallet está conectado, verás:
-   - **Valor Total**: Valor en USD de todos tus activos
-   - **Balance ETH**: Cantidad de Ethereum en tu wallet
-   - **Tokens**: Lista de todos tus tokens ERC-20
+1. Go to the **"Portfolio"** tab
+2. If your wallet is connected, you'll see:
+   - **Total Value**: USD value of all your assets
+   - **ETH Balance**: Amount of Ethereum in your wallet
+   - **Tokens**: List of all your ERC-20 tokens
 
-### Análisis con IA
+### AI Analysis
 
-AURA analiza automáticamente tu portfolio y te proporciona:
+AURA automatically analyzes your portfolio and provides:
 
-- **Score de Diversidad**: Qué tan diversificado está tu portfolio (0-10)
-- **Nivel de Riesgo**: Bajo, Medio o Alto
-- **Recomendaciones**: Sugerencias personalizadas para optimizar
+- **Diversification Score**: How diversified your portfolio is (0-10)
+- **Risk Level**: Low, Medium or High
+- **Recommendations**: Personalized suggestions to optimize
 
-### Interpretar las Recomendaciones
+### Interpreting Recommendations
 
-- **Diversificación**: "Considera aumentar exposición a Bitcoin"
-- **Gestión de Riesgo**: "Reduce concentración en un solo token"
-- **Liquidez**: "Agrega más stablecoins para liquidez"
+- **Diversification**: "Consider increasing exposure to Bitcoin"
+- **Risk Management**: "Reduce concentration in a single token"
+- **Liquidity**: "Add more stablecoins for liquidity"
 
-## 🤖 Chat con AdEx AURA
+## 🤖 Chat with AdEx AURA
 
-### Cómo Usar el Chat
+### How to Use the Chat
 
-1. Ve a la pestaña **"Chat IA"**
-2. Escribe tu pregunta en el campo de texto
-3. Presiona Enter o haz clic en "Enviar"
-4. AdEx AURA responderá con análisis y recomendaciones
+1. Go to the **"AI Chat"** tab
+2. Type your question in the text field
+3. Press Enter or click "Send"
+4. AdEx AURA will respond with analysis and recommendations
 
-### Tipos de Preguntas
+### Types of Questions
 
-#### Análisis de Mercado
+#### Market Analysis
 ```
-"¿Cómo está el mercado hoy?"
-"¿Qué criptomonedas recomiendas?"
-"¿Cuándo es buen momento para comprar Bitcoin?"
-```
-
-#### Análisis de Portfolio
-```
-"Analiza mi portfolio"
-"¿Está bien diversificado mi portfolio?"
-"¿Qué cambios me recomiendas?"
+"How is the market today?"
+"What cryptocurrencies do you recommend?"
+"When is a good time to buy Bitcoin?"
 ```
 
-#### Educación
+#### Portfolio Analysis
 ```
-"Explica qué es DeFi"
-"¿Cómo funciona el staking?"
-"¿Qué es yield farming?"
-```
-
-#### Estrategias de Trading
-```
-"Dame una estrategia de DCA"
-"¿Cómo gestiono el riesgo?"
-"¿Cuándo debería tomar ganancias?"
+"Analyze my portfolio"
+"Is my portfolio well diversified?"
+"What changes do you recommend?"
 ```
 
-### Características del Chat
+#### Education
+```
+"Explain what DeFi is"
+"How does staking work?"
+"What is yield farming?"
+```
 
-- **Contexto Personalizado**: AdEx AURA conoce tu portfolio
-- **Análisis Detallado**: Respuestas con fundamentos técnicos
-- **Recomendaciones Accionables**: Sugerencias específicas
-- **Historial**: Guarda todas tus conversaciones
+#### Trading Strategies
+```
+"Give me a DCA strategy"
+"How do I manage risk?"
+"When should I take profits?"
+```
 
-## 🔔 Sistema de Alertas
+### Chat Features
 
-### Tipos de Alertas
+- **Personalized Context**: AdEx AURA knows your portfolio
+- **Detailed Analysis**: Responses with technical fundamentals
+- **Actionable Recommendations**: Specific suggestions
+- **History**: Saves all your conversations
 
-#### Alertas de Precio
-- **Por encima de**: Te notifica cuando el precio supera un valor
-- **Por debajo de**: Te avisa cuando el precio cae por debajo de un nivel
+## 🔔 Alert System
 
-#### Alertas de Cambio
-- **Cambio positivo**: Notifica ganancias significativas
-- **Cambio negativo**: Alerta sobre caídas importantes
+### Alert Types
 
-#### Alertas de Volumen
-- **Volumen alto**: Detecta actividad inusual de trading
+#### Price Alerts
+- **Above**: Notifies you when price exceeds a value
+- **Below**: Alerts you when price falls below a level
 
-### Gestionar Alertas
+#### Change Alerts
+- **Positive change**: Notifies significant gains
+- **Negative change**: Alerts about important drops
 
-- **Activar/Desactivar**: Toggle individual de cada alerta
-- **Editar**: Modificar condiciones existentes
-- **Eliminar**: Borrar alertas que ya no necesites
-- **Historial**: Ver alertas que se han activado
+#### Volume Alerts
+- **High volume**: Detects unusual trading activity
 
-### Mejores Prácticas
+### Managing Alerts
 
-1. **No sobrecargues**: Máximo 5-10 alertas activas
-2. **Niveles realistas**: Usa precios alcanzables
-3. **Diversifica**: Alertas para diferentes tokens
-4. **Revisa regularmente**: Actualiza según el mercado
+- **Activate/Deactivate**: Individual toggle for each alert
+- **Edit**: Modify existing conditions
+- **Delete**: Remove alerts you no longer need
+- **History**: View alerts that have been triggered
 
-## 📚 Centro de Educación
+### Best Practices
 
-### Estructura de Aprendizaje
+1. **Don't overload**: Maximum 5-10 active alerts
+2. **Realistic levels**: Use achievable prices
+3. **Diversify**: Alerts for different tokens
+4. **Review regularly**: Update according to market
 
-#### Niveles de Dificultad
-- **Principiante**: Conceptos básicos de crypto
-- **Intermedio**: Trading y análisis técnico
-- **Avanzado**: DeFi y estrategias complejas
+## 📚 Education Center
 
-#### Categorías Disponibles
+### Learning Structure
 
-1. **Conceptos Básicos**
-   - ¿Qué son las criptomonedas?
-   - Blockchain explicado
-   - Guía de wallets
+#### Difficulty Levels
+- **Beginner**: Basic crypto concepts
+- **Intermediate**: Trading and technical analysis
+- **Advanced**: DeFi and complex strategies
+
+#### Available Categories
+
+1. **Basic Concepts**
+   - What are cryptocurrencies?
+   - Blockchain explained
+   - Wallet guide
 
 2. **Trading**
-   - Fundamentos del trading
-   - Análisis técnico
-   - Gestión de riesgo
+   - Trading fundamentals
+   - Technical analysis
+   - Risk management
 
 3. **DeFi**
-   - Introducción a DeFi
+   - DeFi introduction
    - Yield farming
    - Liquidity pools
 
-4. **Seguridad**
-   - Seguridad de wallets
-   - Prevención de estafas
-   - Claves privadas
+4. **Security**
+   - Wallet security
+   - Scam prevention
+   - Private keys
 
-### Seguimiento de Progreso
+### Progress Tracking
 
-- **Completadas**: Lecciones que has terminado
-- **En Progreso**: Lecciones que has empezado
-- **Pendientes**: Lecciones disponibles
-- **Score de Progreso**: Porcentaje completado por categoría
+- **Completed**: Lessons you have finished
+- **In Progress**: Lessons you have started
+- **Pending**: Available lessons
+- **Progress Score**: Percentage completed per category
 
-## 🛠️ Configuración Avanzada
+## 🛠️ Advanced Configuration
 
-### Preferencias de Usuario
+### User Preferences
 
-#### Notificaciones
-- **Alertas**: Recibir notificaciones de alertas
-- **Novedades**: Actualizaciones de la app
-- **Mercado**: Noticias importantes del mercado
+#### Notifications
+- **Alerts**: Receive alert notifications
+- **Updates**: App updates
+- **Market**: Important market news
 
-#### Privacidad
-- **Datos del Portfolio**: Solo se almacenan localmente
-- **Conversaciones**: Historial guardado en tu navegador
-- **Análisis**: Datos anónimos para mejorar AdEx AURA
+#### Privacy
+- **Portfolio Data**: Only stored locally
+- **Conversations**: History saved in your browser
+- **Analysis**: Anonymous data to improve AdEx AURA
 
-### Integración con APIs
+### API Integration
 
-#### Configurar APIs Adicionales
-1. Ve a Configuración
-2. Agrega tus API keys:
-   - **CoinGecko**: Para datos más precisos
-   - **Alchemy**: Para datos blockchain
-3. Guarda la configuración
+#### Configure Additional APIs
+1. Go to Settings
+2. Add your API keys:
+   - **CoinGecko**: For more accurate data
+   - **Alchemy**: For blockchain data
+3. Save configuration
 
-## 🎯 Consejos para Principiantes
+## 🎯 Tips for Beginners
 
-### Empezar con Seguridad
+### Start Safely
 
-1. **Usa cantidades pequeñas**: Comienza con lo que puedas permitirte perder
-2. **Diversifica**: No pongas todo en una sola criptomoneda
-3. **Educate**: Usa el centro de educación antes de invertir
-4. **Mantén privadas tus claves**: Nunca las compartas
+1. **Use small amounts**: Start with what you can afford to lose
+2. **Diversify**: Don't put everything in one cryptocurrency
+3. **Educate yourself**: Use the education center before investing
+4. **Keep your keys private**: Never share them
 
-### Estrategias Recomendadas
+### Recommended Strategies
 
 #### DCA (Dollar Cost Averaging)
-- Invierte una cantidad fija regularmente
-- Reduce el impacto de la volatilidad
-- Ideal para principiantes
+- Invest a fixed amount regularly
+- Reduces the impact of volatility
+- Ideal for beginners
 
-#### Portfolio 60-40
-- 60% en Bitcoin y Ethereum
-- 40% en altcoins y stablecoins
-- Balance entre riesgo y estabilidad
+#### 60-40 Portfolio
+- 60% in Bitcoin and Ethereum
+- 40% in altcoins and stablecoins
+- Balance between risk and stability
 
-### Señales de Advertencia
+### Warning Signs
 
-⚠️ **Cuidado con**:
-- Promesas de ganancias garantizadas
-- "Oportunidades" que suenan demasiado buenas
-- Presión para invertir rápidamente
-- Proyectos sin documentación clara
+⚠️ **Beware of**:
+- Guaranteed profit promises
+- "Opportunities" that sound too good
+- Pressure to invest quickly
+- Projects without clear documentation
 
-## 🔧 Solución de Problemas
+## 🔧 Troubleshooting
 
-### Problemas Comunes
+### Common Issues
 
-#### "MetaMask no está instalado"
-- Descarga MetaMask desde el sitio oficial
-- Asegúrate de que esté habilitado en tu navegador
-- Recarga la página
+#### "MetaMask is not installed"
+- Download MetaMask from the official site
+- Make sure it's enabled in your browser
+- Reload the page
 
-#### "Error al conectar wallet"
-- Verifica que estés en la red correcta
-- Asegúrate de tener fondos para gas
-- Intenta desconectar y volver a conectar
+#### "Error connecting wallet"
+- Verify you're on the correct network
+- Make sure you have funds for gas
+- Try disconnecting and reconnecting
 
-#### "AdEx AURA no responde"
-- Verifica tu conexión a internet
-- Comprueba que tengas una API key válida
-- Intenta recargar la página
+#### "AdEx AURA not responding"
+- Check your internet connection
+- Verify you have a valid API key
+- Try reloading the page
 
-#### "Datos no se actualizan"
-- Verifica que las APIs estén funcionando
-- Comprueba tu conexión a internet
-- Intenta actualizar manualmente
+#### "Data not updating"
+- Verify that APIs are working
+- Check your internet connection
+- Try updating manually
 
-### Obtener Ayuda
+### Getting Help
 
-1. **FAQ**: Revisa las preguntas frecuentes
-2. **Documentación**: Consulta la documentación técnica
-3. **Soporte**: Contacta al equipo de soporte
-4. **Comunidad**: Únete al Discord para ayuda de la comunidad
+1. **FAQ**: Review frequently asked questions
+2. **Documentation**: Consult technical documentation
+3. **Support**: Contact the support team
+4. **Community**: Join Discord for community help
 
-## 📱 Usar en Móvil
+## 📱 Mobile Usage
 
-### Compatibilidad
-- **iOS Safari**: Funciona completamente
-- **Android Chrome**: Funciona completamente
-- **MetaMask Mobile**: Compatible con la app móvil
+### Compatibility
+- **iOS Safari**: Works completely
+- **Android Chrome**: Works completely
+- **MetaMask Mobile**: Compatible with mobile app
 
-### Optimizaciones para Móvil
-- Interfaz responsive
-- Botones táctiles grandes
-- Navegación simplificada
-- Notificaciones push
+### Mobile Optimizations
+- Responsive interface
+- Large touch buttons
+- Simplified navigation
+- Push notifications
 
-## 🔄 Actualizaciones y Novedades
+## 🔄 Updates and News
 
-### Mantener la App Actualizada
-- Las actualizaciones se aplican automáticamente
-- Recarga la página para obtener la última versión
-- Suscríbete a notificaciones de novedades
+### Keep the App Updated
+- Updates are applied automatically
+- Reload the page to get the latest version
+- Subscribe to update notifications
 
-### Nuevas Funcionalidades
-- **Trading Directo**: Próximamente
-- **Más Exchanges**: Integración extendida
-- **Análisis Técnico Avanzado**: Nuevas herramientas
-- **Modo Oscuro**: Interfaz alternativa
+### New Features
+- **Direct Trading**: Coming soon
+- **More Exchanges**: Extended integration
+- **Advanced Technical Analysis**: New tools
+- **Dark Mode**: Alternative interface
 
-## 📊 Métricas y Rendimiento
+## 📊 Metrics and Performance
 
-### Seguimiento de tu Progreso
-- **Portfolio Performance**: Rendimiento histórico
-- **Alertas Activadas**: Efectividad de tus alertas
-- **Tiempo en la App**: Engagement con la plataforma
-- **Lecciones Completadas**: Progreso educativo
+### Track Your Progress
+- **Portfolio Performance**: Historical performance
+- **Triggered Alerts**: Effectiveness of your alerts
+- **Time in App**: Platform engagement
+- **Completed Lessons**: Educational progress
 
-### Mejorar tu Experiencia
-- **Usa AdEx AURA regularmente**: Mejora las recomendaciones
-- **Configura alertas relevantes**: Mantente informado
-- **Completa las lecciones**: Aumenta tu conocimiento
-- **Diversifica tu portfolio**: Reduce el riesgo
+### Improve Your Experience
+- **Use AdEx AURA regularly**: Improves recommendations
+- **Set up relevant alerts**: Stay informed
+- **Complete lessons**: Increase your knowledge
+- **Diversify your portfolio**: Reduce risk
 
-## ⭐ Recomendaciones por Dirección (AdEx AURA)
+## ⭐ Address-based Recommendations (AdEx AURA)
 
-Además de preguntas normales, puedes pegar una account address (0x…) y el agente (vía AdEx AURA API) generará una lista de recomendaciones y estrategias en lenguaje natural, con una breve descripción de lo que hace cada una.
+In addition to normal questions, you can paste an account address (0x…) and the agent (via AdEx AURA API) will generate a list of recommendations and strategies in natural language, with a brief description of what each one does.
 
-- Dónde usarlo: pestaña **AI Chat** o **Strategies**
-- Prompt sugerido:
+- Where to use it: **AI Chat** or **Strategies** tab
+- Suggested prompt:
   ```text
   Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.
   ```
-- Consejo: en pantalla verás la dirección en formato corto (0x1C680f…32ab) para mejor lectura, pero se envía completa a la API.
+- Tip: on screen you'll see the address in short format (0x1C680f…32ab) for better readability, but it's sent complete to the API.
 
 ---
 
-¡Disfruta usando CryptoMentor AI! Si tienes preguntas, no dudes en contactar al equipo de soporte o usar el chat con AdEx AURA. 🚀
+Enjoy using CryptoMentor AI! If you have questions, don't hesitate to contact the support team or use the chat with AdEx AURA. 🚀

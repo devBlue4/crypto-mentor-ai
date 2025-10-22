@@ -1,234 +1,234 @@
-# Guía de Instalación - CryptoMentor AI
+# Installation Guide - CryptoMentor AI
 
-Esta guía te ayudará a configurar el entorno de desarrollo para CryptoMentor AI.
+This guide will help you set up the development environment for CryptoMentor AI.
 
-## 📋 Prerrequisitos
+## 📋 Prerequisites
 
-### Software Requerido
+### Required Software
 
-- **Node.js**: Versión 18.0 o superior
-- **npm**: Versión 8.0 o superior (viene con Node.js)
-- **Git**: Para clonar el repositorio
-- **MetaMask**: Extensión del navegador para Web3
+- **Node.js**: Version 18.0 or higher
+- **npm**: Version 8.0 or higher (comes with Node.js)
+- **Git**: To clone the repository
+- **MetaMask**: Browser extension for Web3
 
-### Verificar Instalaciones
+### Verify Installations
 
 ```bash
-# Verificar Node.js
+# Verify Node.js
 node --version
-# Debería mostrar: v18.x.x o superior
+# Should show: v18.x.x or higher
 
-# Verificar npm
+# Verify npm
 npm --version
-# Debería mostrar: 8.x.x o superior
+# Should show: 8.x.x or higher
 
-# Verificar Git
+# Verify Git
 git --version
 ```
 
-### Navegadores Soportados
+### Supported Browsers
 
-- **Chrome**: Versión 90+
-- **Firefox**: Versión 88+
-- **Safari**: Versión 14+
-- **Edge**: Versión 90+
+- **Chrome**: Version 90+
+- **Firefox**: Version 88+
+- **Safari**: Version 14+
+- **Edge**: Version 90+
 
-## 🚀 Instalación Paso a Paso
+## 🚀 Step-by-Step Installation
 
-### 1. Clonar el Repositorio
+### 1. Clone the Repository
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/crypto-mentor-ai.git
+# Clone the repository
+git clone https://github.com/your-username/crypto-mentor-ai.git
 
-# Navegar al directorio
+# Navigate to the directory
 cd crypto-mentor-ai
 ```
 
-### 2. Instalar Dependencias
+### 2. Install Dependencies
 
 ```bash
-# Instalar todas las dependencias
+# Install all dependencies
 npm install
 
-# O usar yarn si lo prefieres
+# Or use yarn if you prefer
 yarn install
 ```
 
-### 3. Configurar Variables de Entorno
+### 3. Configure Environment Variables
 
 ```bash
-# Copiar archivo de ejemplo
+# Copy example file
 cp env.example .env
 
-# Editar el archivo .env
-nano .env  # o usar tu editor preferido
+# Edit the .env file
+nano .env  # or use your preferred editor
 ```
 
-**Variables requeridas:**
+**Required variables:**
 
 ```env
-# AdEx AURA API (Requerida)
-VITE_AURA_API_KEY=tu_api_key_de_aura_aqui
+# AdEx AURA API (Required)
+VITE_AURA_API_KEY=your_aura_api_key_here
 
-# APIs opcionales para funcionalidad extendida
-VITE_COINGECKO_API_KEY=tu_api_key_de_coingecko
-VITE_ALCHEMY_API_KEY=tu_api_key_de_alchemy
-VITE_INFURA_API_KEY=tu_api_key_de_infura
+# Optional APIs for extended functionality
+VITE_COINGECKO_API_KEY=your_coingecko_api_key
+VITE_ALCHEMY_API_KEY=your_alchemy_api_key
+VITE_INFURA_API_KEY=your_infura_api_key
 
-# Configuración de la app
+# App configuration
 VITE_APP_NAME=CryptoMentor AI
 VITE_APP_VERSION=1.0.0
 VITE_APP_ENVIRONMENT=development
 ```
 
-### 4. Obtener API Keys
+### 4. Get API Keys
 
-#### AdEx AURA API Key (Requerida)
-1. Registrarse en [AdEx Network](https://adex.network)
-2. Acceder al dashboard de desarrollador
-3. Crear una nueva aplicación
-4. Copiar la API key
+#### AdEx AURA API Key (Required)
+1. Register at [AdEx Network](https://adex.network)
+2. Access the developer dashboard
+3. Create a new application
+4. Copy the API key
 
-#### CoinGecko API Key (Opcional)
-1. Ir a [CoinGecko API](https://www.coingecko.com/en/api)
-2. Registrarse para una cuenta gratuita
-3. Obtener la API key del dashboard
+#### CoinGecko API Key (Optional)
+1. Go to [CoinGecko API](https://www.coingecko.com/en/api)
+2. Register for a free account
+3. Get the API key from the dashboard
 
-#### Alchemy/Infura (Opcionales)
+#### Alchemy/Infura (Optional)
 1. **Alchemy**: [alchemy.com](https://alchemy.com)
 2. **Infura**: [infura.io](https://infura.io)
 
-### 5. Instalar MetaMask
+### 5. Install MetaMask
 
-1. Ir a [metamask.io](https://metamask.io/download/)
-2. Descargar la extensión para tu navegador
-3. Crear una nueva wallet o importar una existente
-4. **Importante**: Usar una red de prueba para desarrollo
+1. Go to [metamask.io](https://metamask.io/download/)
+2. Download the extension for your browser
+3. Create a new wallet or import an existing one
+4. **Important**: Use a test network for development
 
-### 6. Configurar Red de Prueba
+### 6. Configure Test Network
 
-Para desarrollo, configura una red de prueba:
+For development, configure a test network:
 
-1. Abrir MetaMask
-2. Ir a Settings > Networks
-3. Agregar red personalizada:
+1. Open MetaMask
+2. Go to Settings > Networks
+3. Add custom network:
    - **Network Name**: Ethereum Testnet
-   - **RPC URL**: `https://goerli.infura.io/v3/TU_PROJECT_ID`
+   - **RPC URL**: `https://goerli.infura.io/v3/YOUR_PROJECT_ID`
    - **Chain ID**: 5
    - **Currency Symbol**: ETH
    - **Block Explorer**: `https://goerli.etherscan.io`
 
-### 7. Ejecutar la Aplicación
+### 7. Run the Application
 
 ```bash
-# Modo desarrollo
+# Development mode
 npm run dev
 
-# La aplicación estará disponible en:
+# The application will be available at:
 # http://localhost:3000
 ```
 
-## 🔧 Scripts Disponibles
+## 🔧 Available Scripts
 
 ```bash
-# Desarrollo
-npm run dev          # Servidor de desarrollo con hot reload
-npm run build        # Build de producción
-npm run preview      # Preview del build de producción
-npm run lint         # Ejecutar ESLint
-npm run lint:fix     # Corregir errores de linting automáticamente
+# Development
+npm run dev          # Development server with hot reload
+npm run build        # Production build
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix linting errors automatically
 
-# Utilidades
-npm run setup        # Script de configuración automática
-npm run clean        # Limpiar archivos de build
+# Utilities
+npm run setup        # Automatic configuration script
+npm run clean        # Clean build files
 ```
 
-## 🐛 Solución de Problemas
+## 🐛 Troubleshooting
 
 ### Error: "Cannot find module"
 ```bash
-# Limpiar cache y reinstalar
+# Clear cache and reinstall
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 ### Error: "Port 3000 is already in use"
 ```bash
-# Usar un puerto diferente
+# Use a different port
 npm run dev -- --port 3001
 ```
 
 ### Error: "MetaMask not found"
-- Verificar que MetaMask esté instalado
-- Asegurarse de que esté habilitado en el navegador
-- Recargar la página
+- Verify MetaMask is installed
+- Make sure it's enabled in the browser
+- Reload the page
 
 ### Error: "Invalid API key"
-- Verificar que la API key esté en el archivo `.env`
-- Confirmar que la API key sea válida
-- Verificar que no haya espacios extra en el archivo `.env`
+- Verify the API key is in the `.env` file
+- Confirm the API key is valid
+- Check there are no extra spaces in the `.env` file
 
-## 🏗️ Estructura del Proyecto
+## 🏗️ Project Structure
 
 ```
 crypto-mentor-ai/
-├── public/                 # Archivos estáticos
-├── src/                   # Código fuente
-│   ├── components/        # Componentes React
+├── public/                 # Static files
+├── src/                   # Source code
+│   ├── components/        # React components
 │   ├── contexts/         # React Contexts
-│   ├── services/         # Servicios y APIs
-│   ├── App.jsx          # Componente principal
-│   └── main.jsx         # Punto de entrada
-├── docs/                # Documentación
-├── scripts/             # Scripts de utilidad
-├── package.json         # Dependencias y scripts
-├── vite.config.js       # Configuración de Vite
-├── tailwind.config.js   # Configuración de TailwindCSS
-└── .env                 # Variables de entorno
+│   ├── services/         # Services and APIs
+│   ├── App.jsx          # Main component
+│   └── main.jsx         # Entry point
+├── docs/                # Documentation
+├── scripts/             # Utility scripts
+├── package.json         # Dependencies and scripts
+├── vite.config.js       # Vite configuration
+├── tailwind.config.js   # TailwindCSS configuration
+└── .env                 # Environment variables
 ```
 
-## 🔄 Actualizaciones
+## 🔄 Updates
 
-Para mantener el proyecto actualizado:
+To keep the project updated:
 
 ```bash
-# Verificar actualizaciones de dependencias
+# Check dependency updates
 npm outdated
 
-# Actualizar dependencias
+# Update dependencies
 npm update
 
-# Actualizar a las últimas versiones (cuidado)
+# Update to latest versions (be careful)
 npm install package@latest
 ```
 
-## 📝 Notas de Desarrollo
+## 📝 Development Notes
 
-### Variables de Entorno
-- Todas las variables deben empezar con `VITE_` para ser accesibles en el frontend
-- Nunca commitear el archivo `.env` al repositorio
-- Usar `.env.example` como plantilla
+### Environment Variables
+- All variables must start with `VITE_` to be accessible in the frontend
+- Never commit the `.env` file to the repository
+- Use `.env.example` as a template
 
-### MetaMask para Desarrollo
-- Usar siempre redes de prueba para desarrollo
-- Nunca usar claves privadas reales en desarrollo
-- Configurar fondos de prueba desde faucets
+### MetaMask for Development
+- Always use test networks for development
+- Never use real private keys in development
+- Configure test funds from faucets
 
 ### Hot Reload
-- Vite proporciona hot reload automático
-- Los cambios en componentes se reflejan inmediatamente
-- Los cambios en configuración requieren reiniciar el servidor
+- Vite provides automatic hot reload
+- Component changes are reflected immediately
+- Configuration changes require server restart
 
-## 🆘 Obtener Ayuda
+## 🆘 Getting Help
 
-Si tienes problemas:
+If you have problems:
 
-1. **Revisar logs**: Verificar la consola del navegador y terminal
-2. **Documentación**: Consultar los archivos en `/docs`
-3. **Issues**: Buscar en [GitHub Issues](https://github.com/tu-usuario/crypto-mentor-ai/issues)
-4. **Comunidad**: Unirse al [Discord](https://discord.gg/cryptomentor)
+1. **Check logs**: Verify browser console and terminal
+2. **Documentation**: Consult files in `/docs`
+3. **Issues**: Search in [GitHub Issues](https://github.com/your-username/crypto-mentor-ai/issues)
+4. **Community**: Join [Discord](https://discord.gg/cryptomentor)
 
 ---
 
-¡Feliz desarrollo! 🚀
+Happy coding! 🚀

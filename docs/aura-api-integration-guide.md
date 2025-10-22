@@ -1,36 +1,36 @@
-# Guía de Integración de AdEx AURA API
+# AdEx AURA API Integration Guide
 
-## Resumen Ejecutivo
+## Executive Summary
 
-AdEx AURA es un framework de agente de IA personal y motor de recomendaciones que analiza datos públicamente disponibles de Ethereum y blockchains de Layer 2. Procesa estos datos a través de un modelo de lenguaje grande (LLM) para generar recomendaciones personalizadas de acciones o aplicaciones basadas en el comportamiento del usuario.
+AdEx AURA is a personal AI agent framework and recommendation engine that analyzes publicly available data from Ethereum and Layer 2 blockchains. It processes this data through a large language model (LLM) to generate personalized recommendations for actions or applications based on user behavior.
 
-**Funcionalidad Principal**: AURA toma una dirección de cuenta y genera una lista de recomendaciones de aplicaciones y estrategias en lenguaje natural, con descripciones de lo que hace cada una.
+**Main Functionality**: AURA takes an account address and generates a list of application and strategy recommendations in natural language, with descriptions of what each one does.
 
-## Arquitectura del Sistema
+## System Architecture
 
-### Componentes Principales
+### Main Components
 
 1. **Portfolio Analyzer** (`lib/utils/portfolio.ts`)
-   - Obtiene datos del portfolio desde múltiples redes blockchain
-   - Utiliza `ambire-common` para interactuar con RPCs
-   - Soporta múltiples redes EVM
+   - Gets portfolio data from multiple blockchain networks
+   - Uses `ambire-common` to interact with RPCs
+   - Supports multiple EVM networks
 
 2. **LLM Processors** (`lib/utils/llm/`)
-   - **Gemini**: Integración con Google Gemini AI
-   - **Grok**: Integración con Grok AI
-   - **Mocked AI**: Respuestas de demostración para desarrollo
+   - **Gemini**: Integration with Google Gemini AI
+   - **Grok**: Integration with Grok AI
+   - **Mocked AI**: Demo responses for development
 
 3. **Strategy Engine** (`lib/utils/strategies.ts`)
-   - Define estrategias predefinidas para portfolios vacíos
-   - Estructura de datos para recomendaciones
+   - Defines predefined strategies for empty portfolios
+   - Data structure for recommendations
 
 4. **API Server** (`app/index.ts`)
-   - Servidor Express en puerto 3420
-   - Endpoint POST `/` para procesar direcciones
+   - Express server on port 3420
+   - POST `/` endpoint to process addresses
 
-## Estructura de Datos
+## Data Structure
 
-### Tipos Principales
+### Main Types
 
 ```typescript
 // Portfolio Token
@@ -41,20 +41,20 @@ type PortfolioToken = {
     symbol: string
 }
 
-// Portfolio por Red
+// Portfolio by Network
 type PortfolioForNetwork = {
     network: PortfolioNetworkInfo
     tokens: PortfolioToken[]
 }
 
-// Estrategia
+// Strategy
 type Strategy = {
     name: string
     risk: StrategyRisk // 'low' | 'moderate' | 'high' | 'opportunistic'
     actions: StrategyAction[]
 }
 
-// Acción de Estrategia
+// Strategy Action
 type StrategyAction = {
     tokens: string // "USDC, ETH"
     description: string
@@ -65,7 +65,7 @@ type StrategyAction = {
     flags?: string[]
 }
 
-// Respuesta de AURA
+// AURA Response
 type AuraResponse_01 = {
     address: string
     portfolio: PortfolioForNetwork[]
@@ -73,20 +73,20 @@ type AuraResponse_01 = {
 }
 ```
 
-## Integración en tu Proyecto
+## Integration in Your Project
 
-### 1. API Pública de AdEx AURA
+### 1. AdEx AURA Public API
 
-La API pública está disponible en: `https://aura.adex.network/api/`
+The public API is available at: `https://aura.adex.network/api/`
 
-**Endpoints principales:**
+**Main endpoints:**
 - **Portfolio Balances**: `GET /api/portfolio/balances?address={address}`
 - **Portfolio Strategies**: `GET /api/portfolio/strategies?address={address}`
 
-### 2. Llamada a la API
+### 2. API Call
 
 ```javascript
-// Ejemplo de llamada para obtener estrategias
+// Example call to get strategies
 const response = await fetch(`https://aura.adex.network/api/portfolio/strategies?address=${address}`, {
     method: 'GET',
     headers: {
@@ -97,17 +97,17 @@ const response = await fetch(`https://aura.adex.network/api/portfolio/strategies
 const data = await response.json();
 ```
 
-### 3. Variables de Entorno Requeridas
+### 3. Required Environment Variables
 
 ```bash
-# API Key de AdEx AURA (opcional, para límites más altos)
-VITE_AURA_API_KEY=tu_api_key_aqui
+# AdEx AURA API Key (optional, for higher limits)
+VITE_AURA_API_KEY=your_api_key_here
 
-# Base URL de la API
+# API Base URL
 VITE_AURA_API_BASE=https://aura.adex.network/api
 ```
 
-### 4. Integración en tu Servicio
+### 4. Integration in Your Service
 
 ```javascript
 // src/services/auraAPI.js
@@ -135,68 +135,68 @@ export const auraAPI = {
 };
 ```
 
-## Flujo de Procesamiento
+## Processing Flow
 
-1. **Input**: Dirección de wallet Ethereum
-2. **API Call**: Llamada GET a `/api/portfolio/strategies?address={address}`
-3. **Portfolio Analysis**: AURA analiza el portfolio en múltiples redes blockchain
-4. **Strategy Generation**: Genera estrategias personalizadas basadas en el portfolio
-5. **Response**: Devuelve portfolio + estrategias estructuradas en formato JSON
+1. **Input**: Ethereum wallet address
+2. **API Call**: GET call to `/api/portfolio/strategies?address={address}`
+3. **Portfolio Analysis**: AURA analyzes the portfolio across multiple blockchain networks
+4. **Strategy Generation**: Generates personalized strategies based on the portfolio
+5. **Response**: Returns portfolio + structured strategies in JSON format
 
-## Casos de Uso
+## Use Cases
 
-### Portfolio Vacío
-Si la dirección no tiene tokens, AURA devuelve estrategias predefinidas:
-- "Top up wallet with funds" (riesgo bajo)
-- Recomendaciones para comprar stablecoins o ETH
+### Empty Portfolio
+If the address has no tokens, AURA returns predefined strategies:
+- "Top up wallet with funds" (low risk)
+- Recommendations to buy stablecoins or ETH
 
-### Portfolio con Tokens
-AURA analiza los tokens y genera estrategias personalizadas:
-- Staking de tokens específicos
-- Liquidity provision en DEXs
-- Yield farming en L2s
-- Bridging entre redes
+### Portfolio with Tokens
+AURA analyzes tokens and generates personalized strategies:
+- Staking specific tokens
+- Liquidity provision on DEXs
+- Yield farming on L2s
+- Bridging between networks
 
-## Configuración de Redes
+## Network Configuration
 
-AURA soporta múltiples redes EVM a través de `ambire-common`:
+AURA supports multiple EVM networks through `ambire-common`:
 - Ethereum Mainnet
 - Polygon
 - Arbitrum
 - Optimism
 - BSC
-- Y más...
+- And more...
 
-## Manejo de Errores
+## Error Handling
 
 ```javascript
-// Ejemplo de manejo robusto
+// Example of robust handling
 try {
     const recommendations = await auraAPI.getPersonalizedRecommendations(address);
     
     if (recommendations.strategies && recommendations.strategies.length > 0) {
-        // Procesar recomendaciones
+        // Process recommendations
         return recommendations.strategies[0].response;
     } else {
-        // Fallback a estrategias predefinidas
+        // Fallback to predefined strategies
         return getFallbackStrategies();
     }
 } catch (error) {
     console.error('AURA API error:', error);
-    // Fallback local
+    // Local fallback
     return getLocalFallbackStrategies();
 }
 ```
 
-## Optimizaciones para Producción
+## Production Optimizations
 
-1. **Caching**: Implementar cache para respuestas de AURA
-2. **Rate Limiting**: Controlar frecuencia de llamadas
-3. **Fallbacks**: Siempre tener respuestas de respaldo
-4. **Monitoring**: Monitorear latencia y errores de la API
-5. **Load Balancing**: Para múltiples instancias de AURA
+1. **Caching**: Implement cache for AURA responses
+2. **Rate Limiting**: Control call frequency
+3. **Fallbacks**: Always have backup responses
+4. **Monitoring**: Monitor API latency and errors
+5. **Load Balancing**: For multiple AURA instances
 
-## Ejemplo de Respuesta Completa
+## Complete Response Example
 
 ```json
 {
@@ -264,19 +264,19 @@ try {
 }
 ```
 
-## Próximos Pasos
+## Next Steps
 
-1. **Configurar las variables de entorno** con la URL correcta de la API
-2. **Actualizar el código** para usar los endpoints correctos
-3. **Probar con direcciones reales** para validar funcionamiento
-4. **Implementar manejo de errores** apropiado
-5. **Optimizar para producción** con caching y rate limiting
+1. **Configure environment variables** with the correct API URL
+2. **Update code** to use the correct endpoints
+3. **Test with real addresses** to validate functionality
+4. **Implement appropriate error handling**
+5. **Optimize for production** with caching and rate limiting
 
-Esta integración te permitirá aprovechar el poder de AURA para generar recomendaciones personalizadas basadas en el análisis real del portfolio del usuario usando la API pública de AdEx.
+This integration will allow you to leverage the power of AURA to generate personalized recommendations based on real user portfolio analysis using the public AdEx API.
 
-## Referencias
+## References
 
-- [Documentación oficial de AdEx AURA API](https://guide.adex.network/adex-aura-api/)
-- [Endpoint Portfolio Strategies](https://guide.adex.network/adex-aura-api/api-endpoints/portfolio-strategies)
-- [Endpoint Portfolio Balances](https://guide.adex.network/adex-aura-api/api-endpoints/portfolio-balances)
+- [Official AdEx AURA API Documentation](https://guide.adex.network/adex-aura-api/)
+- [Portfolio Strategies Endpoint](https://guide.adex.network/adex-aura-api/api-endpoints/portfolio-strategies)
+- [Portfolio Balances Endpoint](https://guide.adex.network/adex-aura-api/api-endpoints/portfolio-balances)
 - [Quickstart Guide](https://guide.adex.network/adex-aura-api/quickstart)

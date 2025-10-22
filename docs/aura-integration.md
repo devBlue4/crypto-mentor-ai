@@ -1,28 +1,28 @@
-# Integración con AdEx AURA - Documentación Técnica
+# AdEx AURA Integration - Technical Documentation
 
-Este documento describe en detalle cómo CryptoMentor AI se integra con la API de AdEx AURA para proporcionar funcionalidades de inteligencia artificial.
+This document describes in detail how CryptoMentor AI integrates with the AdEx AURA API to provide artificial intelligence functionalities.
 
-## 🤖 Visión General de AdEx AURA
+## 🤖 AdEx AURA Overview
 
-### ¿Qué es AdEx AURA?
+### What is AdEx AURA?
 
-AdEx AURA es una API de inteligencia artificial especializada en análisis de criptomonedas y mercados financieros. Proporciona:
+AdEx AURA is an artificial intelligence API specialized in cryptocurrency and financial market analysis. It provides:
 
-- **Análisis contextual** de portfolios
-- **Recomendaciones personalizadas** de trading
-- **Insights de mercado** en tiempo real
-- **Chat inteligente** con conocimiento especializado
+- **Contextual analysis** of portfolios
+- **Personalized trading** recommendations
+- **Real-time market** insights
+- **Intelligent chat** with specialized knowledge
 
-### Capacidades de AdEx AURA
+### AdEx AURA Capabilities
 
-1. **Análisis de Portfolio**: Evaluación de diversificación, riesgo y rendimiento
-2. **Recomendaciones de Trading**: Sugerencias basadas en condiciones de mercado
-3. **Análisis de Sentimiento**: Interpretación de noticias y tendencias
-4. **Educación Contextual**: Explicaciones adaptadas al nivel del usuario
+1. **Portfolio Analysis**: Evaluation of diversification, risk and performance
+2. **Trading Recommendations**: Suggestions based on market conditions
+3. **Sentiment Analysis**: Interpretation of news and trends
+4. **Contextual Education**: Explanations adapted to user level
 
-## 🔌 Implementación Técnica
+## 🔌 Technical Implementation
 
-### Configuración de la API
+### API Configuration
 
 ```javascript
 // src/services/auraAPI.js
@@ -40,13 +40,13 @@ const auraClient = axios.create({
 })
 ```
 
-### Endpoints Principales
+### Main Endpoints
 
-#### 1. Chat con IA
+#### 1. AI Chat
 ```javascript
 POST /chat
 {
-  "message": "¿Cómo está mi portfolio?",
+  "message": "How is my portfolio?",
   "context": {
     "user_type": "crypto_enthusiast",
     "experience_level": "intermediate",

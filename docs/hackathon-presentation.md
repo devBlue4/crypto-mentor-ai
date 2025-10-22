@@ -1,87 +1,87 @@
-# Presentación del Proyecto - AdEx AURA Hackathon
+# Project Presentation - AdEx AURA Hackathon
 
-## 🎯 CryptoMentor AI: Tu Asistente Inteligente de Trading Web3
+## 🎯 CryptoMentor AI: Your Intelligent Web3 Trading Assistant
 
-### Elevator Pitch (30 segundos)
+### Elevator Pitch (30 seconds)
 
-**CryptoMentor AI** es un asistente inteligente que utiliza la API de AdEx AURA para democratizar el acceso al trading de criptomonedas. Combinamos Web3, IA y una interfaz moderna para ayudar tanto a principiantes como a traders experimentados a tomar decisiones informadas en el mercado crypto.
-
----
-
-## 🚀 Demo en Vivo
-
-### 1. Conexión de Wallet (30 segundos)
-- Abrir CryptoMentor AI
-- Conectar MetaMask con un clic
-- Verificar conexión exitosa
-- Mostrar dirección de wallet truncada
-
-### 2. Dashboard de Mercado (45 segundos)
-- Vista general del mercado crypto
-- Gráficos interactivos de precios
-- Noticias del mercado con análisis de sentimiento
-- Métricas clave: Market Cap, Fear & Greed Index
-
-### 3. Chat con AdEx AURA (60 segundos)
-- Pregunta: "¿Cómo está el mercado hoy?"
-- Respuesta contextual de AdEx AURA con análisis
-- Pregunta: "Analiza mi portfolio"
-- Análisis personalizado basado en holdings reales
-- Recomendaciones específicas y accionables
-
-### 4. Análisis de Portfolio (45 segundos)
-- Vista de tokens y balances
-- Métricas de diversificación y riesgo
-- Score de portfolio calculado por AdEx AURA
-- Recomendaciones personalizadas
-
-### 5. Sistema de Alertas (30 segundos)
-- Crear alerta de precio para Bitcoin
-- Configuración inteligente con IA
-- Gestión de alertas existentes
-- Notificaciones en tiempo real
-
-### 6. Centro de Educación (30 segundos)
-- Lecciones categorizadas por dificultad
-- Progreso de aprendizaje
-- Consejos y mejores prácticas
-- Interfaz interactiva
+**CryptoMentor AI** is an intelligent assistant that uses the AdEx AURA API to democratize access to cryptocurrency trading. We combine Web3, AI, and a modern interface to help both beginners and experienced traders make informed decisions in the crypto market.
 
 ---
 
-## 💡 Problema que Resolvemos
+## 🚀 Live Demo
 
-### El Problema
-- **Barrera de entrada alta**: El trading de crypto es complejo para principiantes
-- **Información fragmentada**: Datos dispersos en múltiples plataformas
-- **Falta de personalización**: Recomendaciones genéricas, no contextuales
-- **Riesgo alto**: Usuarios toman decisiones sin análisis adecuado
+### 1. Wallet Connection (30 seconds)
+- Open CryptoMentor AI
+- Connect MetaMask with one click
+- Verify successful connection
+- Show truncated wallet address
 
-### Nuestra Solución
-- **IA contextual**: AdEx AURA analiza tu portfolio específico
-- **Interfaz unificada**: Todo en una sola aplicación
-- **Educación integrada**: Aprende mientras usas la plataforma
-- **Análisis personalizado**: Recomendaciones basadas en tu perfil
+### 2. Market Dashboard (45 seconds)
+- Crypto market overview
+- Interactive price charts
+- Market news with sentiment analysis
+- Key metrics: Market Cap, Fear & Greed Index
+
+### 3. Chat with AdEx AURA (60 seconds)
+- Question: "How is the market today?"
+- Contextual response from AdEx AURA with analysis
+- Question: "Analyze my portfolio"
+- Personalized analysis based on real holdings
+- Specific and actionable recommendations
+
+### 4. Portfolio Analysis (45 seconds)
+- View tokens and balances
+- Diversification and risk metrics
+- Portfolio score calculated by AdEx AURA
+- Personalized recommendations
+
+### 5. Alert System (30 seconds)
+- Create price alert for Bitcoin
+- Intelligent configuration with AI
+- Manage existing alerts
+- Real-time notifications
+
+### 6. Education Center (30 seconds)
+- Lessons categorized by difficulty
+- Learning progress
+- Tips and best practices
+- Interactive interface
 
 ---
 
-## 🛠️ Arquitectura Técnica
+## 💡 Problem We Solve
 
-### Stack Tecnológico
+### The Problem
+- **High barrier to entry**: Crypto trading is complex for beginners
+- **Fragmented information**: Data scattered across multiple platforms
+- **Lack of personalization**: Generic recommendations, not contextual
+- **High risk**: Users make decisions without adequate analysis
+
+### Our Solution
+- **Contextual AI**: AdEx AURA analyzes your specific portfolio
+- **Unified interface**: Everything in one application
+- **Integrated education**: Learn while using the platform
+- **Personalized analysis**: Recommendations based on your profile
+
+---
+
+## 🛠️ Technical Architecture
+
+### Technology Stack
 ```
 Frontend: React 18 + Vite + TailwindCSS
 Web3: Ethers.js v6 + MetaMask
-IA: AdEx AURA API
-Gráficos: Recharts
-Estado: React Context API
-Notificaciones: React Hot Toast
+AI: AdEx AURA API
+Charts: Recharts
+State: React Context API
+Notifications: React Hot Toast
 ```
 
-### Integración con AdEx AURA
+### AdEx AURA Integration
 ```javascript
-// Ejemplo de uso innovador
+// Example of innovative usage
 const response = await auraAPI.sendMessage(
-  "Analiza mi portfolio",
+  "Analyze my portfolio",
   {
     hasWallet: true,
     tokens: ['BTC', 'ETH', 'USDC'],
@@ -91,210 +91,210 @@ const response = await auraAPI.sendMessage(
 )
 ```
 
-### Características Técnicas Destacadas
-- **Error Boundary**: Manejo elegante de errores
-- **Responsive Design**: Funciona en todos los dispositivos
-- **Progressive Enhancement**: Funciona sin JavaScript
-- **Offline Capable**: Modo demo sin conexión
+### Outstanding Technical Features
+- **Error Boundary**: Elegant error handling
+- **Responsive Design**: Works on all devices
+- **Progressive Enhancement**: Works without JavaScript
+- **Offline Capable**: Demo mode without connection
 
 ---
 
-## 🎯 Funcionalidades Clave
+## 🎯 Key Features
 
-### 1. Chat Inteligente con AdEx AURA
-- **Contexto completo**: AdEx AURA conoce tu portfolio
-- **Análisis en tiempo real**: Respuestas basadas en datos actuales
-- **Recomendaciones accionables**: Sugerencias específicas
-- **Educación integrada**: Explica conceptos complejos
+### 1. Intelligent Chat with AdEx AURA
+- **Complete context**: AdEx AURA knows your portfolio
+- **Real-time analysis**: Responses based on current data
+- **Actionable recommendations**: Specific suggestions
+- **Integrated education**: Explains complex concepts
 
-### 2. Análisis de Portfolio Automático
-- **Detección automática**: Lee tokens de tu wallet
-- **Métricas avanzadas**: Diversificación, riesgo, rendimiento
-- **Recomendaciones personalizadas**: Basadas en tu perfil
-- **Alertas inteligentes**: Notificaciones contextuales
+### 2. Automatic Portfolio Analysis
+- **Automatic detection**: Reads tokens from your wallet
+- **Advanced metrics**: Diversification, risk, performance
+- **Personalized recommendations**: Based on your profile
+- **Intelligent alerts**: Contextual notifications
 
-### 3. Dashboard de Mercado
-- **Datos en tiempo real**: Precios, volumen, sentimiento
-- **Gráficos interactivos**: Visualización de tendencias
-- **Noticias analizadas**: Con análisis de sentimiento
-- **Métricas clave**: Fear & Greed, dominancia de mercado
+### 3. Market Dashboard
+- **Real-time data**: Prices, volume, sentiment
+- **Interactive charts**: Trend visualization
+- **Analyzed news**: With sentiment analysis
+- **Key metrics**: Fear & Greed, market dominance
 
-### 4. Sistema de Alertas Inteligentes
-- **Configuración con IA**: AdEx AURA sugiere alertas relevantes
-- **Múltiples tipos**: Precio, cambio %, volumen
-- **Notificaciones contextuales**: Basadas en tu actividad
-- **Gestión centralizada**: Todas tus alertas en un lugar
+### 4. Intelligent Alert System
+- **AI configuration**: AdEx AURA suggests relevant alerts
+- **Multiple types**: Price, change %, volume
+- **Contextual notifications**: Based on your activity
+- **Centralized management**: All your alerts in one place
 
-### 5. Centro de Educación
-- **Lecciones interactivas**: Aprende haciendo
-- **Progreso personalizado**: Adaptado a tu nivel
-- **Categorías especializadas**: Básicos, Trading, DeFi, Seguridad
-- **Consejos prácticos**: Mejores prácticas del mercado
-
----
-
-## 🏆 Por qué Debería Ganar
-
-### 1. Uso Innovador de AdEx AURA
-- **No solo chat básico**: Análisis contextual completo del portfolio
-- **Recomendaciones personalizadas**: Basadas en holdings reales
-- **Integración profunda**: AdEx AURA como cerebro de la aplicación
-- **Contexto rico**: Usuario, portfolio, mercado, historial
-
-### 2. Solución Real a Problema Real
-- **Democratiza el trading**: Hace crypto accesible para todos
-- **Reduce barreras de entrada**: Interfaz intuitiva y educación
-- **Mejora decisiones**: Análisis profesional para usuarios retail
-- **Impacto medible**: Ayuda a usuarios a tomar mejores decisiones
-
-### 3. Implementación Técnica Excelente
-- **Código limpio**: Bien estructurado y documentado
-- **Arquitectura escalable**: Fácil de mantener y extender
-- **UX excepcional**: Diseño moderno y responsivo
-- **Performance optimizada**: Carga rápida y fluida
-
-### 4. Potencial de Impacto
-- **Escalabilidad**: Puede ayudar a millones de usuarios
-- **Educación**: Crea usuarios más informados
-- **Adopción**: Facilita entrada al ecosistema Web3
-- **Comunidad**: Base para ecosistema educativo
+### 5. Education Center
+- **Interactive lessons**: Learn by doing
+- **Personalized progress**: Adapted to your level
+- **Specialized categories**: Basics, Trading, DeFi, Security
+- **Practical tips**: Market best practices
 
 ---
 
-## 📊 Métricas y KPIs
+## 🏆 Why It Should Win
+
+### 1. Innovative Use of AdEx AURA
+- **Not just basic chat**: Complete contextual portfolio analysis
+- **Personalized recommendations**: Based on real holdings
+- **Deep integration**: AdEx AURA as the brain of the application
+- **Rich context**: User, portfolio, market, history
+
+### 2. Real Solution to Real Problem
+- **Democratizes trading**: Makes crypto accessible to everyone
+- **Reduces barriers to entry**: Intuitive interface and education
+- **Improves decisions**: Professional analysis for retail users
+- **Measurable impact**: Helps users make better decisions
+
+### 3. Excellent Technical Implementation
+- **Clean code**: Well-structured and documented
+- **Scalable architecture**: Easy to maintain and extend
+- **Exceptional UX**: Modern and responsive design
+- **Optimized performance**: Fast and smooth loading
+
+### 4. Impact Potential
+- **Scalability**: Can help millions of users
+- **Education**: Creates more informed users
+- **Adoption**: Facilitates entry into Web3 ecosystem
+- **Community**: Foundation for educational ecosystem
+
+---
+
+## 📊 Metrics and KPIs
 
 ### Engagement
-- **Tiempo promedio en app**: 8-12 minutos
-- **Mensajes por sesión**: 5-8 con AdEx AURA
-- **Retención de usuarios**: 85%
-- **Satisfacción**: 4.2/5 estrellas
+- **Average time in app**: 8-12 minutes
+- **Messages per session**: 5-8 with AdEx AURA
+- **User retention**: 85%
+- **Satisfaction**: 4.2/5 stars
 
-### Funcionalidad
-- **Tiempo de respuesta AdEx AURA**: <2 segundos
-- **Precisión de recomendaciones**: 78%
-- **Uptime de APIs**: 99.5%
+### Functionality
+- **AdEx AURA response time**: <2 seconds
+- **Recommendation accuracy**: 78%
+- **API uptime**: 99.5%
 - **Error rate**: <1%
 
-### Impacto
-- **Usuarios educados**: 90% completan al menos una lección
-- **Mejores decisiones**: 65% implementan recomendaciones
-- **Reducción de riesgo**: 40% menos pérdidas promedio
-- **Adopción Web3**: 70% de usuarios nuevos en crypto
+### Impact
+- **Educated users**: 90% complete at least one lesson
+- **Better decisions**: 65% implement recommendations
+- **Risk reduction**: 40% fewer average losses
+- **Web3 adoption**: 70% of new crypto users
 
 ---
 
-## 🔮 Roadmap y Visión
+## 🔮 Roadmap and Vision
 
-### Próximos 3 meses
-- **Trading directo**: Ejecutar trades desde la app
-- **Más exchanges**: Integración con Binance, Coinbase
-- **Análisis técnico**: Indicadores avanzados
-- **App móvil**: Versión nativa iOS/Android
+### Next 3 months
+- **Direct trading**: Execute trades from the app
+- **More exchanges**: Integration with Binance, Coinbase
+- **Technical analysis**: Advanced indicators
+- **Mobile app**: Native iOS/Android version
 
-### Próximos 6 meses
+### Next 6 months
 - **DeFi integration**: Yield farming, staking
-- **NFT analysis**: Análisis de colecciones
-- **Social trading**: Copiar estrategias de expertos
-- **Gamificación**: Sistema de puntos y logros
+- **NFT analysis**: Collection analysis
+- **Social trading**: Copy expert strategies
+- **Gamification**: Points and achievements system
 
-### Visión a largo plazo
-- **Ecosistema completo**: Plataforma integral de crypto
-- **IA avanzada**: Predicciones de mercado
-- **Educación institucional**: Cursos certificados
-- **API pública**: Para desarrolladores externos
+### Long-term vision
+- **Complete ecosystem**: Comprehensive crypto platform
+- **Advanced AI**: Market predictions
+- **Institutional education**: Certified courses
+- **Public API**: For external developers
 
 ---
 
-## 🎬 Demo Script Detallado
+## 🎬 Detailed Demo Script
 
-### Introducción (30 segundos)
-"Buenos días, soy [Nombre] y voy a presentar CryptoMentor AI, un asistente inteligente que utiliza AdEx AURA para democratizar el trading de criptomonedas."
+### Introduction (30 seconds)
+"Good morning, I'm [Name] and I'm going to present CryptoMentor AI, an intelligent assistant that uses AdEx AURA to democratize cryptocurrency trading."
 
-### Problema (15 segundos)
-"El trading de crypto es complejo, la información está fragmentada, y los usuarios toman decisiones sin análisis adecuado."
+### Problem (15 seconds)
+"Crypto trading is complex, information is fragmented, and users make decisions without adequate analysis."
 
-### Solución (15 segundos)
-"CryptoMentor AI combina Web3, IA contextual y educación para ayudar a todos los usuarios a tomar mejores decisiones."
+### Solution (15 seconds)
+"CryptoMentor AI combines Web3, contextual AI, and education to help all users make better decisions."
 
-### Demo Técnico (3 minutos)
+### Technical Demo (3 minutes)
 
-#### 1. Conexión (20 segundos)
-"Hagamos una demo en vivo. Primero, conectemos un wallet real..."
-- Abrir aplicación
-- Conectar MetaMask
-- Mostrar datos del wallet
+#### 1. Connection (20 seconds)
+"Let's do a live demo. First, let's connect a real wallet..."
+- Open application
+- Connect MetaMask
+- Show wallet data
 
-#### 2. Chat con AdEx AURA (45 segundos)
-"Ahora probemos AdEx AURA con contexto real. Preguntémosle sobre el mercado..."
-- Pregunta sobre mercado
-- Mostrar respuesta contextual
-- "Ahora analicemos mi portfolio específico..."
-- Mostrar análisis personalizado
+#### 2. Chat with AdEx AURA (45 seconds)
+"Now let's test AdEx AURA with real context. Let's ask about the market..."
+- Market question
+- Show contextual response
+- "Now let's analyze my specific portfolio..."
+- Show personalized analysis
 
-#### 2.1 Highlight: Address → Recommendations (30 segundos)
-- Pegar la dirección `0x1C680f16b2270e324D5778305C9EC96784c832ab` en el **Chat** o en **Strategies**
+#### 2.1 Highlight: Address → Recommendations (30 seconds)
+- Paste the address `0x1C680f16b2270e324D5778305C9EC96784c832ab` in **Chat** or **Strategies**
 - Prompt: `Analyze address 0x1C680f16b2270e324D5778305C9EC96784c832ab and give app recommendations and strategies in natural language form, with a description of what each one does.`
-- Mostrar la lista generada (estrategias + descripción) y explicar que está “Powered by AdEx AURA API”
+- Show the generated list (strategies + description) and explain that it's "Powered by AdEx AURA API"
 
-#### 3. Portfolio Analysis (30 segundos)
-"Veamos el análisis automático de mi portfolio..."
-- Mostrar tokens detectados
-- Explicar métricas de diversificación
-- Destacar recomendaciones personalizadas
+#### 3. Portfolio Analysis (30 seconds)
+"Let's see the automatic analysis of my portfolio..."
+- Show detected tokens
+- Explain diversification metrics
+- Highlight personalized recommendations
 
-#### 4. Alertas Inteligentes (25 segundos)
-"Configurémos una alerta inteligente..."
-- Crear alerta con IA
-- Mostrar configuración automática
-- Explicar notificaciones contextuales
+#### 4. Intelligent Alerts (25 seconds)
+"Let's set up an intelligent alert..."
+- Create alert with AI
+- Show automatic configuration
+- Explain contextual notifications
 
-### Impacto (20 segundos)
-"En resumen, CryptoMentor AI hace que el trading de crypto sea accesible, educativo y más seguro para todos."
+### Impact (20 seconds)
+"In summary, CryptoMentor AI makes crypto trading accessible, educational, and safer for everyone."
 
-### Call to Action (10 segundos)
-"¿Preguntas?"
-
----
-
-## 💬 Preguntas Frecuentes para Judges
-
-### Q: ¿Cómo aseguran la seguridad de los usuarios?
-**A:** Solo leemos datos públicos de wallets, nunca almacenamos claves privadas, y todas las comunicaciones usan HTTPS. Además, incluimos educación sobre seguridad.
-
-### Q: ¿Qué hace diferente a CryptoMentor AI?
-**A:** La integración profunda con AdEx AURA para análisis contextual. No es solo un chat, sino un asistente que conoce tu portfolio y da recomendaciones personalizadas.
-
-### Q: ¿Cómo escalan el proyecto?
-**A:** Arquitectura modular, APIs bien documentadas, y plan de monetización a través de funcionalidades premium y partnerships.
-
-### Q: ¿Qué métricas usan para medir éxito?
-**A:** Engagement del usuario, precisión de recomendaciones, reducción de pérdidas, y adopción de Web3 por nuevos usuarios.
-
-### Q: ¿Cómo manejan la volatilidad del mercado crypto?
-**A:** Educación constante, análisis de riesgo, y recomendaciones conservadoras para principiantes, con opciones más agresivas para usuarios experimentados.
+### Call to Action (10 seconds)
+"Questions?"
 
 ---
 
-## 🎯 Mensajes Clave
+## 💬 FAQ for Judges
 
-1. **Innovación**: Uso único de AdEx AURA para análisis contextual
-2. **Impacto**: Democratiza el acceso al trading crypto
-3. **Calidad**: Implementación técnica excelente
-4. **Escalabilidad**: Potencial para ayudar a millones de usuarios
-5. **Educación**: Crea usuarios más informados y seguros
+### Q: How do you ensure user security?
+**A:** We only read public wallet data, never store private keys, and all communications use HTTPS. Additionally, we include security education.
+
+### Q: What makes CryptoMentor AI different?
+**A:** Deep integration with AdEx AURA for contextual analysis. It's not just a chat, but an assistant that knows your portfolio and gives personalized recommendations.
+
+### Q: How do you scale the project?
+**A:** Modular architecture, well-documented APIs, and monetization plan through premium features and partnerships.
+
+### Q: What metrics do you use to measure success?
+**A:** User engagement, recommendation accuracy, loss reduction, and Web3 adoption by new users.
+
+### Q: How do you handle crypto market volatility?
+**A:** Constant education, risk analysis, and conservative recommendations for beginners, with more aggressive options for experienced users.
 
 ---
 
-## 📞 Contacto y Recursos
+## 🎯 Key Messages
 
-- **Demo en vivo**: [URL del demo]
-- **Código fuente**: [GitHub repository]
-- **Documentación**: [docs/ folder]
-- **Video demo**: [YouTube link]
-- **Presentación**: [Slides link]
+1. **Innovation**: Unique use of AdEx AURA for contextual analysis
+2. **Impact**: Democratizes access to crypto trading
+3. **Quality**: Excellent technical implementation
+4. **Scalability**: Potential to help millions of users
+5. **Education**: Creates more informed and secure users
 
 ---
 
-**CryptoMentor AI** - Transformando la educación y el trading de criptomonedas con el poder de la IA de AdEx AURA.
+## 📞 Contact and Resources
 
-*¡Gracias por la oportunidad de presentar nuestro proyecto!* 🚀
+- **Live demo**: [Demo URL]
+- **Source code**: [GitHub repository]
+- **Documentation**: [docs/ folder]
+- **Demo video**: [YouTube link]
+- **Presentation**: [Slides link]
+
+---
+
+**CryptoMentor AI** - Transforming cryptocurrency education and trading with the power of AdEx AURA AI.
+
+*Thank you for the opportunity to present our project!* 🚀

@@ -1,48 +1,48 @@
-# Integración Web3 - CryptoMentor AI
+# Web3 Integration - CryptoMentor AI
 
-Este documento describe la implementación de funcionalidades Web3 en CryptoMentor AI, incluyendo la integración con MetaMask, operaciones de blockchain y gestión de wallets.
+This document describes the implementation of Web3 functionalities in CryptoMentor AI, including MetaMask integration, blockchain operations, and wallet management.
 
-## 🔗 Visión General Web3
+## 🔗 Web3 Overview
 
-### ¿Qué es Web3?
+### What is Web3?
 
-Web3 representa la próxima generación de internet, donde:
+Web3 represents the next generation of the internet, where:
 
-- **Descentralización**: No hay entidades centrales que controlen los datos
-- **Propiedad de Datos**: Los usuarios controlan su información y activos
-- **Interoperabilidad**: Aplicaciones que funcionan entre diferentes blockchains
-- **Transparencia**: Todas las transacciones son públicas y verificables
+- **Decentralization**: No central entities control the data
+- **Data Ownership**: Users control their information and assets
+- **Interoperability**: Applications that work across different blockchains
+- **Transparency**: All transactions are public and verifiable
 
-### Componentes Web3 en CryptoMentor AI
+### Web3 Components in CryptoMentor AI
 
-1. **Wallet Integration**: Conexión con MetaMask y otras wallets
-2. **Blockchain Data**: Lectura de balances y transacciones
-3. **Smart Contracts**: Interacción con contratos inteligentes
-4. **Token Management**: Gestión de tokens ERC-20 y NFTs
+1. **Wallet Integration**: Connection with MetaMask and other wallets
+2. **Blockchain Data**: Reading balances and transactions
+3. **Smart Contracts**: Interaction with smart contracts
+4. **Token Management**: Management of ERC-20 tokens and NFTs
 
-## 🔧 Implementación Técnica
+## 🔧 Technical Implementation
 
-### Configuración de Ethers.js
+### Ethers.js Configuration
 
 ```javascript
 // src/services/walletService.js
 import { ethers } from 'ethers'
 
-// Verificar si MetaMask está instalado
+// Check if MetaMask is installed
 export const isMetaMaskInstalled = () => {
   return typeof window !== 'undefined' && window.ethereum
 }
 
-// Crear provider de MetaMask
+// Create MetaMask provider
 export const getMetaMaskProvider = () => {
   if (!isMetaMaskInstalled()) {
-    throw new Error('MetaMask no está instalado')
+    throw new Error('MetaMask is not installed')
   }
   return new ethers.BrowserProvider(window.ethereum)
 }
 ```
 
-### Provider y Signer
+### Provider and Signer
 
 ```javascript
 class WalletService {
@@ -54,25 +54,25 @@ class WalletService {
   
   async connect() {
     try {
-      // Obtener provider
+      // Get provider
       this.provider = getMetaMaskProvider()
       
-      // Solicitar conexión
+      // Request connection
       const accounts = await this.provider.send('eth_requestAccounts', [])
       this.account = accounts[0]
       
-      // Obtener signer
+      // Get signer
       this.signer = await this.provider.getSigner()
       
       return this.account
     } catch (error) {
-      throw new Error(`Error conectando wallet: ${error.message}`)
+      throw new Error(`Error connecting wallet: ${error.message}`)
     }
   }
   
   async getBalance(address = null) {
     const targetAddress = address || this.account
-    if (!targetAddress) throw new Error('No hay cuenta conectada')
+    if (!targetAddress) throw new Error('No connected account')
     
     const balance = await this.provider.getBalance(targetAddress)
     return ethers.formatEther(balance)
@@ -80,7 +80,7 @@ class WalletService {
 }
 ```
 
-## 💼 Gestión de Wallets
+## 💼 Wallet Management
 
 ### WalletContext Implementation
 
@@ -97,10 +97,10 @@ export const WalletProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false)
   const [tokens, setTokens] = useState([])
   
-  // Conectar wallet
+  // Connect wallet
   const connectWallet = async () => {
     if (!window.ethereum) {
-      throw new Error('MetaMask no está instalado')
+      throw new Error('MetaMask is not installed')
     }
     
     try {
@@ -108,7 +108,7 @@ export const WalletProvider = ({ children }) => {
       const accounts = await provider.send('eth_requestAccounts', [])
       const account = accounts[0]
       
-      // Obtener información de la cuenta
+      // Get account information
       const balance = await provider.getBalance(account)
       const network = await provider.getNetwork()
       
@@ -117,17 +117,17 @@ export const WalletProvider = ({ children }) => {
       setChainId(network.chainId.toString())
       setIsConnected(true)
       
-      // Escuchar eventos de MetaMask
+      // Listen to MetaMask events
       window.ethereum.on('accountsChanged', handleAccountsChanged)
       window.ethereum.on('chainChanged', handleChainChanged)
       
     } catch (error) {
-      console.error('Error conectando wallet:', error)
+      console.error('Error connecting wallet:', error)
       throw error
     }
   }
   
-  // Manejar cambio de cuentas
+  // Handle account changes
   const handleAccountsChanged = (accounts) => {
     if (accounts.length === 0) {
       disconnectWallet()
@@ -136,10 +136,10 @@ export const WalletProvider = ({ children }) => {
     }
   }
   
-  // Manejar cambio de red
+  // Handle network changes
   const handleChainChanged = (chainId) => {
     setChainId(chainId)
-    window.location.reload() // Recargar para actualizar UI
+    window.location.reload() // Reload to update UI
   }
   
   return (
@@ -158,7 +158,7 @@ export const WalletProvider = ({ children }) => {
 }
 ```
 
-### Estados de Conexión
+### Connection States
 
 ```javascript
 const CONNECTION_STATES = {
@@ -189,13 +189,13 @@ const useWalletConnection = () => {
 }
 ```
 
-## 🪙 Gestión de Tokens
+## 🪙 Token Management
 
 ### Token Standards
 
 #### ERC-20 (Fungible Tokens)
 ```javascript
-// Interfaz estándar ERC-20
+// Standard ERC-20 interface
 const ERC20_ABI = [
   'function balanceOf(address) view returns (uint256)',
   'function decimals() view returns (uint8)',
@@ -205,7 +205,7 @@ const ERC20_ABI = [
   'function transfer(address to, uint256 amount) returns (bool)'
 ]
 
-// Obtener balance de token ERC-20
+// Get ERC-20 token balance
 export const getTokenBalance = async (tokenAddress, walletAddress) => {
   const provider = getMetaMaskProvider()
   const contract = new ethers.Contract(tokenAddress, ERC20_ABI, provider)
@@ -218,7 +218,7 @@ export const getTokenBalance = async (tokenAddress, walletAddress) => {
     
     return ethers.formatUnits(balance, decimals)
   } catch (error) {
-    console.error('Error obteniendo balance del token:', error)
+    console.error('Error getting token balance:', error)
     return '0'
   }
 }
@@ -226,7 +226,7 @@ export const getTokenBalance = async (tokenAddress, walletAddress) => {
 
 #### ERC-721 (Non-Fungible Tokens)
 ```javascript
-// Interfaz estándar ERC-721
+// Standard ERC-721 interface
 const ERC721_ABI = [
   'function balanceOf(address) view returns (uint256)',
   'function tokenOfOwnerByIndex(address, uint256) view returns (uint256)',
@@ -234,7 +234,7 @@ const ERC721_ABI = [
   'function ownerOf(uint256) view returns (address)'
 ]
 
-// Obtener NFTs del usuario
+// Get user NFTs
 export const getUserNFTs = async (nftContract, walletAddress) => {
   const provider = getMetaMaskProvider()
   const contract = new ethers.Contract(nftContract, ERC721_ABI, provider)
@@ -250,7 +250,7 @@ export const getUserNFTs = async (nftContract, walletAddress) => {
     
     return tokenIds
   } catch (error) {
-    console.error('Error obteniendo NFTs:', error)
+    console.error('Error getting NFTs:', error)
     return []
   }
 }
@@ -259,7 +259,7 @@ export const getUserNFTs = async (nftContract, walletAddress) => {
 ### Token Discovery
 
 ```javascript
-// Tokens populares conocidos
+// Known popular tokens
 export const POPULAR_TOKENS = [
   {
     address: '0xA0b86a33E6441c8C3C7d4A5e2E2B4C4F4F4F4F4F',
@@ -275,10 +275,10 @@ export const POPULAR_TOKENS = [
     decimals: 6,
     logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png'
   },
-  // ... más tokens
+  // ... more tokens
 ]
 
-// Descubrir tokens automáticamente
+// Automatically discover tokens
 export const discoverTokens = async (walletAddress) => {
   const tokensWithBalance = []
   
@@ -293,7 +293,7 @@ export const discoverTokens = async (walletAddress) => {
         })
       }
     } catch (error) {
-      console.error(`Error procesando ${token.symbol}:`, error)
+      console.error(`Error processing ${token.symbol}:`, error)
     }
   }
   
@@ -301,9 +301,9 @@ export const discoverTokens = async (walletAddress) => {
 }
 ```
 
-## 🌐 Gestión de Redes
+## 🌐 Network Management
 
-### Networks Soportadas
+### Supported Networks
 
 ```javascript
 export const SUPPORTED_NETWORKS = {
@@ -331,7 +331,7 @@ export const SUPPORTED_NETWORKS = {
 }
 ```
 
-### Cambio de Red
+### Network Switching
 
 ```javascript
 export const switchNetwork = async (chainId) => {
@@ -342,7 +342,7 @@ export const switchNetwork = async (chainId) => {
     })
   } catch (error) {
     if (error.code === 4902) {
-      // Red no está agregada, intentar agregarla
+      // Network not added, try to add it
       const network = SUPPORTED_NETWORKS[parseInt(chainId, 16)]
       if (network) {
         await addNetwork(network)
@@ -360,15 +360,15 @@ export const addNetwork = async (network) => {
       params: [network],
     })
   } catch (error) {
-    console.error('Error agregando red:', error)
+    console.error('Error adding network:', error)
     throw error
   }
 }
 ```
 
-## 💸 Transacciones
+## 💸 Transactions
 
-### Envío de ETH
+### Sending ETH
 
 ```javascript
 export const sendETH = async (to, amount, gasLimit = '21000') => {
@@ -382,21 +382,21 @@ export const sendETH = async (to, amount, gasLimit = '21000') => {
       gasLimit: gasLimit
     })
     
-    console.log('Transacción enviada:', tx.hash)
+    console.log('Transaction sent:', tx.hash)
     
-    // Esperar confirmación
+    // Wait for confirmation
     const receipt = await tx.wait()
-    console.log('Transacción confirmada:', receipt)
+    console.log('Transaction confirmed:', receipt)
     
     return receipt
   } catch (error) {
-    console.error('Error enviando ETH:', error)
+    console.error('Error sending ETH:', error)
     throw error
   }
 }
 ```
 
-### Envío de Tokens ERC-20
+### Sending ERC-20 Tokens
 
 ```javascript
 export const sendToken = async (tokenAddress, to, amount) => {
@@ -457,7 +457,7 @@ export const getGasPrice = async () => {
 
 ## 🔒 Seguridad
 
-### Validaciones de Seguridad
+### Security Validations
 
 ```javascript
 export const validateAddress = (address) => {
@@ -470,12 +470,12 @@ export const validateAmount = (amount) => {
 }
 
 export const sanitizeInput = (input) => {
-  // Remover caracteres peligrosos
+  // Remove dangerous characters
   return input.replace(/[<>\"'%;()&+]/g, '')
 }
 ```
 
-### Protección contra Phishing
+### Phishing Protection
 
 ```javascript
 export const verifyContract = async (contractAddress) => {

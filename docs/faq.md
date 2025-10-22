@@ -1,463 +1,463 @@
 # FAQ - CryptoMentor AI
 
-Preguntas frecuentes sobre CryptoMentor AI, su uso, configuración y funcionalidades.
+Frequently asked questions about CryptoMentor AI, its use, configuration and features.
 
-## 🚀 Instalación y Configuración
+## 🚀 Installation and Configuration
 
-### ¿Cómo instalo CryptoMentor AI?
+### How do I install CryptoMentor AI?
 
-1. **Clona el repositorio:**
+1. **Clone the repository:**
    ```bash
-   git clone https://github.com/tu-usuario/crypto-mentor-ai.git
+   git clone https://github.com/your-username/crypto-mentor-ai.git
    cd crypto-mentor-ai
    ```
 
-2. **Instala las dependencias:**
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-3. **Configura las variables de entorno:**
+3. **Configure environment variables:**
    ```bash
    cp env.example .env
-   # Edita .env y agrega tu API key de AURA
+   # Edit .env and add your AURA API key
    ```
 
-4. **Ejecuta la aplicación:**
+4. **Run the application:**
    ```bash
    npm run dev
    ```
 
-### ¿Qué necesito para usar CryptoMentor AI?
+### What do I need to use CryptoMentor AI?
 
-**Requisitos mínimos:**
+**Minimum requirements:**
 - Node.js 18+
-- Navegador moderno (Chrome, Firefox, Safari, Edge)
-- MetaMask instalado
-- API key de AdEx AURA
+- Modern browser (Chrome, Firefox, Safari, Edge)
+- MetaMask installed
+- AdEx AURA API key
 
-**Opcional:**
-- API keys de CoinGecko, Alchemy, Infura para funcionalidad extendida
+**Optional:**
+- CoinGecko, Alchemy, Infura API keys for extended functionality
 
-### ¿Dónde obtengo la API key de AdEx AURA?
+### Where do I get the AdEx AURA API key?
 
-1. Ve a [adex.network](https://adex.network)
-2. Regístrate para una cuenta
-3. Accede al dashboard de desarrollador
-4. Crea una nueva aplicación
-5. Copia la API key generada
+1. Go to [adex.network](https://adex.network)
+2. Register for an account
+3. Access the developer dashboard
+4. Create a new application
+5. Copy the generated API key
 
-### ¿La aplicación funciona sin API key de AURA?
+### Does the application work without AURA API key?
 
-Sí, CryptoMentor AI incluye un **modo demo** que funciona sin API key. Sin embargo, las respuestas serán limitadas y no incluirán análisis personalizados reales.
+Yes, CryptoMentor AI includes a **demo mode** that works without an API key. However, responses will be limited and won't include real personalized analysis.
 
-## 💼 Wallet y Web3
+## 💼 Wallet and Web3
 
-### ¿Qué wallets son compatibles?
+### What wallets are compatible?
 
-Actualmente CryptoMentor AI soporta:
-- **MetaMask** (recomendado)
-- **WalletConnect** (próximamente)
-- **Coinbase Wallet** (próximamente)
+Currently CryptoMentor AI supports:
+- **MetaMask** (recommended)
+- **WalletConnect** (coming soon)
+- **Coinbase Wallet** (coming soon)
 
-### ¿Es seguro conectar mi wallet?
+### Is it safe to connect my wallet?
 
-Sí, CryptoMentor AI:
-- **Solo lee** datos públicos de tu wallet
-- **No solicita** permisos de transacción
-- **No almacena** claves privadas
-- **No puede** acceder a tus fondos
+Yes, CryptoMentor AI:
+- **Only reads** public data from your wallet
+- **Does not request** transaction permissions
+- **Does not store** private keys
+- **Cannot** access your funds
 
-### ¿Qué redes blockchain soporta?
+### What blockchain networks does it support?
 
-**Redes principales:**
+**Main networks:**
 - Ethereum Mainnet
 - Polygon Mainnet
-- Binance Smart Chain (próximamente)
+- Binance Smart Chain (coming soon)
 
-**Redes de prueba:**
+**Test networks:**
 - Goerli Testnet
 - Mumbai Testnet
 
-### ¿Puedo usar la aplicación sin conectar wallet?
+### Can I use the application without connecting a wallet?
 
-Sí, puedes usar:
-- Chat con AURA
-- Análisis de mercado
-- Centro de educación
-- Sistema de alertas
+Yes, you can use:
+- Chat with AURA
+- Market analysis
+- Education center
+- Alert system
 
-Sin embargo, para análisis de portfolio necesitas conectar tu wallet.
+However, for portfolio analysis you need to connect your wallet.
 
-## 🤖 IA AURA
+## 🤖 AURA AI
 
-### ¿Qué es AURA?
+### What is AURA?
 
-AURA es la IA de AdEx Network especializada en:
-- Análisis de criptomonedas
-- Recomendaciones de trading
-- Insights de mercado
-- Educación crypto
+AURA is AdEx Network's AI specialized in:
+- Cryptocurrency analysis
+- Trading recommendations
+- Market insights
+- Crypto education
 
-### ¿Cómo funciona el chat con AURA?
+### How does chat with AURA work?
 
-1. **Escribe tu pregunta** en el campo de texto
-2. **AURA analiza** tu mensaje y contexto
-3. **Genera una respuesta** personalizada
-4. **Incluye recomendaciones** si es relevante
+1. **Type your question** in the text field
+2. **AURA analyzes** your message and context
+3. **Generates a personalized** response
+4. **Includes recommendations** if relevant
 
-### ¿AURA puede hacer trading por mí?
+### Can AURA do trading for me?
 
-No, AURA solo proporciona:
-- **Análisis** del mercado y tu portfolio
-- **Recomendaciones** educativas
-- **Insights** sobre tendencias
-- **Información** para ayudarte a decidir
+No, AURA only provides:
+- **Analysis** of the market and your portfolio
+- **Educational recommendations**
+- **Insights** about trends
+- **Information** to help you decide
 
-### ¿Las recomendaciones de AURA son garantizadas?
+### Are AURA's recommendations guaranteed?
 
-No, AURA proporciona análisis y recomendaciones basadas en:
-- Datos históricos
-- Tendencias del mercado
-- Tu perfil de riesgo
+No, AURA provides analysis and recommendations based on:
+- Historical data
+- Market trends
+- Your risk profile
 
-**Importante:** Siempre haz tu propia investigación antes de invertir.
+**Important:** Always do your own research before investing.
 
-### ¿Cómo mejora AURA sus recomendaciones?
+### How does AURA improve its recommendations?
 
-AURA aprende de:
-- Interacciones con usuarios
-- Datos de mercado en tiempo real
-- Feedback de la comunidad
-- Actualizaciones de la IA
+AURA learns from:
+- User interactions
+- Real-time market data
+- Community feedback
+- AI updates
 
-## 📊 Portfolio y Análisis
+## 📊 Portfolio and Analysis
 
-### ¿Cómo analiza AURA mi portfolio?
+### How does AURA analyze my portfolio?
 
-AURA evalúa:
-- **Diversificación**: Distribución de activos
-- **Riesgo**: Volatilidad y concentración
-- **Rendimiento**: Cambios en valor
-- **Liquidez**: Disponibilidad de fondos
+AURA evaluates:
+- **Diversification**: Asset distribution
+- **Risk**: Volatility and concentration
+- **Performance**: Value changes
+- **Liquidity**: Fund availability
 
-### ¿Qué tokens detecta automáticamente?
+### What tokens does it automatically detect?
 
-CryptoMentor AI detecta tokens ERC-20 populares:
+CryptoMentor AI detects popular ERC-20 tokens:
 - USDC, USDT, WBTC
 - LINK, UNI, MATIC
-- Y muchos más
+- And many more
 
-### ¿Puedo agregar tokens personalizados?
+### Can I add custom tokens?
 
-Actualmente no, pero puedes sugerir tokens para agregar en futuras versiones.
+Currently no, but you can suggest tokens to add in future versions.
 
-### ¿Cómo calcula el valor de mi portfolio?
+### How does it calculate my portfolio value?
 
-El valor se calcula usando:
-- Precios actuales de CoinGecko
-- Balances de tokens en tu wallet
-- Conversión a USD
+The value is calculated using:
+- Current CoinGecko prices
+- Token balances in your wallet
+- USD conversion
 
-### ¿Con qué frecuencia se actualiza mi portfolio?
+### How often is my portfolio updated?
 
-- **Automaticamente**: Cada 30 segundos
-- **Manual**: Usando el botón "Actualizar"
-- **Al conectar**: Cuando conectas tu wallet
+- **Automatically**: Every 30 seconds
+- **Manual**: Using the "Update" button
+- **On connect**: When you connect your wallet
 
-## 🔔 Alertas
+## 🔔 Alerts
 
-### ¿Qué tipos de alertas puedo crear?
+### What types of alerts can I create?
 
-**Alertas de precio:**
-- Por encima de un valor
-- Por debajo de un valor
+**Price alerts:**
+- Above a value
+- Below a value
 
-**Alertas de cambio:**
-- Cambio positivo %
-- Cambio negativo %
+**Change alerts:**
+- Positive change %
+- Negative change %
 
-**Alertas de volumen:**
-- Volumen alto
-- Volumen bajo
+**Volume alerts:**
+- High volume
+- Low volume
 
-### ¿Cómo recibo las alertas?
+### How do I receive alerts?
 
-Las alertas se muestran:
-- **En la aplicación** (notificaciones)
-- **Por email** (si configuras)
-- **Push notifications** (próximamente)
+Alerts are shown:
+- **In the application** (notifications)
+- **By email** (if configured)
+- **Push notifications** (coming soon)
 
-### ¿Cuántas alertas puedo tener?
+### How many alerts can I have?
 
-No hay límite técnico, pero recomendamos:
-- **Máximo 10 alertas activas**
-- **Alertas relevantes** para tu estrategia
-- **Revisar regularmente** y eliminar las innecesarias
+There's no technical limit, but we recommend:
+- **Maximum 10 active alerts**
+- **Relevant alerts** for your strategy
+- **Review regularly** and remove unnecessary ones
 
-### ¿Las alertas funcionan sin conexión?
+### Do alerts work offline?
 
-No, las alertas requieren:
-- Conexión a internet
-- Aplicación abierta o servicio activo
-- APIs funcionando correctamente
+No, alerts require:
+- Internet connection
+- Application open or active service
+- APIs working correctly
 
-## 📚 Educación
+## 📚 Education
 
-### ¿Qué puedo aprender en el centro de educación?
+### What can I learn in the education center?
 
-**Conceptos básicos:**
-- ¿Qué son las criptomonedas?
-- Cómo funciona blockchain
-- Tipos de wallets
+**Basic concepts:**
+- What are cryptocurrencies?
+- How blockchain works
+- Types of wallets
 
 **Trading:**
-- Fundamentos del trading
-- Análisis técnico
-- Gestión de riesgo
+- Trading fundamentals
+- Technical analysis
+- Risk management
 
 **DeFi:**
-- Protocolos descentralizados
+- Decentralized protocols
 - Yield farming
 - Liquidity pools
 
-**Seguridad:**
-- Protección de wallets
-- Prevención de estafas
-- Mejores prácticas
+**Security:**
+- Wallet protection
+- Scam prevention
+- Best practices
 
-### ¿Hay certificaciones o diplomas?
+### Are there certifications or diplomas?
 
-Actualmente no, pero estamos considerando:
-- **Badges de progreso**
-- **Certificados de competencia**
-- **Sistema de puntos**
+Currently no, but we're considering:
+- **Progress badges**
+- **Competency certificates**
+- **Points system**
 
-### ¿El contenido se actualiza?
+### Is the content updated?
 
-Sí, el contenido educativo se actualiza:
-- **Mensualmente** con nuevas lecciones
-- **Según tendencias** del mercado
-- **Basado en feedback** de usuarios
+Yes, educational content is updated:
+- **Monthly** with new lessons
+- **According to market** trends
+- **Based on user** feedback
 
-## 🔧 Problemas Técnicos
+## 🔧 Technical Issues
 
-### ¿Por qué no se conecta mi wallet?
+### Why won't my wallet connect?
 
-**Posibles causas:**
-- MetaMask no está instalado
-- MetaMask no está desbloqueado
-- Estás en la red incorrecta
-- Permisos denegados
+**Possible causes:**
+- MetaMask is not installed
+- MetaMask is not unlocked
+- You're on the wrong network
+- Permissions denied
 
-**Soluciones:**
-1. Instala/actualiza MetaMask
-2. Desbloquea tu wallet
-3. Cambia a la red correcta
-4. Recarga la página
+**Solutions:**
+1. Install/update MetaMask
+2. Unlock your wallet
+3. Switch to the correct network
+4. Reload the page
 
-### ¿Por qué AURA no responde?
+### Why isn't AURA responding?
 
-**Posibles causas:**
-- Sin conexión a internet
-- API key inválida o expirada
-- Límite de rate excedido
-- Error en el servidor
+**Possible causes:**
+- No internet connection
+- Invalid or expired API key
+- Rate limit exceeded
+- Server error
 
-**Soluciones:**
-1. Verifica tu conexión
-2. Revisa tu API key
-3. Espera unos minutos
-4. Contacta soporte
+**Solutions:**
+1. Check your connection
+2. Review your API key
+3. Wait a few minutes
+4. Contact support
 
-### ¿Por qué no se actualizan los precios?
+### Why aren't prices updating?
 
-**Posibles causas:**
-- APIs de precios caídas
-- Límite de requests excedido
-- Cache desactualizado
+**Possible causes:**
+- Price APIs down
+- Request limit exceeded
+- Outdated cache
 
-**Soluciones:**
-1. Recarga la página
-2. Espera unos minutos
-3. Verifica tus API keys
+**Solutions:**
+1. Reload the page
+2. Wait a few minutes
+3. Check your API keys
 
-### ¿La aplicación es lenta?
+### Is the application slow?
 
-**Optimizaciones:**
-- Cierra pestañas innecesarias
-- Usa un navegador moderno
-- Verifica tu conexión a internet
-- Limpia cache del navegador
+**Optimizations:**
+- Close unnecessary tabs
+- Use a modern browser
+- Check your internet connection
+- Clear browser cache
 
-## 💰 Costos y Precios
+## 💰 Costs and Pricing
 
-### ¿CryptoMentor AI es gratuito?
+### Is CryptoMentor AI free?
 
-**Versión básica:**
-- ✅ Completamente gratuita
-- ✅ Todas las funcionalidades principales
-- ✅ Chat con AURA
-- ✅ Análisis de portfolio
+**Basic version:**
+- ✅ Completely free
+- ✅ All main features
+- ✅ Chat with AURA
+- ✅ Portfolio analysis
 
-**Versión premium (futura):**
-- 🔄 Funcionalidades avanzadas
-- 🔄 APIs premium
-- 🔄 Soporte prioritario
+**Premium version (future):**
+- 🔄 Advanced features
+- 🔄 Premium APIs
+- 🔄 Priority support
 
-### ¿Hay costos ocultos?
+### Are there hidden costs?
 
-No, CryptoMentor AI es completamente gratuito. Los únicos costos pueden ser:
-- **Gas fees** para transacciones blockchain
-- **API keys premium** (opcionales)
+No, CryptoMentor AI is completely free. The only costs might be:
+- **Gas fees** for blockchain transactions
+- **Premium API keys** (optional)
 
-### ¿Cómo se mantiene el proyecto?
+### How is the project maintained?
 
-El proyecto se mantiene con:
-- **Patrocinios** de la comunidad
-- **Donaciones** voluntarias
-- **Colaboraciones** con partners
-- **Programas** de desarrollo
+The project is maintained with:
+- **Community** sponsorships
+- **Voluntary** donations
+- **Partnerships** with partners
+- **Development** programs
 
-## 🔒 Privacidad y Seguridad
+## 🔒 Privacy and Security
 
-### ¿Qué datos recolecta CryptoMentor AI?
+### What data does CryptoMentor AI collect?
 
-**Datos recolectados:**
-- Dirección de wallet (pública)
-- Balances de tokens (públicos)
-- Interacciones con AURA
-- Preferencias de usuario
+**Data collected:**
+- Wallet address (public)
+- Token balances (public)
+- AURA interactions
+- User preferences
 
-**Datos NO recolectados:**
-- Claves privadas
-- Datos personales
-- Información financiera privada
-- Historial de transacciones
+**Data NOT collected:**
+- Private keys
+- Personal data
+- Private financial information
+- Transaction history
 
-### ¿Dónde se almacenan mis datos?
+### Where is my data stored?
 
-**Localmente:**
-- Configuraciones de usuario
-- Historial de chat
-- Preferencias de alertas
+**Locally:**
+- User settings
+- Chat history
+- Alert preferences
 
-**En servidores:**
-- Análisis anónimos
-- Métricas de uso
-- Datos de mercado
+**On servers:**
+- Anonymous analytics
+- Usage metrics
+- Market data
 
-### ¿Puedo eliminar mis datos?
+### Can I delete my data?
 
-Sí, puedes:
-- **Limpiar historial** de chat
-- **Eliminar alertas**
-- **Desconectar wallet**
-- **Contactar soporte** para eliminación completa
+Yes, you can:
+- **Clear chat** history
+- **Delete alerts**
+- **Disconnect wallet**
+- **Contact support** for complete deletion
 
-### ¿Es seguro para principiantes?
+### Is it safe for beginners?
 
-Sí, CryptoMentor AI es seguro porque:
-- **Solo lectura** de datos públicos
-- **No puede** acceder a tus fondos
-- **Educación** antes que trading
-- **Advertencias** de riesgo incluidas
+Yes, CryptoMentor AI is safe because:
+- **Read-only** public data
+- **Cannot** access your funds
+- **Education** before trading
+- **Risk warnings** included
 
-## 🌐 Idiomas y Regiones
+## 🌐 Languages and Regions
 
-### ¿En qué idiomas está disponible?
+### What languages is it available in?
 
-Actualmente:
-- **Español** (completo)
-- **Inglés** (próximamente)
+Currently:
+- **Spanish** (complete)
+- **English** (coming soon)
 
-Próximamente:
-- Portugués, Francés, Alemán, Chino
+Coming soon:
+- Portuguese, French, German, Chinese
 
-### ¿Funciona en mi país?
+### Does it work in my country?
 
-CryptoMentor AI funciona globalmente, pero:
-- **Verifica regulaciones** locales sobre crypto
-- **Consulta asesoría** legal si es necesario
-- **Usa redes** apropiadas para tu región
+CryptoMentor AI works globally, but:
+- **Check local** crypto regulations
+- **Consult legal** advice if necessary
+- **Use networks** appropriate for your region
 
-### ¿Hay restricciones geográficas?
+### Are there geographic restrictions?
 
-No hay restricciones técnicas, pero:
-- Algunas APIs pueden tener limitaciones
-- Regulaciones locales pueden aplicar
-- Recomendamos verificar compliance local
+No technical restrictions, but:
+- Some APIs may have limitations
+- Local regulations may apply
+- We recommend checking local compliance
 
-## 🚀 Futuro y Desarrollo
+## 🚀 Future and Development
 
-### ¿Qué nuevas funcionalidades vienen?
+### What new features are coming?
 
-**Próximas características:**
-- Trading directo desde la app
-- Integración con más exchanges
-- Análisis técnico avanzado
-- Modo oscuro
-- App móvil nativa
+**Upcoming features:**
+- Direct trading from the app
+- Integration with more exchanges
+- Advanced technical analysis
+- Dark mode
+- Native mobile app
 
-### ¿Cómo puedo contribuir al proyecto?
+### How can I contribute to the project?
 
-**Formas de contribuir:**
-- **Código**: Pull requests en GitHub
-- **Documentación**: Mejorar docs
-- **Testing**: Reportar bugs
-- **Feedback**: Sugerencias de funcionalidades
-- **Comunidad**: Ayudar a otros usuarios
+**Ways to contribute:**
+- **Code**: Pull requests on GitHub
+- **Documentation**: Improve docs
+- **Testing**: Report bugs
+- **Feedback**: Feature suggestions
+- **Community**: Help other users
 
-### ¿Hay roadmap público?
+### Is there a public roadmap?
 
-Sí, puedes ver el roadmap en:
-- [GitHub Issues](https://github.com/tu-usuario/crypto-mentor-ai/issues)
+Yes, you can see the roadmap at:
+- [GitHub Issues](https://github.com/your-username/crypto-mentor-ai/issues)
 - [Discord](https://discord.gg/cryptomentor)
-- Documentación del proyecto
+- Project documentation
 
-### ¿Cómo reporto bugs o sugerencias?
+### How do I report bugs or suggestions?
 
-**Opciones:**
-1. **GitHub Issues**: Para bugs técnicos
-2. **Discord**: Para discusión
+**Options:**
+1. **GitHub Issues**: For technical bugs
+2. **Discord**: For discussion
 3. **Email**: support@cryptomentor.ai
-4. **Formulario**: En la aplicación
+4. **Form**: In the application
 
-## 📞 Soporte y Comunidad
+## 📞 Support and Community
 
-### ¿Dónde obtengo ayuda?
+### Where do I get help?
 
-**Canales de soporte:**
-- **FAQ**: Este documento
-- **Documentación**: docs/ folder
-- **Discord**: Comunidad activa
-- **Email**: Soporte técnico
-- **GitHub**: Issues y discusiones
+**Support channels:**
+- **FAQ**: This document
+- **Documentation**: docs/ folder
+- **Discord**: Active community
+- **Email**: Technical support
+- **GitHub**: Issues and discussions
 
-### ¿Hay comunidad de usuarios?
+### Is there a user community?
 
-Sí, únete a:
-- **Discord**: Chat en tiempo real
-- **GitHub**: Discusiones técnicas
-- **Twitter**: Actualizaciones
-- **Reddit**: Discusiones generales
+Yes, join:
+- **Discord**: Real-time chat
+- **GitHub**: Technical discussions
+- **Twitter**: Updates
+- **Reddit**: General discussions
 
-### ¿Ofrecen soporte técnico?
+### Do you offer technical support?
 
-**Soporte disponible:**
-- **Comunidad**: Discord y GitHub
-- **Documentación**: Guías detalladas
-- **Email**: Para casos complejos
-- **Video calls**: Para partners (futuro)
+**Available support:**
+- **Community**: Discord and GitHub
+- **Documentation**: Detailed guides
+- **Email**: For complex cases
+- **Video calls**: For partners (future)
 
-### ¿Hay programa de beta testing?
+### Is there a beta testing program?
 
-Sí, puedes unirte al programa beta:
-1. Únete al Discord
-2. Solicita acceso beta
-3. Prueba nuevas funcionalidades
-4. Proporciona feedback
+Yes, you can join the beta program:
+1. Join Discord
+2. Request beta access
+3. Test new features
+4. Provide feedback
 
 ---
 
-¿No encontraste tu pregunta? ¡Únete a nuestra comunidad en Discord o contacta soporte! 🚀
+Didn't find your question? Join our community on Discord or contact support! 🚀
