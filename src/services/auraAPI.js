@@ -8,6 +8,7 @@ const AURA_API_BASE = import.meta.env.DEV
   : (import.meta.env.VITE_AURA_API_BASE || 'https://api.adex.network/aura/v1')
 const AURA_API_KEY = import.meta.env.VITE_AURA_API_KEY
 const OPENAI_API_KEY_PRESENT = !!import.meta.env.VITE_OPENAI_API_KEY
+const DEMO_ENABLED = !(import.meta.env.VITE_DISABLE_DEMO === 'true')
 
 // Log configuration (only in development)
 if (import.meta.env.DEV) {
@@ -49,14 +50,20 @@ export const auraAPI = {
           auraResponseCache.set(cacheKey, quiz, 5 * 60 * 1000)
           return quiz
         } catch (_) {
-          const quiz = this.getDemoQuiz(topic, questionCount)
-          auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
-          return quiz
+          if (DEMO_ENABLED) {
+            const quiz = this.getDemoQuiz(topic, questionCount)
+            auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
+            return quiz
+          }
+          throw new Error('Quiz generation failed and demo disabled')
         }
       }
-      const quiz = this.getDemoQuiz(topic, questionCount)
-      auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
-      return quiz
+      if (DEMO_ENABLED) {
+        const quiz = this.getDemoQuiz(topic, questionCount)
+        auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
+        return quiz
+      }
+      throw new Error('AURA/OpenAI keys missing and demo disabled')
     }
 
     // Try AURA native endpoint first
@@ -91,9 +98,12 @@ export const auraAPI = {
         auraResponseCache.set(cacheKey, quiz, 5 * 60 * 1000)
         return quiz
       } catch (_) {
-        const quiz = this.getDemoQuiz(topic, questionCount)
-        auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
-        return quiz
+        if (DEMO_ENABLED) {
+          const quiz = this.getDemoQuiz(topic, questionCount)
+          auraResponseCache.set(cacheKey, quiz, 2 * 60 * 1000)
+          return quiz
+        }
+        throw new Error('Quiz generation failed and demo disabled')
       }
     }
   },
@@ -269,12 +279,15 @@ export const auraAPI = {
         return cached
       }
     
-    // If no API key, use demo mode
+    // If no API key
     if (!AURA_API_KEY || AURA_API_KEY === 'your_aura_api_key_here') {
-      console.log('🔸 AURA API: Using demo mode (no API key configured)')
-      const result = this.getDemoResponse(message, context)
-      auraResponseCache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
-      return result
+      if (DEMO_ENABLED) {
+        console.log('🔸 AURA API: Using demo mode (no API key configured)')
+        const result = this.getDemoResponse(message, context)
+        auraResponseCache.set(cacheKey, result, 2 * 60 * 1000)
+        return result
+      }
+      throw new Error('AURA API key missing and demo disabled')
     }
     
     try {
@@ -319,20 +332,26 @@ export const auraAPI = {
             } catch (_) { /* si falla, continuamos al demo */ }
           }
         }
-        console.warn('⚠️ AURA API: usando modo demo temporalmente')
-        const demo = this.getDemoResponse(message, context)
-        auraResponseCache.set(cacheKey, demo, 2 * 60 * 1000)
-        return demo
+        if (DEMO_ENABLED) {
+          console.warn('⚠️ AURA API: usando modo demo temporalmente')
+          const demo = this.getDemoResponse(message, context)
+          auraResponseCache.set(cacheKey, demo, 2 * 60 * 1000)
+          return demo
+        }
+        throw error
       }
 
       // Con API key y errores distintos a 500: propagar para que la UI lo muestre (401, 403, 404, 429, etc.)
       if (AURA_API_KEY) throw error
 
-      // Sin API key: usar respuestas de demostración
-      console.warn('⚠️ AURA API: No API key, usando modo demo')
-      const result = this.getDemoResponse(message, context)
-      auraResponseCache.set(cacheKey, result, 2 * 60 * 1000)
-      return result
+      // Sin API key
+      if (DEMO_ENABLED) {
+        console.warn('⚠️ AURA API: No API key, usando modo demo')
+        const result = this.getDemoResponse(message, context)
+        auraResponseCache.set(cacheKey, result, 2 * 60 * 1000)
+        return result
+      }
+      throw error
     }
   },
 
@@ -341,7 +360,7 @@ export const auraAPI = {
     const cacheKey = generateCacheKey('portfolio-analysis', JSON.stringify(tokens), balance)
     
     // Try to get from cache first (only for demo responses)
-    if (!AURA_API_KEY) {
+    if (!AURA_API_KEY && DEMO_ENABLED) {
       const cached = auraResponseCache.get(cacheKey)
       if (cached !== null) {
         return cached
@@ -367,7 +386,7 @@ export const auraAPI = {
       auraResponseCache.set(cacheKey, result)
       return result
     } catch (error) {
-      if (!AURA_API_KEY) {
+      if (!AURA_API_KEY && DEMO_ENABLED) {
         const result = this.getDemoPortfolioAnalysis(tokens, balance)
         auraResponseCache.set(cacheKey, result)
         return result
@@ -388,7 +407,7 @@ export const auraAPI = {
       })
       return response.data
     } catch (error) {
-      if (!AURA_API_KEY) {
+      if (!AURA_API_KEY && DEMO_ENABLED) {
         return this.getDemoMarketInsights()
       }
       throw error
@@ -401,7 +420,7 @@ export const auraAPI = {
       const response = await auraClient.post('/recommendations/personalized', userProfile)
       return response.data
     } catch (error) {
-      if (!AURA_API_KEY) {
+      if (!AURA_API_KEY && DEMO_ENABLED) {
         return this.getDemoRecommendations(userProfile)
       }
       throw error

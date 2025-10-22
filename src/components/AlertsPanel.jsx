@@ -94,7 +94,27 @@ const AlertsPanel = () => {
       })
       toast.success('Alert created successfully')
     } catch (error) {
-      toast.error('Error creating alert')
+      console.error('Create alert failed, using local fallback:', error)
+      // Local fallback: create the alert only on client so the demo keeps working
+      const alert = {
+        id: Date.now(),
+        ...newAlert,
+        value: newAlert.value,
+        currentValue: newAlert.symbol === 'BTC' ? '43250' : '2650',
+        enabled: true,
+        created: new Date(),
+        triggered: false
+      }
+      setAlerts(prev => [...prev, alert])
+      setShowCreateModal(false)
+      setNewAlert({
+        type: 'price',
+        symbol: 'BTC',
+        condition: 'above',
+        value: '',
+        enabled: true
+      })
+      toast.success('Alert saved locally for the demo')
     }
   }
 
