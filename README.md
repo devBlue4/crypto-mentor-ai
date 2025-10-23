@@ -2,6 +2,10 @@
 
 An intelligent Web3 trading assistant that uses the AdEx AURA API to provide real-time market analysis, personalized recommendations, and cryptocurrency education.
 
+## 🎥 Video Demo
+
+[**Watch Demo Video**](https://drive.google.com/file/d/165a-rHMFKH2MtPgKc74ZNXUXqMrhYyms/view?usp=sharing) - See CryptoMentor AI in action!
+
 ## ✨ Key Features
 
 - **🤖 AdEx AURA Chat**: Intelligent chat interface for crypto questions
